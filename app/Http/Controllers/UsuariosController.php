@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Usuarios;
 
-class Usuarios extends Controller
+class UsuariosController extends Controller
 {
   public function show() {
     $users = Usuarios::all();

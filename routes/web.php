@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Usuarios;
+use App\Http\Controllers\UsuariosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +15,4 @@ use App\Http\Controllers\Usuarios;
 |
 */
 
-Route::get('/', [Usuarios::class, 'show']);
+Route::get('/', [UsuariosController::class, 'show']);
