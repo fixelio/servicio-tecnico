@@ -16,3 +16,6 @@ use App\Http\Controllers\UsuariosController;
 */
 
 Route::get('/', [UsuariosController::class, 'show']);
+
+Route::get('/solicitud', [SolicitudMantenimientoController::class, 'showCrear'])->name('solicitud');
+Route::post('/solicitud', [SolicitudMantenimientoController::class, 'crear'])->name('solicitud.post');
