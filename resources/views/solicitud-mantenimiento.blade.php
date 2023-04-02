@@ -1,4 +1,7 @@
-<main class="d-flex justify-content-center align-items-center w-75 p-3">
+@extends('layout')
+
+@section('content')
+<div class="d-flex justify-content-center align-items-center w-75 p-3">
   <form
     action="{{ route('solicitud.post') }}"
     method="POST"
@@ -49,4 +52,4 @@
     </div>
     <button type="submit" class="btn btn-primary">Registrar</button>
   </form>
-</main>
+</div>
