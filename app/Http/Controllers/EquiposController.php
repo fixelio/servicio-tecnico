@@ -29,7 +29,7 @@ class EquiposController extends Controller
       return redirect()->back()->withInput()->withErrors(['mensaje' => 'Ha ocurrido un error al guardar el equipo.']);
     }
 
-    return redirect()->withSuccess();
+    return redirect('equipo');
   }
 
   public function create(array $data) {
