@@ -1,8 +1,8 @@
 @extends('layout')
 
 @section('content')
-<section>
-  <div class="container-sm d-flex justify-content-center align-items-center flex-column mx-5">
+<section class="mx-5">
+  <div class="container-sm d-flex justify-content-center align-items-center flex-column">
     <form
       action="{{ route('equipo.post') }}"
       method="POST"

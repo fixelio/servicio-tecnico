@@ -10,4 +10,5 @@ class Equipos extends Model
   use HasFactory;
 
   protected $table = 'equipos';
+  protected $fillable = ['num_serie', 'marca', 'modelo', 'fecha_compra'];
 }
