@@ -26,7 +26,7 @@ class EquiposController extends Controller
       $check = $this->create($data);
     }
     catch (QueryException $e) {
-      return redirect()->back()->withInput()->withErrors(['mensaje'] => 'Ha ocurrido un error al guardar el equipo.');
+      return redirect()->back()->withInput()->withErrors(['mensaje' => 'Ha ocurrido un error al guardar el equipo.']);
     }
 
     return redirect()->withSuccess();
