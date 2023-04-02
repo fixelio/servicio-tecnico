@@ -1,6 +1,3 @@
-@extends('layout')
-
-@section('content')
 <section class="mx-3">
   <h3>Componentes</h3>
   <div class="container-sm d-flex justify-content-center align-items-center flex-column">
@@ -26,4 +23,3 @@
     </table>
   </div>
 </section>
-@endsection
