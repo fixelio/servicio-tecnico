@@ -4,7 +4,7 @@
 <section>
   <div class="container-sm d-flex justify-content-center align-items-center flex-column mx-5">
     <form
-      action="{{ route('solicitud.post') }}"
+      action="{{ route('equipo.post') }}"
       method="POST"
       class="row mt-5 g-3"
     >

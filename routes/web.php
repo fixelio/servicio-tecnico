@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\SolicitudMantenimientoController;
+use App\Http\Controllers\EquiposController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,6 @@ Route::get('/', [UsuariosController::class, 'show']);
 
 Route::get('/solicitud', [SolicitudMantenimientoController::class, 'showCrear'])->name('solicitud');
 Route::post('/solicitud', [SolicitudMantenimientoController::class, 'crear'])->name('solicitud.post');
+
+Route::get('/equipo', [EquiposController::class, 'showCrear'])->name('equipo');
+Route::post('/equipo', [EquiposController::class, 'crear'])->name('equipo.post');
