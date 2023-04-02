@@ -1,7 +1,8 @@
 @extends('layout')
 
 @section('content')
-<section class="mx-5">
+<section class="mx-3 mb-4">
+  <h3>Equipo</h3>
   <div class="container-sm d-flex justify-content-center align-items-center flex-column">
     <form
       action="{{ route('equipo.post') }}"
@@ -54,6 +55,9 @@
       </div>
       <button type="submit" class="btn btn-primary">Registrar</button>
     </form>
+
+    @include('componentes', [])
+
   </div>
 </section>
 @endsection
