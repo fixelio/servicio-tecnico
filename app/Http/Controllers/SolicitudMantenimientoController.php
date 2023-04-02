@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\SolicitudMantenimiento;
+use App\Models\SolicitudesMantenimiento;
 
 class SolicitudMantenimientoController extends Controller
 {
@@ -26,7 +26,7 @@ class SolicitudMantenimientoController extends Controller
   }
 
   public function create(array $data) {
-    return SolicitudMantenimiento::create([
+    return SolicitudesMantenimiento::create([
       'num_serie' => $data['num_serie'],
       'marca' => $data['marca'],
       'modelo' => $data['modelo'],
