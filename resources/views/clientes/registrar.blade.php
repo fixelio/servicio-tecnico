@@ -3,7 +3,7 @@
 @section('content')
 <section class="mx-2 mx-md-5 mb-5">
   <h3 class="mb-2">Registrar Cliente</h3>
-  <div class="container-sm d-flex justify-content-center align-items-center">
+  <div class="container-sm d-flex justify-content-center align-items-center mb-3">
     <form action="{{ route('cliente.post') }}" method="POST" class="row g-3 mt-5">
       @csrf
       <div class="col-12 col-lg-6 col-xl-4 mb-3">

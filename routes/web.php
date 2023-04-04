@@ -19,9 +19,9 @@ use App\Http\Controllers\EquiposController;
 
 Route::get('/', [ClientesController::class, 'show']);
 
-Route::get('/registrar/cliente', [ClientesController::class, 'registrarView'])->name('clientes');
+Route::get('/registrar/cliente', [ClientesController::class, 'registrarView'])->name('registrar-cliente');
 
-Route::post('/cliente', [ClientesController::class, 'crear'])->name('clientes.post');
+Route::post('/cliente', [ClientesController::class, 'crear'])->name('cliente.post');
 
 Route::get('/solicitud', [SolicitudMantenimientoController::class, 'showCrear'])->name('solicitud');
 Route::post('/solicitud', [SolicitudMantenimientoController::class, 'crear'])->name('solicitud.post');
