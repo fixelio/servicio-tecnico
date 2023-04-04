@@ -18,7 +18,7 @@
             <td>{{ $componente->descripcion }}</td>
             <td>{{ $componente->precio }}</td>
           </tr>
-        $endforeach
+        @endforeach
       </tbody>
     </table>
   </div>

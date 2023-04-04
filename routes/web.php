@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\SolicitudMantenimientoController;
 use App\Http\Controllers\EquiposController;
 
@@ -17,7 +17,11 @@ use App\Http\Controllers\EquiposController;
 |
 */
 
-Route::get('/', [UsuariosController::class, 'show']);
+Route::get('/', [ClientesController::class, 'show']);
+
+Route::get('/registrar/cliente', [ClientesController::class, 'registrarView'])->name('clientes');
+
+Route::post('/cliente', [ClientesController::class, 'crear'])->name('clientes.post');
 
 Route::get('/solicitud', [SolicitudMantenimientoController::class, 'showCrear'])->name('solicitud');
 Route::post('/solicitud', [SolicitudMantenimientoController::class, 'crear'])->name('solicitud.post');
