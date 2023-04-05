@@ -3,8 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ClientesController;
-use App\Http\Controllers\SolicitudMantenimientoController;
+use App\Http\Controllers\SolicitudesMantenimientoController;
 use App\Http\Controllers\EquiposController;
+use App\Http\Controllers\OrdenesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +20,10 @@ use App\Http\Controllers\EquiposController;
 
 Route::get('/', [ClientesController::class, 'show']);
 
+Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes');
 Route::get('/registrar/cliente', [ClientesController::class, 'registrarView'])->name('registrar-cliente');
-
 Route::post('/cliente', [ClientesController::class, 'crear'])->name('cliente.post');
 
-Route::get('/solicitud', [SolicitudMantenimientoController::class, 'showCrear'])->name('solicitud');
-Route::post('/solicitud', [SolicitudMantenimientoController::class, 'crear'])->name('solicitud.post');
-
-Route::get('/equipo', [EquiposController::class, 'showCrear'])->name('equipo');
-Route::post('/equipo', [EquiposController::class, 'crear'])->name('equipo.post');
+Route::get('/registrar/solicitud/cliente/{correo}', [SolicitudesMantenimientoController::class, 'registrarView'])->name('registrar-solicitud');
+Route::get('/solicitudes', [SolicitudesMantenimientoController::class, 'listadoView'])->name('listado-solicitudes');
+Route::post('/solicitud', [SolicitudesMantenimientoController::class, 'crear'])->name('solicitud.post');

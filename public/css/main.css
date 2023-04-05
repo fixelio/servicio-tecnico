@@ -1,15 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900;&display=swap');
 
-
-
-
-
 /*     General Styles       */
-
-
-
-
-
 
 *
 {
@@ -59,13 +50,7 @@ h6
   color: #d8d8d8;
 }
 
-form {
-  max-width: 560px;
-}
-
 /* Navbar */
-
-
 
 .navbar
 {
@@ -97,15 +82,7 @@ form {
   transition: 0.3s ease;
 }
 
-
-
-
-
 /*     Mobile Nav       */
-
-
-
-
 
 .navbar .navbar-toggler
 {
@@ -153,5 +130,25 @@ form {
   #navbarSupportedContent > ul > li:nth-child(n) > a
   {
     padding: 10px 0;
+  }
+}
+
+
+form {
+  max-width: 100%;
+  width: 75%;
+}
+
+#nav-links {
+  width: 75%;
+}
+
+@media screen and (max-width: 768px) {
+  form {
+    width: 95%;
+  }
+
+  #nav-links {
+    width: 95%;
   }
 }
