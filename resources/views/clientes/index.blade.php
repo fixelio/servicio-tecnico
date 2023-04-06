@@ -6,7 +6,7 @@
       <div class="w-75">
         <div class="d-flex justify-content-between align-items-end mb-5">
           <h3 class="mb-2 my-5">Clientes</h3>
-          <a class="btn btn-primary" href="{{ route('registrar-cliente') }}">Registrar</a>
+          <a class="btn btn-primary" href="{{ route('registrar-cliente') }}">Registrar Cliente</a>
         </div>
         <div class="d-flex justify-content-start align-items-start flex-column">
           <div class="alert alert-info mb-4" role="alert">
