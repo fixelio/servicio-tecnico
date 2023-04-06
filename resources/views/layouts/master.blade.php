@@ -28,8 +28,11 @@
         <ul class="navbar-nav">
           @guest
             @if (Route::has('login'))
-              <li class="nav-item">
-                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+              <li class="nav-item px-0 px-lg-4">
+                <div class="form-check form-switch nav-link">
+                  <label class="form-check-label" for="lightSwitch">Modo Oscuro</label>
+                  <input class="form-check-input" type="checkbox" id="lightSwitch" />
+                </div>
               </li>
             @endif
           @else
