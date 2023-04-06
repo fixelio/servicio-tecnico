@@ -8,6 +8,11 @@ use App\Models\Clientes;
 
 class ClientesController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
+
   public function index()
   {
     $clientes = DB::table('clientes')

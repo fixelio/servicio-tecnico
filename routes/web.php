@@ -19,7 +19,7 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Route::get('/', [ClientesController::class, 'show']);
+Route::get('/', [ClientesController::class, 'index']);
 
 Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes');
 Route::get('/registrar/cliente', [ClientesController::class, 'registrarView'])->name('registrar-cliente');
@@ -33,5 +33,3 @@ Route::post('/solicitud/${codigo}/estado/${estado}', [SolicitudesMantenimientoCo
 
 
 Auth::routes();
-
-Route::get('/home', [HomeController::class, 'index'])->name('home');
