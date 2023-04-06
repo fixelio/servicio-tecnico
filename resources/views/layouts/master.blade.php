@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,6 +30,12 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ route('listado-solicitudes') }}">Solicitudes</a>
           </li>
+          <li class="nav-item px-0 px-lg-4">
+            <div class="form-check form-switch nav-link">
+              <label class="form-check-label" for="lightSwitch">Modo Oscuro</label>
+              <input class="form-check-input" type="checkbox" id="lightSwitch" />
+            </div>
+          </li>
         </ul>
       </div>
     </div>
@@ -49,5 +55,25 @@
   <main class="mt-5">
     @yield('content')
   </main>
+
+  <script>
+    (() => {
+      let theme = 'light';
+      const $themeSwitcher = document.querySelector('#lightSwitch');
+      const storedTheme = localStorage.getItem('theme');
+
+      if (storedTheme && storedTheme === 'dark') {
+        theme = storedTheme;
+        document.documentElement.setAttribute('data-bs-theme', theme);
+        $themeSwitcher.checked = theme === 'dark';
+      }
+
+      $themeSwitcher.addEventListener('change', (e) => {
+        theme = theme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-bs-theme', theme);
+        localStorage.setItem('theme', theme);
+      });
+    })();
+  </script>
 </body>
 </html>

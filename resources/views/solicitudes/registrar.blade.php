@@ -3,7 +3,7 @@
 @section('content')
   <section class="my-5">
     <div class="container d-flex justify-content-center align-items-center flex-column mb-3">
-      <div class="w-75 mt-5">
+      <div class="wrapper mt-5">
         <h3 class="mb-5">Datos del cliente:</h3>
         <p>Cliente: <strong>{{ $cliente['nombre'] }} {{ $cliente['apellido'] }}</strong> </p>
         <p>Correo electrónico: <strong>{{ $cliente['correo_electronico'] }}</strong></p>
@@ -11,7 +11,8 @@
         <a href="{{ route('clientes') }}" class="link-opacity-100">Cambiar cliente</a>
       </div>
       <form action="{{ route('solicitud.post') }}" method="POST" class="row g-3 mt-5">
-        <h3 class="mb-2">Registrar solicitud de mantenimiento</h3>
+        <h3 class="mb-5">Registrar solicitud de mantenimiento</h3>
+        <p><strong>Ingresa los datos del equipo.</strong> Los campos obligatorios están marcados con (*)</p>
         @csrf
         <div class="col-12 col-lg-6 mb-3">
           <label for="num_serie" class="form-label">Número de Serie</label>
@@ -34,7 +35,7 @@
           >
         </div>
         <div class="col-12 col-lg-6 mb-3">
-          <label for="modelo" class="form-label">Modelo</label>
+          <label for="modelo" class="form-label">Modelo *</label>
           <input
             type="text"
             id="modelo"
@@ -46,7 +47,7 @@
         </div>
         @csrf
         <div class="col-12 col-lg-6 mb-3">
-          <label for="fecha_compra" class="form-label">Fecha de compra</label>
+          <label for="fecha_compra" class="form-label">Fecha de compra *</label>
           <input
             type="date"
             id="fecha_compra"

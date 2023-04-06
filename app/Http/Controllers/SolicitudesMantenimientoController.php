@@ -23,9 +23,31 @@ class SolicitudesMantenimientoController extends Controller
       ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
       ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
       ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
+      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'terminado')
       ->get();
 
     return view('solicitudes.listado', ['solicitudes' => $solicitudes]);
+  }
+
+  public function listadoClienteView(Request $request)
+  {
+    $correo = $request->route('correo');
+
+    $cliente = Clientes::where('correo_electronico', $correo)->firstOrFail();
+    $solicitudes = SolicitudesMantenimiento::join('equipos', function($join) {
+      $join->on('solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo');
+      })
+      ->join('clientes', function($join) use(&$cliente) {
+        $join
+          ->on('solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
+          ->where('clientes.id_cliente', '=', $cliente['id_cliente']);
+      })
+      ->get();
+
+    return view('solicitudes.cliente', [
+      'solicitudes' => $solicitudes,
+      'cliente' => $cliente
+    ]);
   }
 
   public function crear(Request $request) {
@@ -67,12 +89,16 @@ class SolicitudesMantenimientoController extends Controller
   }
 
   public function cambiarEstado(Request $request) {
-    $codigo_solicitud = $request->route('codigo');
-    $estado_solicitud = $request->route('estado');
+    $request->validate([
+      'codigo_solicitud' => 'required',
+      'estado_solicitud' => 'required',
+    ]);
 
-    $solicitud = SolicitudesMantenimiento::where('codigo_solicitud', $codigo_solicitud);
+    $data = $request->all();
+
+    $solicitud = SolicitudesMantenimiento::where('codigo_solicitud', $data['codigo_solicitud'])->firstOrFail();
     SolicitudesMantenimiento::find($solicitud['id_solicitud'])->update([
-      'estado_solicitud' => $estado_solicitud
+      'estado_solicitud' => $data['estado_solicitud']
     ]);
 
     return redirect()->route('listado-solicitudes')->with([

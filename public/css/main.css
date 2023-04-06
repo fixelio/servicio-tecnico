@@ -89,27 +89,11 @@ h6
   cursor: pointer;
   font-weight: 500;
   transition: 0.3s ease;
-  color: white;
 }
 
-#bar:hover,
-#bar.active
-{
-  color: coral;
-}
+
 
 @media only screen and (max-width: 991px) {
-  body > nav > div > button:hover,
-  body > nav > div > button:focus
-  {
-    background-color: coral;
-  }
-
-  body > nav > div > button:hover #bar,
-  body > nav > div > button:focus #bar
-  {
-    color: white;
-  }
 
   #navbarSupportedContent > ul
   {
@@ -135,6 +119,10 @@ form {
   width: 75%;
 }
 
+.wrapper {
+  width: 75%;
+}
+
 @media screen and (max-width: 768px) {
   form {
     width: 95%;
@@ -143,4 +131,12 @@ form {
   #nav-links {
     width: 95%;
   }
+
+  .wrapper {
+    width: 95%;
+  }
+}
+
+.badge .badge-center {
+  margin-left: 40%;
 }
