@@ -8,45 +8,76 @@
           <h3 class="mb-2 my-5">Clientes</h3>
           <a class="btn btn-primary" href="{{ route('registrar-cliente') }}">Registrar</a>
         </div>
-        <div class="table-responsive">
+        <div>
           <table class="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Nombre</th>
-                <th scope="col">Órdenes en proceso</th>
+                <th scope="col">Pendiente</th>
+                <th scope="col">Terminado</th>
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
-              @for($i = 0; $i < count($clientes); $i++)
-                <tr scope="row">
-                  <th>{{ $i + 1 }}</th>
-                  <td>{{ $clientes[$i]->nombre }} {{ $clientes[$i]->apellido }}</td>
-                  <td>0</td>
-                  <td class="d-flex justify-content-end align-items-end">
-                    <div class="dropdown dropdown-menu-end">
-                      <button
-                        class="btn btn-primary dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        Acciones
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a href="{{ route('registrar-solicitud', [
-                            'correo' => $clientes[$i]->correo_electronico,
-                          ])}}" class="dropdown-item">Registrar Orden</a></li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-              @endfor
+            <tbody id="cuerpo-table-clientes">
+              
             </tbody>
           </table>
         </div>
       </div>
     </div>
+    <script>
+      (async() => {
+        const rawClientes = {{ Js::from($clientes) }};
+        const sanitized = rawClientes.map(cliente => ({
+          nombre: `${cliente.nombre} ${cliente.apellido}`,
+          correo: cliente.correo_electronico,
+          estadoSolicitud: cliente.estado_solicitud,
+        }));
+
+        const indexed = sanitized.reduce((acc, cliente) => ({
+          ...acc,
+          [cliente.correo]: {
+            nombre: cliente.nombre,
+            correo: cliente.correo,
+            pendientes: (acc[cliente.correo]?.pendientes || 0) + (cliente.estadoSolicitud === 'pendiente' ? 1 : 0),
+            terminados: (acc[cliente.correo]?.terminados || 0) + (cliente.estadoSolicitud === 'terminado' ? 1 : 0),
+          }
+        }), {});
+
+        const $tabla = document.querySelector('#cuerpo-table-clientes');
+        let index = 1;
+
+        for (const correo in indexed) {
+          const cliente = indexed[correo];
+          const $boton = elt('button', {
+            className: 'btn btn-primary dropdown-toggle',
+            type: 'button'
+          }, 'Acciones');
+
+          $boton.setAttribute('data-bs-toggle', 'dropdown');
+          $boton.setAttribute('aria-expanded', 'false');
+
+          $tabla.appendChild(
+            elt('tr', { scope: 'row' },
+              elt('th', {}, `${index++}`),
+              elt('td', {}, cliente.nombre),
+              elt('td', {}, cliente.pendientes.toString()),
+              elt('td', {}, cliente.terminados.toString()),
+              elt('td', { className: 'd-flex justify-content-end align-items-end' },
+                elt('div', { className: 'dropdown dropdown-menu-end' },
+                  $boton,
+                  elt('ul', { className: 'dropdown-menu' },
+                    elt('li', {},
+                      elt('a', { href: `/registrar/solicitud/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Registrar Solicitud')
+                    )
+                  )
+                )
+              )
+            )
+          );
+        }
+      })();
+    </script>
   </section>
 @stop

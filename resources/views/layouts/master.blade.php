@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="dark">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
   <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('js/lib.js') }}"></script>
 </head>
 <body class="antialiased">
   <nav class="navbar navbar-expand-lg bg-body-tertiary py-3 fixed-top">
@@ -24,13 +25,10 @@
       <div class="collapse navbar-collapse d-lg-flex justify-content-lg-end" id="navbarSupportedContent">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Inicio</a>
+            <a class="nav-link" href="{{ route('clientes') }}">Clientes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{{ route('clientes') }}">Clientes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Inicia Sesión</a>
+            <a class="nav-link" href="{{ route('listado-solicitudes') }}">Solicitudes</a>
           </li>
         </ul>
       </div>

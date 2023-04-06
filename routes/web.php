@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\SolicitudesMantenimientoController;
 use App\Http\Controllers\EquiposController;
 use App\Http\Controllers\OrdenesController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,7 @@ Route::post('/cliente', [ClientesController::class, 'crear'])->name('cliente.pos
 Route::get('/registrar/solicitud/cliente/{correo}', [SolicitudesMantenimientoController::class, 'registrarView'])->name('registrar-solicitud');
 Route::get('/solicitudes', [SolicitudesMantenimientoController::class, 'listadoView'])->name('listado-solicitudes');
 Route::post('/solicitud', [SolicitudesMantenimientoController::class, 'crear'])->name('solicitud.post');
+Route::post('/solicitud/${codigo}/estado/${estado}', [SolicitudesMantenimientoController::class, 'cambiarEstado'])->name('estado-solicitud.update');
+Auth::routes();
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');

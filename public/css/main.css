@@ -65,14 +65,6 @@ h6
   transition: 0.3s ease;
 }
 
-.navbar .navbar-nav .nav-link:hover,
-.navbar i:hover,
-.navbar .navbar-nav .nav-link.active,
-.navbar i.active
-{
-  color: coral;
-}
-
 .navbar i
 {
   font-size: 1.2rem;

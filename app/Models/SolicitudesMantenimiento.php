@@ -10,5 +10,5 @@ class SolicitudesMantenimiento extends Model
   use HasFactory;
 
   protected $table = 'solicitudes_mantenimiento';
-  protected $fillable = ['id_equipo', 'id_cliente', 'fecha_solicitud', 'descripcion_problema', 'estado_solicitud'];
+  protected $fillable = ['id_equipo', 'id_cliente', 'codigo_solicitud', 'fecha_solicitud', 'descripcion_problema', 'estado_solicitud'];
 }

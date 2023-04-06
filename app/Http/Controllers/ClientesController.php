@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Clientes;
 
 class ClientesController extends Controller
 {
   public function index()
   {
-    $clientes = Clientes::all();
+    $clientes = DB::table('clientes')
+      ->leftJoin('solicitudes_mantenimiento', 'clientes.id_cliente', '=', 'solicitudes_mantenimiento.id_cliente')
+      ->get();
+      
     return view('clientes.index', ['clientes' => $clientes]);
   }
 
