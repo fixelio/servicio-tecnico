@@ -9,8 +9,10 @@
           <a class="btn btn-primary" href="{{ route('registrar-cliente') }}">Registrar</a>
         </div>
         <div class="d-flex justify-content-start align-items-start flex-column">
-          <p>Haz click en el nombre de cada cliente para ver su histórico</p>
-          <p>
+          <div class="alert alert-info mb-4" role="alert">
+            Haz click en el nombre de cada cliente para ver su histórico. Para registrar una solicitud de mantenimiento, haz click en "Acciones" y luego selecciona "Registrar Solicitud"
+          </div>
+          <div>
             <div class="form-check form-switch form-check-reverse">
               <label class="form-check-label" for="hideClients">Ocultar clientes que no tengan el estado 'pendiente' ni 'en proceso'</label>
               <input class="form-check-input" type="checkbox" id="hideClients" />
