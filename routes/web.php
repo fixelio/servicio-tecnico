@@ -33,7 +33,7 @@ Route::get('/solicitudes/cliente/{correo}', [SolicitudesMantenimientoController:
 Route::get('/editar/solicitud/{codigo?}', [SolicitudesMantenimientoController::class, 'editarView'])->name('editar-solicitud');
 Route::post('/solicitud', [SolicitudesMantenimientoController::class, 'crear'])->name('solicitud.post');
 Route::post('/editar/solicitud', [SolicitudesMantenimientoController::class, 'editar'])->name('solicitud.put');
-Route::post('/solicitud/${codigo}/estado/${estado}', [SolicitudesMantenimientoController::class, 'cambiarEstado'])->name('estado-solicitud.update');
+Route::post('/editar/solicitud/estado', [SolicitudesMantenimientoController::class, 'cambiarEstado'])->name('estado-solicitud.put');
 
 
 Auth::routes();

@@ -6,6 +6,7 @@
     tify-content-center align-items-center flex-column mb-3">
       <form action="#" class="row mt-5" id="form-buscar-solicitud">
         <h3 class="mb-4 mt-5">Buscar Solicitud</h3>
+        <p>Recuerda que no puedes editar una solicitud que ya ha sido marcada como "Terminada"</p>
         <div class="col-9 mb-3">
           <input
             type="email"
@@ -55,7 +56,6 @@
             value="{{ $solicitud !== null ? $solicitud?->modelo : '' }}"
           >
         </div>
-        @csrf
         <div class="col-12 col-lg-6 mb-3">
           <label for="fecha_compra" class="form-label">Fecha de compra *</label>
           <input

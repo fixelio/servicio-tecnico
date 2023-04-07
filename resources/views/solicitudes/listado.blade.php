@@ -2,6 +2,35 @@
 
 @section('content')
   <section class="my-5">
+    <div
+      class="modal fade"
+      id="modal-estado-terminado"
+      tabindex="-1"
+      aria-labelledby=""
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header"><h3 class="modal-title">Terminar Solicitud</h3></div>
+          <div class="modal-body">
+            <form action="#" class="row g-2 w-100" onsubmit="event.preventDefault();">
+              <div class="col-12 mb-3">
+                <label for="descripcion_solucion_content" class="form-label">Descripción del problema</label>
+                <textarea id="descripcion_solucion_content" class="form-control" rows="4"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              id="boton-modal-establecer"
+            >Establecer</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container d-flex justify-content-center align-items-center flex-column">
       <div class="w-75">
         <div class="d-flex justify-content-between align-items-end mb-5">
@@ -32,6 +61,12 @@
         </div>
       </div>
     </div>
+    <form id="cambiar-estado-form" action="{{ route('estado-solicitud.put') }}" method="POST" class="d-none">
+        @csrf
+        <input type="hidden" name="codigo_solicitud" id="codigo_solicitud" value="">
+        <input type="hidden" name="estado_solicitud" id="estado_solicitud" value="">
+        <input type="hidden" name="descripcion_solucion" id="descripcion_solucion" value="">
+    </form>
     <script>
       (async() => {
         const rawData = {{ Js::from($solicitudes) }};
@@ -83,7 +118,7 @@
                       elt('button', { className: 'dropdown-item', onclick: () => marcarEnProceso(data), disabled: data.solicitud.estado === 'en proceso' }, 'Marcar como "En proceso"')
                     ),
                     elt('li', {},
-                      elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data) }, 'Marcar como "Terminado"')
+                      elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data), disabled: data.solicitud.estado === 'terminado' }, 'Marcar como "Terminado"')
                     )
                   )
                 )
@@ -108,48 +143,70 @@
           }
         }
 
-        async function marcarEnProceso(data) {
-          const body = new URLSearchParams({
-            codigo_solicitud: data.solicitud.codigo,
-            estado_solicitud: 'en proceso',
+        async function marcarTerminado(data) {
+          const $form = document.getElementById('cambiar-estado-form');
+
+          let $codigo = document.getElementById('codigo_solicitud');
+          let $estado = document.getElementById('estado_solicitud');
+          let $descripcion = document.getElementById('descripcion_solucion');
+
+          const $inputDesc = document.getElementById('descripcion_solucion_content');
+          const $modal = document.querySelector('#modal-estado-terminado');
+          const modal = new bootstrap.Modal($modal, {});
+
+          $inputDesc.addEventListener('change', e => {
+            $descripcion.value = e.target.value;
           });
 
-          const options = {
-            method: 'POST',
-            body,
+          $inputDesc.addEventListener('keyup', e => {
+            $descripcion.value = e.target.value;
+          });
+
+          const $botonModalEstablecer = document.querySelector('#boton-modal-establecer');
+          $botonModalEstablecer.onclick = () => {
+            $inputDesc.value = '';
+
+            $codigo.value = data.solicitud.codigo;
+            $estado.value = 'terminado';
+
+            $form.submit();
+            modal.hide();
           }
 
-          const response = await fetch('/api/solicitud/estado', options);
-          if (!response.ok) {
-            alert('Ocurrió un error al cambiar el estado de la solicitud.');
-            return;
-          }
-
-          location.reload();
+          modal.show();
         }
 
-        async function marcarTerminado(data) {
-          const body = new URLSearchParams({
-            codigo_solicitud: data.solicitud.codigo,
-            estado_solicitud: 'terminado',
-          });
+        async function marcarEnProceso(data) {
+          const $form = document.getElementById('cambiar-estado-form');
 
-          const options = {
-            method: 'POST',
-            body,
-          }
+          let $codigo = document.getElementById('codigo_solicitud');
+          let $estado = document.getElementById('estado_solicitud');
 
-          const response = await fetch('/api/solicitud/estado', options);
-          if (!response.ok) {
-            alert('Ocurrió un error al cambiar el estado de la solicitud.');
-            return;
-          }
+          $codigo.value = data.solicitud.codigo;
+          $estado.value = 'en proceso';
 
-          location.reload();
+          $form.submit();
         }
 
         window.addEventListener('DOMContentLoaded', boot);
       })();
     </script>
+
+    @if(session()->get('type') !== null && session()->get('mensaje') !== null)
+
+    <script>
+      const toastElement = document.querySelector('.toast');
+      const content = document.querySelector('.toast-body');
+      const toast = new bootstrap.Toast(toastElement);
+
+      content.textContent = "{{ session()->get('type') === 'exito' ? 'Mensaje' : 'Error' }}: {{ session()->get('mensaje') }}";
+
+      toast.show();
+
+      setTimeout(() => toast.hide(), 5000);
+    </script>
+
+    @endif
+
   </section>
 @stop

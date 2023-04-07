@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\SolicitudesMantenimiento;
 use App\Models\Clientes;
 use App\Models\Equipos;
+use App\Models\HistorialMantenimiento;
+
+use App\Services\ReportesService;
 
 class SolicitudesMantenimientoController extends Controller
 {
@@ -66,6 +69,7 @@ class SolicitudesMantenimientoController extends Controller
         ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
         ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
         ->where('solicitudes_mantenimiento.codigo_solicitud', '=', $codigo)
+        ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'terminado')
         ->first();
     }
 
@@ -74,7 +78,7 @@ class SolicitudesMantenimientoController extends Controller
     ]);
   }
 
-  public function crear(Request $request) {
+  public function crear(Request $request, ReportesService $reportesService) {
     $request->validate([
       'modelo' => 'required',
       'correo' => 'required',
@@ -98,7 +102,7 @@ class SolicitudesMantenimientoController extends Controller
 
     $codigo_solicitud = date('Y')."-".$codigo.date('m').date('d');
     $solicitud = SolicitudesMantenimiento::create([
-      'id_equipo' => $equipo['id'],
+      'id_equipo' => $equipo['id_equipo'],
       'id_cliente' => $cliente['id_cliente'],
       'codigo_solicitud' => $codigo_solicitud,
       'fecha_solicitud' => $fecha_solicitud,
@@ -106,6 +110,8 @@ class SolicitudesMantenimientoController extends Controller
       'estado_solicitud' => 'pendiente',
       'observaciones' => $datos['observaciones'],
     ]);
+
+    $reportesService->entrada();
 
     return redirect()->route('listado-solicitudes')->with([
       'type' => 'exito',
@@ -124,7 +130,10 @@ class SolicitudesMantenimientoController extends Controller
     ]);
 
     $datos = $request->all();
-    $solicitud = SolicitudesMantenimiento::where('codigo_solicitud', $datos['codigo_buscar'])->firstOrFail();
+    $solicitud = SolicitudesMantenimiento
+      ::where('codigo_solicitud', $datos['codigo_buscar'])
+      ->where('estado_solicitud', '!=', 'terminado')
+      ->firstOrFail();
 
     if ($solicitud->codigo_solicitud !== $datos['codigo_buscar']) {
       return redirect('/editar/solicitud/'.$datos['codigo_buscar'])->with([
@@ -161,9 +170,29 @@ class SolicitudesMantenimientoController extends Controller
       'estado_solicitud' => $data['estado_solicitud']
     ]);
 
+    if ($data['estado_solicitud'] === 'terminado') {
+      $descripcionSolucion = is_null($data['descripcion_solucion']) ? '' : $data['descripcion_solucion'];
+      $this->crearHistorial($solicitud, $descripcionSolucion);
+      // return redirect('generar reporte salida')
+    }
+
     return redirect()->route('listado-solicitudes')->with([
       'type' => 'exito',
       'mensaje' => 'Se ha modificado el estado de la solicitud',
     ]);
+  }
+
+  private function crearHistorial($solicitud, $descripcionSolucion)
+  {
+    $fechaFin = date('Y-m-d');
+    $datos = [
+      'id_solicitud' => $solicitud->id_solicitud,
+      'id_tecnico' => null,
+      'fecha_inicio' => $solicitud->created_at,
+      'fecha_fin' => $fechaFin,
+      'descripcion_solucion' => $descripcionSolucion,
+    ];
+
+    return HistorialMantenimiento::create($datos);
   }
 }
