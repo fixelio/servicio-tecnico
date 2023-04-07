@@ -9,13 +9,24 @@ use App\Models\Clientes;
 use App\Models\Equipos;
 use App\Models\HistorialMantenimiento;
 
+use App\Services\TecnicosService;
+
 use App\Services\ReportesService;
+use App\Services\SolicitudesTecnicosService;
 
 class SolicitudesMantenimientoController extends Controller
 {
-  public function __construct()
+  private $tecnicosService;
+  private $solicitudesTecnicos;
+
+  public function __construct(
+    TecnicosService $tecnicosService,
+    SolicitudesTecnicosService $solicitudesTecnicos
+  )
   {
     $this->middleware('auth');
+    $this->tecnicosService = $tecnicosService;
+    $this->solicitudesTecnicos = $solicitudesTecnicos;
   }
   
   public function registrarView(Request $request) {
@@ -34,7 +45,12 @@ class SolicitudesMantenimientoController extends Controller
       ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'terminado')
       ->get();
 
-    return view('solicitudes.listado', ['solicitudes' => $solicitudes]);
+    $tecnicos = $this->tecnicosService->findAll();
+
+    return view('solicitudes.listado', [
+      'solicitudes' => $solicitudes,
+      'tecnicos' => $tecnicos,
+    ]);
   }
 
   public function listadoClienteView(Request $request)
@@ -78,7 +94,7 @@ class SolicitudesMantenimientoController extends Controller
     ]);
   }
 
-  public function crear(Request $request, ReportesService $reportesService) {
+  public function crear(Request $request) {
     $request->validate([
       'articulo' => 'required',
       'modelo' => 'required',
@@ -113,10 +129,10 @@ class SolicitudesMantenimientoController extends Controller
       'observaciones' => $datos['observaciones'],
     ]);
 
-    error_log('Generando reporte');
-
-    $reporte = $reportesService->entrada();
-    return $reporte;
+    return redirect('/registrar/solicitud')->with([
+      'type' => 'exito',
+      'mensaje' => 'Se ha registrado la solicitud',
+    ]);
   }
 
   public function editar(Request $request)
@@ -178,6 +194,13 @@ class SolicitudesMantenimientoController extends Controller
       // return redirect('generar reporte salida')
     }
 
+    if ($data['estado_solicitud'] === 'en proceso') {
+      print_r($data);
+      $tecnicoResponsable = $this->tecnicosService->findOne($data['correo_tecnico']);
+      $this->asignarTecnicoResponsable($solicitud['id_solicitud'], $tecnicoResponsable['id_tecnico']);
+      // return redirect('generar reporte entrada')
+    }
+
     return redirect()->route('listado-solicitudes')->with([
       'type' => 'exito',
       'mensaje' => 'Se ha modificado el estado de la solicitud',
@@ -196,5 +219,13 @@ class SolicitudesMantenimientoController extends Controller
     ];
 
     return HistorialMantenimiento::create($datos);
+  }
+
+  private function asignarTecnicoResponsable($idSolicitud, $idTecnico)
+  {
+    return $this->solicitudesTecnicos->create([
+      'id_solicitud' => $idSolicitud,
+      'id_tecnico' => $idTecnico,
+    ]);
   }
 }

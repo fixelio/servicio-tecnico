@@ -31,6 +31,45 @@
         </div>
       </div>
     </div>
+    <div
+      class="modal fade"
+      id="modal-asignar-tecnico"
+      tabindex="-1"
+      aria-labelledby=""
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header"><h3 class="modal-title">Asignar técnico</h3></div>
+          <div class="modal-body">
+            <form action="#" class="row g-2 w-100" onsubmit="event.preventDefault();">
+              <div class="col-12 mb-3">
+                <label for="tecnico_responsable_content" class="form-label">Técnico</label>
+                <select
+                  class="form-select"
+                    aria-label="Técnico responsable de la solicitud"
+                    id="tecnico_responsable_content"
+                    name="correo_tecnico"
+                    required
+                  >
+                  @foreach($tecnicos as $tecnico)
+                    <option value="{{ $tecnico->correo_electronico }}">{{ $tecnico->nombre }} {{ $tecnico->apellido }}</option>
+                  @endforeach
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              id="boton-modal-establecer-tecnico"
+            >Establecer</button>
+          </div>
+        </div>
+      </div>
+    </div>    
     <div class="container d-flex justify-content-center align-items-center flex-column">
       <div class="w-75">
         <div class="d-flex justify-content-between align-items-end mb-5">
@@ -66,6 +105,7 @@
         <input type="hidden" name="codigo_solicitud" id="codigo_solicitud" value="">
         <input type="hidden" name="estado_solicitud" id="estado_solicitud" value="">
         <input type="hidden" name="descripcion_solucion" id="descripcion_solucion" value="">
+        <input type="hidden" name="correo_tecnico" id="correo_tecnico" value="{{ count($tecnicos) > 0 ? $tecnicos[0]->correo_electronico : '' }}">
     </form>
     <script>
       (async() => {
@@ -181,11 +221,28 @@
 
           let $codigo = document.getElementById('codigo_solicitud');
           let $estado = document.getElementById('estado_solicitud');
+          let $tecnico = document.getElementById('correo_tecnico');
 
-          $codigo.value = data.solicitud.codigo;
-          $estado.value = 'en proceso';
+          const $selectTecnico = document.getElementById('tecnico_responsable_content');
+          const $modal = document.querySelector('#modal-asignar-tecnico');
+          const modal = new bootstrap.Modal($modal, {});
 
-          $form.submit();
+          $selectTecnico.addEventListener('change', e => {
+            $tecnico.value = e.target.value;
+          });
+
+          const $botonModalEstablecer = document.querySelector('#boton-modal-establecer-tecnico');
+          $botonModalEstablecer.onclick = () => {
+            $codigo.value = data.solicitud.codigo;
+            $estado.value = 'en proceso';
+
+            if (!$tecnico.value) return;
+
+            $form.submit();
+            modal.hide();
+          }
+
+          modal.show();
         }
 
         window.addEventListener('DOMContentLoaded', boot);
