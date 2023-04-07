@@ -14,6 +14,16 @@
         <h3 class="mb-5">Registrar solicitud de mantenimiento</h3>
         <p><strong>Ingresa los datos del equipo.</strong> Los campos obligatorios están marcados con (*)</p>
         @csrf
+        <div class="col-12 mb-3">
+          <label for="articulo" class="form-label">Artículo</label>
+          <input
+            type="text"
+            id="articulo"
+            name="articulo"
+            class="form-control"
+            placeholder="Ingresa el nombre del artículo"
+          >
+        </div>
         <div class="col-12 col-lg-6 mb-3">
           <label for="num_serie" class="form-label">Número de Serie</label>
           <input

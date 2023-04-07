@@ -80,6 +80,7 @@ class SolicitudesMantenimientoController extends Controller
 
   public function crear(Request $request, ReportesService $reportesService) {
     $request->validate([
+      'articulo' => 'required',
       'modelo' => 'required',
       'correo' => 'required',
     ]);
@@ -89,6 +90,7 @@ class SolicitudesMantenimientoController extends Controller
     $cliente = Clientes::where('correo_electronico', $datos['correo'])->firstOrFail();
 
     $equipo = Equipos::create([
+      'articulo' => $datos['articulo'],
       'num_serie' => $datos['num_serie'],
       'marca' => $datos['marca'],
       'modelo' => $datos['modelo'],
@@ -111,17 +113,16 @@ class SolicitudesMantenimientoController extends Controller
       'observaciones' => $datos['observaciones'],
     ]);
 
-    $reportesService->entrada();
+    error_log('Generando reporte');
 
-    return redirect()->route('listado-solicitudes')->with([
-      'type' => 'exito',
-      'mensaje' => 'Se ha registrado la solicitud de mantenimiento',
-    ]);
+    $reporte = $reportesService->entrada();
+    return $reporte;
   }
 
   public function editar(Request $request)
   {
     $request->validate([
+      'articulo' => 'required',
       'num_serie' => 'required',
       'marca' => 'required',
       'modelo' => 'required',
@@ -145,6 +146,7 @@ class SolicitudesMantenimientoController extends Controller
     $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
 
     Equipos::find($equipo['id_equipo'])->update([
+      'articulo' => $datos['articulo'],
       'num_serie' => $datos['num_serie'],
       'marca' => $datos['marca'],
       'modelo' => $datos['modelo'],

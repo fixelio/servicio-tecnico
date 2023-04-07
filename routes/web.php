@@ -4,9 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\SolicitudesMantenimientoController;
-use App\Http\Controllers\EquiposController;
-use App\Http\Controllers\OrdenesController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TecnicosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,5 +33,10 @@ Route::post('/solicitud', [SolicitudesMantenimientoController::class, 'crear'])-
 Route::post('/editar/solicitud', [SolicitudesMantenimientoController::class, 'editar'])->name('solicitud.put');
 Route::post('/editar/solicitud/estado', [SolicitudesMantenimientoController::class, 'cambiarEstado'])->name('estado-solicitud.put');
 
+Route::get('/tecnicos', [TecnicosController::class, 'listadoView'])->name('listado-tecnicos');
+Route::get('/registrar/tecnico', [TecnicosController::class, 'registrarView'])->name('registrar-tecnico');
+Route::get('/editar/tecnico/{correo?}', [TecnicosController::class, 'editarView'])->name('editar-tecnico');
+Route::post('/tecnico', [TecnicosController::class, 'crear'])->name('tecnico.post');
+Route::post('/editar/tecnico', [TecnicosController::class, 'editar'])->name('tecnico.put');
 
 Auth::routes();

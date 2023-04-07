@@ -19,6 +19,7 @@ class EquiposController extends Controller
 
   public function crear(Request $request) {
     $request->validate([
+      'articulo' => 'required',
       'num_serie' => 'required',
       'marca' => 'required',
       'modelo' => 'required',
@@ -39,6 +40,7 @@ class EquiposController extends Controller
 
   public function create(array $data) {
     return Equipos::create([
+      'articulo' => $data['articulo'],
       'num_serie' => $data['num_serie'],
       'marca' => $data['marca'],
       'modelo' => $data['modelo'],

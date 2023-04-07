@@ -4,14 +4,28 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Dummy Report</title>
-
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
-
-	 <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-	 <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-
-	 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 </head>
+<style>
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  vertical-align: top;
+}
+.table > :not(caption) > * > * {
+  padding: 0.5rem 0.5rem;
+}
+.table > tbody {
+  vertical-align: inherit;
+}
+.table > thead {
+  vertical-align: bottom;
+}
+
+</style>
 <body>
 	<main>
 		<h1>{{ $data }}</h1>

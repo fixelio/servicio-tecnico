@@ -23,6 +23,17 @@
       <form action="{{ route('solicitud.put') }}" method="POST" class="row g-3 mt-5">
         <h3 class="mb-4">Editar solicitud de mantenimiento</h3>
         @csrf
+        <div class="col-12 mb-3">
+          <label for="articulo" class="form-label">Artículo</label>
+          <input
+            type="text"
+            id="articulo"
+            name="articulo"
+            class="form-control"
+            placeholder="Ingresa el nombre del artículo"
+            value="{{ $solicitud !== null ? $solicitud?->articulo : '' }}"
+          >
+        </div>
         <div class="col-12 col-lg-6 mb-3">
           <label for="num_serie" class="form-label">Número de Serie</label>
           <input

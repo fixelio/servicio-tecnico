@@ -73,7 +73,7 @@
         const sanitized = rawData.map(solicitud => ({
           solicitud: {
             codigo: solicitud.codigo_solicitud,
-            articulo: solicitud.modelo,
+            articulo: solicitud.articulo,
             estado: solicitud.estado_solicitud,
           },
           cliente: {

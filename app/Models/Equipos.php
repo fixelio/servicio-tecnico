@@ -11,5 +11,5 @@ class Equipos extends Model
 
   protected $table = 'equipos';
   protected $primaryKey = 'id_equipo';
-  protected $fillable = ['num_serie', 'marca', 'modelo', 'fecha_compra'];
+  protected $fillable = ['articulo', 'num_serie', 'marca', 'modelo', 'fecha_compra'];
 }
