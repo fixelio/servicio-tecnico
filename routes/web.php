@@ -36,6 +36,7 @@ Route::post('/editar/solicitud/estado', [SolicitudesMantenimientoController::cla
 Route::get('/tecnicos', [TecnicosController::class, 'listadoView'])->name('listado-tecnicos');
 Route::get('/registrar/tecnico', [TecnicosController::class, 'registrarView'])->name('registrar-tecnico');
 Route::get('/editar/tecnico/{correo?}', [TecnicosController::class, 'editarView'])->name('editar-tecnico');
+Route::get('/solicitudes/tecnico/{correo?}', [TecnicosController::class, 'trabajoAsignado'])->name('solicitudes-tecnico');
 Route::post('/tecnico', [TecnicosController::class, 'crear'])->name('tecnico.post');
 Route::post('/editar/tecnico', [TecnicosController::class, 'editar'])->name('tecnico.put');
 

@@ -99,7 +99,7 @@
           $enlace.setAttribute('href', `/editar/tecnico/${correo}`);
         });
 
-        $inputBuscarCliente.addEventListener('keyup', e => {
+        $inputBuscarTecnico.addEventListener('keyup', e => {
           const correo = e.target.value;
           const $enlace = document.querySelector('#redireccion-editar-tecnico');
           if (!$enlace) {

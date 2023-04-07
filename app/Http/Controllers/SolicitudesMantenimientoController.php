@@ -129,7 +129,7 @@ class SolicitudesMantenimientoController extends Controller
       'observaciones' => $datos['observaciones'],
     ]);
 
-    return redirect('/registrar/solicitud')->with([
+    return redirect('/registrar/solicitud/cliente/'.$cliente['correo_electronico'])->with([
       'type' => 'exito',
       'mensaje' => 'Se ha registrado la solicitud',
     ]);

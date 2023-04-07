@@ -52,6 +52,7 @@
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('listado-tecnicos') }}">Listado</a></li>
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('registrar-tecnico') }}">Registrar</a></li>
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('editar-tecnico') }}">Editar</a></li>
+                <li><a class="nav-link dropdown-item py-2" href="{{ route('solicitudes-tecnico', ['trabajos' => []]) }}">Trabajos</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">

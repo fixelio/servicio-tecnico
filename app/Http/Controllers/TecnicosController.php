@@ -5,15 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Services\TecnicosService;
+use App\Services\SolicitudesTecnicosService;
 
 class TecnicosController extends Controller
 {
   private $tecnicosService;
 
-  public function __construct(TecnicosService $service)
+  public function __construct(
+    TecnicosService $service,
+    SolicitudesTecnicosService $solicitudesTecnicos
+  )
   {
     $this->middleware('auth');
     $this->tecnicosService = $service;
+    $this->solicitudesTecnicos = $solicitudesTecnicos;
   }
 
   public function registrarView()
@@ -86,6 +91,26 @@ class TecnicosController extends Controller
     return redirect('/editar/tecnico')->with([
       'type' => 'exito',
       'mensaje' => 'Se ha editado el tecnico',
+    ]);
+  }
+
+  public function trabajoAsignado (Request $request, $correo = null)
+  {
+    $correo = $request->route('correo');
+    $tecnico = null;
+    $trabajos = [];
+
+    if ($correo !== null) {
+      $tecnico = $this->tecnicosService->findOne($correo);
+    }
+
+    if ($tecnico !== null) {
+      $trabajos = $this->solicitudesTecnicos->findJoin($tecnico['id_tecnico']);
+    }
+
+    return view('tecnicos.trabajos', [
+      'tecnico' => $tecnico,
+      'trabajos' => $trabajos,
     ]);
   }
 }

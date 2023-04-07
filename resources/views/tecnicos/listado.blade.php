@@ -33,6 +33,7 @@
                       </button>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ route('editar-tecnico', ['correo' => $tecnicos[$i]->correo_electronico]) }}">Editar</a></li>
+                        <li><a class="dropdown-item" href="{{ route('solicitudes-tecnico', ['correo' => $tecnicos[$i]->correo_electronico]) }}">Solicitudes Asignadas</a></li>
                       </ul>
                     </div>
                   </td>
