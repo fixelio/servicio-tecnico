@@ -15,7 +15,7 @@
           <div class="modal-body">
             <form action="#" class="row g-2 w-100" onsubmit="event.preventDefault();">
               <div class="col-12 mb-3">
-                <label for="descripcion_solucion_content" class="form-label">Descripción del problema</label>
+                <label for="descripcion_solucion_content" class="form-label">Descripción de la solución</label>
                 <textarea id="descripcion_solucion_content" class="form-control" rows="4"></textarea>
               </div>
             </form>
@@ -240,12 +240,38 @@
 
             $form.submit();
             modal.hide();
+
+            //checkCookie();
           }
 
           modal.show();
         }
 
-        window.addEventListener('DOMContentLoaded', boot);
+        function handleDownloadCreated(item) {
+          console.log(item);
+          let intervalId;
+          const handle = () => {
+            let endTime = item.endTime;
+            console.log(endTime);
+
+            if (endTime !== undefined) {
+              clearInterval(intervalId);
+              location.reload();
+            }
+          }
+
+          intervalId = setInterval(handle, 500);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+          boot();
+
+          if (typeof browser === 'undefined') {
+            window.browser = chrome;
+          }
+
+          window.browser.downloads.onCreated.addEventListener(handleDownloadCreated);
+        });
       })();
     </script>
 

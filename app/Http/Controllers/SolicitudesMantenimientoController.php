@@ -10,7 +10,6 @@ use App\Models\Equipos;
 use App\Models\HistorialMantenimiento;
 
 use App\Services\TecnicosService;
-
 use App\Services\ReportesService;
 use App\Services\SolicitudesTecnicosService;
 
@@ -18,15 +17,18 @@ class SolicitudesMantenimientoController extends Controller
 {
   private $tecnicosService;
   private $solicitudesTecnicos;
+  private $reportesService;
 
   public function __construct(
     TecnicosService $tecnicosService,
-    SolicitudesTecnicosService $solicitudesTecnicos
+    SolicitudesTecnicosService $solicitudesTecnicos,
+    ReportesService $reportesService
   )
   {
     $this->middleware('auth');
     $this->tecnicosService = $tecnicosService;
     $this->solicitudesTecnicos = $solicitudesTecnicos;
+    $this->reportesService = $reportesService;
   }
   
   public function registrarView(Request $request) {
@@ -191,14 +193,13 @@ class SolicitudesMantenimientoController extends Controller
     if ($data['estado_solicitud'] === 'terminado') {
       $descripcionSolucion = is_null($data['descripcion_solucion']) ? '' : $data['descripcion_solucion'];
       $this->crearHistorial($solicitud, $descripcionSolucion);
-      // return redirect('generar reporte salida')
     }
 
     if ($data['estado_solicitud'] === 'en proceso') {
-      print_r($data);
       $tecnicoResponsable = $this->tecnicosService->findOne($data['correo_tecnico']);
       $this->asignarTecnicoResponsable($solicitud['id_solicitud'], $tecnicoResponsable['id_tecnico']);
-      // return redirect('generar reporte entrada')
+      $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
+      return $this->generarReporteEntrada($solicitud, $equipo, $tecnicoResponsable);
     }
 
     return redirect()->route('listado-solicitudes')->with([
@@ -227,5 +228,25 @@ class SolicitudesMantenimientoController extends Controller
       'id_solicitud' => $idSolicitud,
       'id_tecnico' => $idTecnico,
     ]);
+  }
+
+  private function generarReporteEntrada($solicitud, $equipo, $tecnico)
+  {
+    $cliente = Clientes::where('id_cliente', $solicitud['id_cliente'])->firstOrFail();
+    $pdf = $this->reportesService->entrada([
+      'cliente' => $cliente['nombre']." ".$cliente['apellido'],
+      'telefono' => $cliente['telefono'],
+      'articulo' => $equipo['articulo'],
+      'marca' => $equipo['marca'],
+      'modelo' => $equipo['modelo'],
+      'serie' => $equipo['num_serie'],
+      'diagnostico' => $solicitud['descripcion_problema'],
+      'notas' => $solicitud['observaciones'],
+      'tecnico' => $tecnico['nombre']." ".$tecnico['apellido'],
+    ]);
+
+    setcookie('reporte_entrada', '', time() - 3600);
+    setcookie('reporte_entrada', 'descarga_completa', time() + 86400, "/");
+    return $pdf;
   }
 }
