@@ -55,6 +55,25 @@ class SolicitudesMantenimientoController extends Controller
     ]);
   }
 
+  public function editarView(Request $request, $codigo = null)
+  {
+    $codigo = $request->route('codigo');
+    $solicitud = null;
+
+    if ($codigo !== null) {
+      $solicitud = DB::table('solicitudes_mantenimiento')
+        ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
+        ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
+        ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
+        ->where('solicitudes_mantenimiento.codigo_solicitud', '=', $codigo)
+        ->first();
+    }
+
+    return view('solicitudes.editar', [
+      'solicitud' => $solicitud,
+    ]);
+  }
+
   public function crear(Request $request) {
     $request->validate([
       'modelo' => 'required',
@@ -85,11 +104,47 @@ class SolicitudesMantenimientoController extends Controller
       'fecha_solicitud' => $fecha_solicitud,
       'descripcion_problema' => $datos['descripcion_problema'],
       'estado_solicitud' => 'pendiente',
+      'observaciones' => $datos['observaciones'],
     ]);
 
     return redirect()->route('listado-solicitudes')->with([
       'type' => 'exito',
       'mensaje' => 'Se ha registrado la solicitud de mantenimiento',
+    ]);
+  }
+
+  public function editar(Request $request)
+  {
+    $request->validate([
+      'num_serie' => 'required',
+      'marca' => 'required',
+      'modelo' => 'required',
+      'fecha_compra' => 'required',
+      'codigo_buscar' => 'required',
+    ]);
+
+    $datos = $request->all();
+    $solicitud = SolicitudesMantenimiento::where('codigo_solicitud', $datos['codigo_buscar'])->firstOrFail();
+
+    if ($solicitud->codigo_solicitud !== $datos['codigo_buscar']) {
+      return redirect('/editar/solicitud/'.$datos['codigo_buscar'])->with([
+        'type' => 'error',
+        'mensaje' => 'No puedes editar el código de la solicitud'
+      ]);
+    }
+
+    $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
+
+    Equipos::find($equipo['id_equipo'])->update([
+      'num_serie' => $datos['num_serie'],
+      'marca' => $datos['marca'],
+      'modelo' => $datos['modelo'],
+      'fecha_compra' => $datos['fecha_compra'],
+    ]);
+
+    return redirect('/editar/solicitud')->with([
+      'type' => 'exito',
+      'mensaje' => 'Se ha editado la solicitud',
     ]);
   }
 

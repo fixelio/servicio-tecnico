@@ -105,6 +105,9 @@
                       ),
                       elt('li', {},
                         elt('a', { href: `/registrar/solicitud/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Registrar Solicitud')
+                      ),
+                      elt('li', {},
+                        elt('a', { href: `/editar/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Editar Cliente')
                       )
                     )
                   )

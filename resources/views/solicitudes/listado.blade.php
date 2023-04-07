@@ -79,6 +79,7 @@
                   $boton,
                   elt('ul', { className: 'dropdown-menu' },
                     elt('li', {},
+                      elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
                       elt('button', { className: 'dropdown-item', onclick: () => marcarEnProceso(data), disabled: data.solicitud.estado === 'en proceso' }, 'Marcar como "En proceso"')
                     ),
                     elt('li', {},

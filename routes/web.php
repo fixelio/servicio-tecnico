@@ -23,12 +23,16 @@ Route::get('/', [ClientesController::class, 'index']);
 
 Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes');
 Route::get('/registrar/cliente', [ClientesController::class, 'registrarView'])->name('registrar-cliente');
+Route::get('/editar/cliente/{correo?}', [ClientesController::class, 'editarView'])->name('editar-cliente');
 Route::post('/cliente', [ClientesController::class, 'crear'])->name('cliente.post');
+Route::post('/editar/cliente', [ClientesController::class, 'editar'])->name('cliente.put');
 
 Route::get('/solicitudes', [SolicitudesMantenimientoController::class, 'listadoView'])->name('listado-solicitudes');
 Route::get('/registrar/solicitud/cliente/{correo}', [SolicitudesMantenimientoController::class, 'registrarView'])->name('registrar-solicitud');
 Route::get('/solicitudes/cliente/{correo}', [SolicitudesMantenimientoController::class, 'listadoClienteView'])->name('solicitudes-cliente');
+Route::get('/editar/solicitud/{codigo?}', [SolicitudesMantenimientoController::class, 'editarView'])->name('editar-solicitud');
 Route::post('/solicitud', [SolicitudesMantenimientoController::class, 'crear'])->name('solicitud.post');
+Route::post('/editar/solicitud', [SolicitudesMantenimientoController::class, 'editar'])->name('solicitud.put');
 Route::post('/solicitud/${codigo}/estado/${estado}', [SolicitudesMantenimientoController::class, 'cambiarEstado'])->name('estado-solicitud.update');
 
 

@@ -12,6 +12,9 @@
   <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
   <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
@@ -36,15 +39,24 @@
               </li>
             @endif
           @else
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('clientes') }}">Clientes</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link  dropdown-toggle" href="#" data-bs-toggle="dropdown">Clientes</a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link dropdown-item py-2" href="{{ route('clientes') }}">Listado</a></li>
+                <li><a class="nav-link dropdown-item py-2" href="{{ route('registrar-cliente') }}">Registrar</a></li>
+                <li><a class="nav-link dropdown-item py-2" href="{{ route('editar-cliente') }}">Editar</a></li>
+              </ul>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('listado-solicitudes') }}">Solicitudes</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link  dropdown-toggle" href="#" data-bs-toggle="dropdown">Solicitudes</a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link dropdown-item py-2" href="{{ route('listado-solicitudes') }}">Listado</a></li>
+                <li><a class="nav-link dropdown-item py-2" href="{{ route('editar-solicitud') }}">Editar</a></li>
+              </ul>
             </li>
             <li class="nav-item px-0 px-lg-4">
               <div class="form-check form-switch nav-link">
-                <label class="form-check-label" for="lightSwitch">Modo Oscuro</label>
+                <label class="form-check-label" for="lightSwitch"> <i class="bi bi-sun" id="theme-switcher-icon"></i></label>
                 <input class="form-check-input" type="checkbox" id="lightSwitch" />
               </div>
             </li>
@@ -92,17 +104,20 @@
     (() => {
       let theme = 'light';
       const $themeSwitcher = document.querySelector('#lightSwitch');
+      const $icon = document.querySelector('#theme-switcher-icon');
       const storedTheme = localStorage.getItem('theme');
 
       if (storedTheme && storedTheme === 'dark') {
         theme = storedTheme;
         document.documentElement.setAttribute('data-bs-theme', theme);
         $themeSwitcher.checked = theme === 'dark';
+        $icon.className = `bi bi-${theme === 'dark' ? 'sun' : 'moon'}`;
       }
 
       $themeSwitcher.addEventListener('change', (e) => {
         theme = theme === 'light' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-bs-theme', theme);
+        $icon.className = `bi bi-${theme === 'dark' ? 'sun' : 'moon'}`;
         localStorage.setItem('theme', theme);
       });
     })();

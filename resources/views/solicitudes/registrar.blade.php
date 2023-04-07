@@ -65,6 +65,13 @@
           <textarea name="descripcion_problema" id="descripcion_problema" class="form-control" rows="4"></textarea>
         </div>
 
+        <div class="col-12 mb-3">
+          <label for="observaciones" class="form-label">
+            Observaciones
+          </label>
+          <textarea name="observaciones" id="observaciones" class="form-control" rows="4"></textarea>
+        </div>
+
         <input type="hidden" name="correo" value="{{ $cliente['correo_electronico'] }}">
 
         <div>
