@@ -6,7 +6,12 @@ use Illuminate\Support\Facades\DB;
 use App\Models\SolicitudesTecnicos;
 
 class SolicitudesTecnicosService {
-  
+
+  public function findByIdSolicitud($id)
+  {
+    return SolicitudesTecnicos::where('id_solicitud', $id)->firstOrFail();
+  }
+
   public function findJoin($idTecnico)
   {
     return DB::Table('solicitudes_tecnicos')

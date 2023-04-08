@@ -84,7 +84,7 @@ table {
 }
 </style>
 <body>
-  <div class="divTable w-100 mb-5" style="margin-top: 2cm;">
+  <div class="divTable w-100 mb-5">
    <div class="divTableBody">
      <div class="divTableRow">
        <div class="divTableCell w-33">

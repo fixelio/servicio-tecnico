@@ -16,6 +16,11 @@ class TecnicosService {
     return $resultado->firstOrFail();
   }
 
+  public function findById($id)
+  {
+    return Tecnicos::where('id_tecnico', $id)->firstOrFail();
+  }
+
   public function findAll()
   {
     $tecnicos = Tecnicos::all();

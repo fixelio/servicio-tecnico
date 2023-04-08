@@ -27,6 +27,31 @@ class ReportesService {
     ];
 
 		return Pdf::loadView('pdf.entrada', $data)
-      ->download('solicitud de mantenimiento entrada.pdf');
+      ->download('solicitud de mantenimiento entrada '.$info['cliente'].'.pdf');
 	}
+
+  public function salida($info)
+  {
+    $ordenServicio = SolicitudesMantenimiento::count();
+    $fechaSolicitud = date('Y-m-d H:i:s');
+
+    $data = [
+      'ordenServicio' => $ordenServicio,
+      'fechaSolicitud' => $fechaSolicitud,
+      'cliente' => $info['cliente'],
+      'telefono' => $info['telefono'],
+      'articulo' => $info['articulo'],
+      'marca' => $info['marca'],
+      'modelo' => $info['modelo'],
+      'serie' => $info['serie'],
+      'diagnostico' => $info['diagnostico'],
+      'reparacion' => $info['reparacion'],
+      'garantia' => $info['garantia'],
+      'monto' => $info['monto'],
+      'tecnico' => $info['tecnico'],
+    ];
+
+    return Pdf::loadView('pdf.salida', $data)
+      ->download('solicitud de mantenimiento salida '.$info['cliente'].'.pdf');
+  }
 }

@@ -11,12 +11,23 @@
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header"><h3 class="modal-title">Terminar Solicitud</h3></div>
+          <div class="modal-header">
+            <h3 class="modal-title">Terminar Solicitud</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
           <div class="modal-body">
             <form action="#" class="row g-2 w-100" onsubmit="event.preventDefault();">
               <div class="col-12 mb-3">
                 <label for="descripcion_solucion_content" class="form-label">Descripción de la solución</label>
                 <textarea id="descripcion_solucion_content" class="form-control" rows="4"></textarea>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="garantia_content" class="form-label">Garantía</label>
+                <input type="text" class="form-control" id="garantia_content" value="">
+              </div>
+              <div class="col-12 mb-3">
+                <label for="monto_content" class="form-label">Monto a pagar</label>
+                <input type="number" class="form-control" id="monto_content" value="" pattern="[0-9]+([\.,][0-9]+)?" step="0.01">
               </div>
             </form>
           </div>
@@ -27,6 +38,7 @@
               data-bs-dismiss="modal"
               id="boton-modal-establecer"
             >Establecer</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </div>
       </div>
@@ -40,7 +52,10 @@
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header"><h3 class="modal-title">Asignar técnico</h3></div>
+          <div class="modal-header">
+            <h3 class="modal-title">Asignar técnico</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
           <div class="modal-body">
             <form action="#" class="row g-2 w-100" onsubmit="event.preventDefault();">
               <div class="col-12 mb-3">
@@ -66,6 +81,7 @@
               data-bs-dismiss="modal"
               id="boton-modal-establecer-tecnico"
             >Establecer</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </div>
       </div>
@@ -106,6 +122,8 @@
         <input type="hidden" name="estado_solicitud" id="estado_solicitud" value="">
         <input type="hidden" name="descripcion_solucion" id="descripcion_solucion" value="">
         <input type="hidden" name="correo_tecnico" id="correo_tecnico" value="{{ count($tecnicos) > 0 ? $tecnicos[0]->correo_electronico : '' }}">
+        <input type="hidden" name="garantia" id="garantia" value="">
+        <input type="hidden" name="monto" id="monto" value="">
     </form>
     <script>
       (async() => {
@@ -155,6 +173,8 @@
                   elt('ul', { className: 'dropdown-menu' },
                     elt('li', {},
                       elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
+                    ),
+                    elt('li', {},
                       elt('button', { className: 'dropdown-item', onclick: () => marcarEnProceso(data), disabled: data.solicitud.estado === 'en proceso' }, 'Marcar como "En proceso"')
                     ),
                     elt('li', {},
@@ -168,7 +188,7 @@
               $acciones.appendChild(document.createTextNode('Sin acciones'));
             }
 
-            const element = elt('tr', { scope: 'row' },
+            const element = elt('tr', { scope: 'row', id: `solicitud-${data.solicitud.codigo}` },
               elt('th', {}, indice.toString()),
               elt('td', {}, data.solicitud.codigo),
               elt('td', {}, data.cliente.nombre),
@@ -189,27 +209,70 @@
           let $codigo = document.getElementById('codigo_solicitud');
           let $estado = document.getElementById('estado_solicitud');
           let $descripcion = document.getElementById('descripcion_solucion');
+          let $garantia = document.getElementById('garantia');
+          let $monto = document.getElementById('monto');
 
-          const $inputDesc = document.getElementById('descripcion_solucion_content');
+          const $inputDescripcion = document.getElementById('descripcion_solucion_content');
+          const $inputGarantia = document.getElementById('garantia_content');
+          const $inputMonto = document.getElementById('monto_content');
+
           const $modal = document.querySelector('#modal-estado-terminado');
           const modal = new bootstrap.Modal($modal, {});
 
-          $inputDesc.addEventListener('change', e => {
+          $inputDescripcion.addEventListener('change', e => {
             $descripcion.value = e.target.value;
           });
 
-          $inputDesc.addEventListener('keyup', e => {
+          $inputDescripcion.addEventListener('keyup', e => {
             $descripcion.value = e.target.value;
+          });
+
+
+          $inputGarantia.addEventListener('change', e => {
+            $garantia.value = e.target.value;
+          });
+
+          $inputGarantia.addEventListener('keyup', e => {
+            $garantia.value = e.target.value;
+          });
+
+
+          $inputMonto.addEventListener('change', e => {
+            $monto.value = e.target.value;
+          });
+
+          $inputMonto.addEventListener('keyup', e => {
+            $monto.value = e.target.value;
           });
 
           const $botonModalEstablecer = document.querySelector('#boton-modal-establecer');
           $botonModalEstablecer.onclick = () => {
-            $inputDesc.value = '';
+            $inputDescripcion.value = '';
+            $inputGarantia.value = '';
+            $inputMonto.value = '';
 
             $codigo.value = data.solicitud.codigo;
             $estado.value = 'terminado';
 
+            const $row = document.getElementById(`solicitud-${data.solicitud.codigo}`);
+            const $estadoSolicitud = $row.children[4].children[0];
+            $estadoSolicitud.textContent = ESTADO['terminado'];
+            $estadoSolicitud.className = 'badge badge-center text-bg-success';
+
+            const $actions = $row
+              .children[5]
+              .children[0]
+              .children[1];
+
+            $row.children[5].innerHTML = 'Sin acciones';
             $form.submit();
+
+            $codigo.value = '';
+            $estado.value = '';
+            $descripcion.value = '';
+            $garantia.value = '';
+            $monto.value = '';
+
             modal.hide();
           }
 
@@ -237,40 +300,32 @@
             $estado.value = 'en proceso';
 
             if (!$tecnico.value) return;
-
             $form.submit();
-            modal.hide();
 
-            //checkCookie();
+
+            const $row = document.getElementById(`solicitud-${data.solicitud.codigo}`);
+            const $estadoSolicitud = $row.children[4].children[0];
+            $estadoSolicitud.textContent = ESTADO['en proceso'];
+            $estadoSolicitud.className = 'badge badge-center text-bg-info';
+
+            const $actions = $row
+              .children[5]
+              .children[0]
+              .children[1];
+
+            const $btnEnProceso = $actions
+              .children[1]
+              .children[0];
+
+            $btnEnProceso.disabled = true;
+            modal.hide();
           }
 
           modal.show();
         }
 
-        function handleDownloadCreated(item) {
-          console.log(item);
-          let intervalId;
-          const handle = () => {
-            let endTime = item.endTime;
-            console.log(endTime);
-
-            if (endTime !== undefined) {
-              clearInterval(intervalId);
-              location.reload();
-            }
-          }
-
-          intervalId = setInterval(handle, 500);
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
           boot();
-
-          if (typeof browser === 'undefined') {
-            window.browser = chrome;
-          }
-
-          window.browser.downloads.onCreated.addEventListener(handleDownloadCreated);
         });
       })();
     </script>

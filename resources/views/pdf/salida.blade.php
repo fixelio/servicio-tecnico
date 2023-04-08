@@ -3,12 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Solicitud de Entrada</title>
+	<meta name="description" content="PDF de entrada de una solicitud">
+	<meta name="keywords" content="solicitud de mantenimiento, reporte">
+	<title>Solicitud de entrada</title>
 </head>
 <style>
 * {
-	font-family: Helvetica, Arial, sans-serif;
-	font-size: medium;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: medium;
 }
 
 td {
@@ -16,33 +18,33 @@ td {
 }
 
 .bordered td {
-	border-color: #959594;
-	border-style: solid;
-	border-width: 1px;
+  border-color: #959594;
+  border-style: solid;
+  border-width: 1px;
 }
 
 table {
-	border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 .divTable {
-	display: table;
-	width: 100%;
+  display: table;
+  width: 100%;
 }
 
 .divTableRow {
-	display: table-row;
+  display: table-row;
 }
 
 .divTableCell,
 .divTableHead {
-	border: 0px !important;
-	display: table-cell;
-	padding: 0px !important;
+  border: 0px !important;
+  display: table-cell;
+  padding: 0px !important;
 }
 
 .divTableBody {
-	display: table-row-group;
+  display: table-row-group;
 }
 
 .w-100 {
@@ -80,18 +82,23 @@ table {
 .mb-5 {
   margin-bottom: 2rem;
 }
+
+.td-inline {
+  width: 1%;
+  white-space: nowrap;
+}
 </style>
 <body>
-  <div class="divTable w-100 mb-5" style="margin-top: 2cm;">
+  <div class="divTable w-100 mb-5">
    <div class="divTableBody">
      <div class="divTableRow">
        <div class="divTableCell w-33">
          <table class="bordered w-100">
            <tr>
-             <td><b>Orden de Servicio: 520</b></td>
+             <td><b>Orden de Servicio: {{ $ordenServicio }}</b></td>
            </tr>
            <tr>
-             <td><b>Fecha:</b> 14/06/2922 12:09:54</td>
+             <td><b>Fecha:</b> {{ $fechaSolicitud }}</td>
            </tr>
          </table>
        </div>
@@ -109,10 +116,10 @@ table {
    </div> 
   </div>
 
-  <div class="divTable w-100 mb-5">
+  <div class="divTable w-100">
    <div class="divTableBody">
      <div class="divTableRow">
-       <div class="divTableCell w-20">
+       <div class="divTableCell" style="width: 17.1%">
          <table class="bordered w-100">
            <tr>
              <td><b>Cliente</b></td>
@@ -125,21 +132,21 @@ table {
            </tr>
          </table>
        </div>
-       <div class="divTableCell">
+       <div class="divTableCell w-50">
          <table class="bordered w-100">
            <tr>
-             <td>Damian</td>
+             <td>{{ $cliente }}</td>
            </tr>
            <tr>
-             <td>Torre</td>
+             <td>{{ $articulo }}</td>
            </tr>
            <tr>
-             <td>***</td>
+             <td>{{ $marca }}</td>
            </tr>
          </table>
        </div>
-       <div class="divTableCell w-16">
-         <table class="bordered w-100">
+       <div class="divTableCell">
+         <table class="bordered">
            <tr>
              <td><b>Teléfono</b></td>
            </tr>
@@ -151,16 +158,16 @@ table {
            </tr>
          </table>
        </div>
-       <div class="divTableCell">
+       <div class="divTableCell w-50">
          <table class="bordered w-100">
            <tr>
-             <td>***</td>
+             <td>{{ $telefono }}</td>
            </tr>
            <tr>
-             <td>***</td>
+             <td>{{ $modelo }}</td>
            </tr>
            <tr>
-             <td>No tiene</td>
+             <td>{{ $serie }}</td>
            </tr>
          </table>
        </div>
@@ -172,23 +179,44 @@ table {
    <div class="divTableBody">
      <div class="divTableRow">
        <div class="divTableCell w-100">
-         <table class="bordered w-100">
-           <tr>
-             <td rowspan="2"><b>Diagnóstico</b></td>
-           </tr>
-           <tr>
-             <td>Lorem ipsum dolor sit amet consectetur adipisicing, elit. Autem exercitationem suscipit, quibusdam saepe, ratione modi ut quam. Nam, quidem, dignissimos cumque corporis nostrum, hic soluta, aliquid impedit repellat laboriosam obcaecati.</td>
-           </tr>
-           <tr>
-             <td rowspan="2"><b>Notas</b></td>
-           </tr>
-           <tr>
-             <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id aut eum nam molestiae omnis velit deleniti, exercitationem mollitia sequi ullam quisquam recusandae asperiores et beatae tempora. Animi repellat delectus quasi?</td>
-           </tr>
+         <table class="bordered w-100" style="page-break-inside: avoid !important;">
+            <tr>
+              <td class="td-inline"><b>Diagnóstico</b></td>
+              <td class="w-100">{{ $diagnostico }}</td>
+            </tr>
+            <tr>
+              <td class="td-inline"><b>Reparación</b></td>
+              <td class="w-100">{{ $reparacion }}</td>
+            </tr>
+            <tr>
+              <td class="td-inline"><b>Garantía</b></td>
+              <td class="w-100">{{ $garantia }}</td>
+            </tr>
          </table>
        </div>
      </div>
    </div> 
+  </div>
+
+  <div class="divTable w-100">
+    <div class="divTableBody">
+      <div class="divTableRow">
+        <div class="divTableCell w-33">
+          <table class="bordered w-100">
+            <tr>
+              <td><b style="font-size: large; font-style: italic;">Total a Pagar: ${{ $monto }}</b></td>
+            </tr>
+          </table>
+        </div>
+        <div class="divTableCell w-67">
+          <table class="w-100">
+            <tr>
+              <td class="text-center">Técnico Responsable: {{ $tecnico }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="divTable w-100">
@@ -197,14 +225,14 @@ table {
        <div class="divTableCell w-50">
          <table class="bordered w-100">
            <tr>
-             <td style="padding: 32px 10px; padding-bottom: 6px;">Técnico responsable: Sebastián</td>
+             <td style="padding: 42px 10px; padding-bottom: 6px;">Firma del cliente: __________________</td>
            </tr>
          </table>
        </div>
        <div class="divTableCell w-50">
          <table class="bordered w-100">
            <tr>
-             <td style="padding: 32px 10px; padding-bottom: 6px;">Firma: __________________</td>
+             <td style="padding: 42px 10px; padding-bottom: 6px;">Firma del técnico: __________________</td>
            </tr>
          </table>
        </div>
