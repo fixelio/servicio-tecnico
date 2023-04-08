@@ -24,7 +24,7 @@
   <nav class="navbar navbar-expand-lg bg-body-tertiary py-3 fixed-top">
     <div class="container px-4" id="nav-links">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <i id="bar" class="fas fa-bars"></i>
+        <i id="bar" class="bi bi-list"></i>
       </button>
       <div class="collapse navbar-collapse d-lg-flex justify-content-lg-end" id="navbarSupportedContent">
         <ul class="navbar-nav">
