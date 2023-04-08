@@ -7,17 +7,17 @@
       <form action="#" class="row mt-5" id="form-buscar-solicitud">
         <h3 class="mb-3">Buscar Solicitud</h3>
         <p>Recuerda que no puedes editar una solicitud que ya ha sido marcada como "Terminada"</p>
-        <div class="col-8 mb-3">
+        <div class="input-group col-12 mb-3">
           <input
-            type="email"
+            type="text"
             id="buscar-codigo"
             class="form-control"
-            placeholder="Ingresa el codigo de la solicitud"
+            placeholder="Ingresa el código de la solicitud"
+            aria-label="Código de la solicitud"
+            aria-describedby="redireccion-codigo-solicitud"
             value="{{ $solicitud !== null ? $solicitud?->codigo_solicitud : '' }}"
           >
-        </div>
-        <div class="col-4 mb-3">
-          <a class="btn btn-primary w-100" href="#" id="redireccion-codigo-solicitud"><i class="bi bi-search"></i> Buscar</a>
+          <a class="btn btn-outline-primary" id="redireccion-codigo-solicitud" href="#"><i class="bi bi-search"></i> Buscar</a>
         </div>
       </form>
       <form action="{{ route('solicitud.put') }}" method="POST" class="row g-3 mt-5">

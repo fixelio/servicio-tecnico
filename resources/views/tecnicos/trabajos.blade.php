@@ -5,17 +5,17 @@
     <div class="container d-flex justify-content-center align-items-center flex-column">
       <form action="#" class="row mt-5" id="form-buscar-tecnico">
         <h3 class="mb-4">Buscar Técnico</h3>
-        <div class="col-8 mb-3">
+        <div class="input-group col-12 mb-3">
           <input
             type="email"
             id="buscar-correo-electronico"
             class="form-control"
             placeholder="Ingresa el correo del técnico"
+            aria-label="Correo del técnico"
+            aria-describedby="redireccion-solicitudes-cliente"
             value="{{ $tecnico !== null ? $tecnico?->correo_electronico : '' }}"
           >
-        </div>
-        <div class="col-4 mb-3">
-          <a class="btn btn-primary w-100" href="#" id="redireccion-solicitudes-tecnico"><i class="bi bi-search"></i> Buscar</a>
+          <a class="btn btn-outline-primary" id="redireccion-solicitudes-tecnico" href="#"><i class="bi bi-search"></i> Buscar</a>
         </div>
       </form>
       <div class="wrapper mt-5">

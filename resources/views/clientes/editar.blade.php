@@ -3,22 +3,22 @@
 @section('content')
   <section class="my-5">
     <div class="container d-flex justify-content-center align-items-center mb-3 flex-column">
-      <form action="#" class="row my-5" id="form-buscar-cliente">
+      <form action="#" class="row mt-5" id="form-buscar-cliente">
         <h3 class="mb-4">Buscar Cliente</h3>
-        <div class="col-8 mb-3">
+        <div class="input-group col-12 mb-3">
           <input
             type="email"
             id="buscar-correo-electronico"
             class="form-control"
             placeholder="Ingresa el correo del cliente"
+            aria-label="Correo del cliente"
+            aria-describedby="redireccion--editar-cliente"
             value="{{ $cliente !== null ? $cliente?->correo_electronico : '' }}"
           >
-        </div>
-        <div class="col-4 mb-3">
-          <a class="btn btn-primary w-100" href="#" id="redireccion--editar-cliente"><i class="bi bi-search"></i> Buscar</a>
+          <a class="btn btn-outline-primary" id="redireccion--editar-cliente" href="#"><i class="bi bi-search"></i> Buscar</a>
         </div>
       </form>
-      <form action="{{ route('cliente.put') }}" method="POST" class="row g-3">
+      <form action="{{ route('cliente.put') }}" method="POST" class="row g-3 mt-5">
         <h3 class="mb-4">Editar</h3>
         @csrf
         <div class="col-12 col-lg-6 mb-3">
