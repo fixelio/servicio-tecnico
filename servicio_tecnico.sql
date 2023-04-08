@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-04-2023 a las 03:12:07
+-- Tiempo de generación: 08-04-2023 a las 17:30:01
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -58,6 +58,7 @@ CREATE TABLE `componentes` (
 
 CREATE TABLE `equipos` (
   `id_equipo` int(11) NOT NULL,
+  `articulo` varchar(60) NOT NULL,
   `num_serie` varchar(50) DEFAULT NULL,
   `marca` varchar(50) DEFAULT NULL,
   `modelo` varchar(50) DEFAULT NULL,
@@ -81,6 +82,20 @@ CREATE TABLE `equipos_componentes` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `facturas`
+--
+
+CREATE TABLE `facturas` (
+  `id_factura` int(11) NOT NULL,
+  `id_historial` int(11) NOT NULL,
+  `monto` decimal(10,2) NOT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `historial_mantenimiento`
 --
 
@@ -90,7 +105,10 @@ CREATE TABLE `historial_mantenimiento` (
   `id_tecnico` int(11) DEFAULT NULL,
   `fecha_inicio` datetime DEFAULT NULL,
   `fecha_fin` datetime DEFAULT NULL,
-  `descripcion_solucion` varchar(255) DEFAULT NULL
+  `descripcion_solucion` varchar(255) DEFAULT NULL,
+  `garantia` varchar(50) NOT NULL,
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -118,10 +136,24 @@ CREATE TABLE `solicitudes_mantenimiento` (
   `codigo_solicitud` varchar(20) NOT NULL,
   `fecha_solicitud` date DEFAULT NULL,
   `descripcion_problema` varchar(255) DEFAULT NULL,
+  `observaciones` varchar(255) DEFAULT NULL,
   `estado_solicitud` enum('pendiente','en proceso','terminado') DEFAULT NULL,
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `solicitudes_tecnicos`
+--
+
+CREATE TABLE `solicitudes_tecnicos` (
+  `id_solicitud` int(11) NOT NULL,
+  `id_tecnico` int(11) NOT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -134,7 +166,9 @@ CREATE TABLE `tecnicos` (
   `nombre` varchar(50) DEFAULT NULL,
   `apellido` varchar(50) DEFAULT NULL,
   `correo_electronico` varchar(255) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL
+  `telefono` varchar(20) DEFAULT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -153,6 +187,13 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'admin@gmail.com', NULL, '$2y$10$aroW3o6WzPuvLRV4PESZkObNbDLm5nVRpkYC6y.IPywJ6UhvN98oy', NULL, '2023-04-06 18:47:18', '2023-04-06 18:47:18');
 
 --
 -- Índices para tablas volcadas
@@ -185,6 +226,13 @@ ALTER TABLE `equipos_componentes`
   ADD KEY `id_componente` (`id_componente`);
 
 --
+-- Indices de la tabla `facturas`
+--
+ALTER TABLE `facturas`
+  ADD PRIMARY KEY (`id_factura`),
+  ADD KEY `id_historial` (`id_historial`);
+
+--
 -- Indices de la tabla `historial_mantenimiento`
 --
 ALTER TABLE `historial_mantenimiento`
@@ -208,10 +256,18 @@ ALTER TABLE `solicitudes_mantenimiento`
   ADD KEY `id_usuario` (`id_cliente`);
 
 --
+-- Indices de la tabla `solicitudes_tecnicos`
+--
+ALTER TABLE `solicitudes_tecnicos`
+  ADD KEY `id_solicitud` (`id_solicitud`),
+  ADD KEY `id_tecnico` (`id_tecnico`);
+
+--
 -- Indices de la tabla `tecnicos`
 --
 ALTER TABLE `tecnicos`
-  ADD PRIMARY KEY (`id_tecnico`);
+  ADD PRIMARY KEY (`id_tecnico`),
+  ADD UNIQUE KEY `correo_electronico` (`correo_electronico`);
 
 --
 -- Indices de la tabla `users`
@@ -242,6 +298,12 @@ ALTER TABLE `equipos`
   MODIFY `id_equipo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `facturas`
+--
+ALTER TABLE `facturas`
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `historial_mantenimiento`
 --
 ALTER TABLE `historial_mantenimiento`
@@ -269,7 +331,7 @@ ALTER TABLE `tecnicos`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -295,6 +357,13 @@ ALTER TABLE `historial_mantenimiento`
 ALTER TABLE `solicitudes_mantenimiento`
   ADD CONSTRAINT `solicitudes_mantenimiento_ibfk_1` FOREIGN KEY (`id_equipo`) REFERENCES `equipos` (`id_equipo`),
   ADD CONSTRAINT `solicitudes_mantenimiento_ibfk_2` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id_cliente`);
+
+--
+-- Filtros para la tabla `solicitudes_tecnicos`
+--
+ALTER TABLE `solicitudes_tecnicos`
+  ADD CONSTRAINT `solicitudes_tecnicos_ibfk_1` FOREIGN KEY (`id_solicitud`) REFERENCES `solicitudes_mantenimiento` (`id_solicitud`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `solicitudes_tecnicos_ibfk_2` FOREIGN KEY (`id_tecnico`) REFERENCES `tecnicos` (`id_tecnico`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
