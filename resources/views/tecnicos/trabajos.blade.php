@@ -4,8 +4,8 @@
   <section class="my-5">
     <div class="container d-flex justify-content-center align-items-center flex-column">
       <form action="#" class="row mt-5" id="form-buscar-tecnico">
-        <h3 class="mb-4 mt-5">Buscar Técnico</h3>
-        <div class="col-9 mb-3">
+        <h3 class="mb-4">Buscar Técnico</h3>
+        <div class="col-8 mb-3">
           <input
             type="email"
             id="buscar-correo-electronico"
@@ -14,7 +14,7 @@
             value="{{ $tecnico !== null ? $tecnico?->correo_electronico : '' }}"
           >
         </div>
-        <div class="col-3 mb-3">
+        <div class="col-4 mb-3">
           <a class="btn btn-primary w-100" href="#" id="redireccion-solicitudes-tecnico"><i class="bi bi-search"></i> Buscar</a>
         </div>
       </form>

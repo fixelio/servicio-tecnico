@@ -5,9 +5,9 @@
     <div class="container d-flex jus
     tify-content-center align-items-center flex-column mb-3">
       <form action="#" class="row mt-5" id="form-buscar-solicitud">
-        <h3 class="mb-4 mt-5">Buscar Solicitud</h3>
+        <h3 class="mb-3">Buscar Solicitud</h3>
         <p>Recuerda que no puedes editar una solicitud que ya ha sido marcada como "Terminada"</p>
-        <div class="col-9 mb-3">
+        <div class="col-8 mb-3">
           <input
             type="email"
             id="buscar-codigo"
@@ -16,7 +16,7 @@
             value="{{ $solicitud !== null ? $solicitud?->codigo_solicitud : '' }}"
           >
         </div>
-        <div class="col-3 mb-3">
+        <div class="col-4 mb-3">
           <a class="btn btn-primary w-100" href="#" id="redireccion-codigo-solicitud"><i class="bi bi-search"></i> Buscar</a>
         </div>
       </form>
