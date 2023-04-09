@@ -59,7 +59,10 @@ class ClientesController extends Controller
       array_push($resultado[$correo], $solicitud);
     }
 
-    return view('clientes.index', ['clientes' => $resultado]);
+    return view('clientes.index', [
+      'clientes' => $resultado,
+      'maxClientes' => Clientes::count(),
+    ]);
   }
 
   public function registrarView()

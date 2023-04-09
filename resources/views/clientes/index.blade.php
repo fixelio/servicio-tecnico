@@ -11,33 +11,32 @@
               <label for="simpleSearch"></label>
               <div class="input-group flex-nowrap">
                 <span class="bi bi-search input-group-text" id="addon-wrapping"></span>
-                <input type="search" class="form-control" placeholder="Buscar" aria-label="cliente" aria-describedby="addon-wrapping">
+                <input type="search" class="form-control" placeholder="Buscar por nombre" aria-label="cliente" aria-describedby="addon-wrapping" id="input-filtro">
               </div>
             </form>
           </div>
           <div class="w-100 d-flex flex-column flex-sm-row justify-content-end py-3">
-            <button type="button" class="btn btn-primary mb-2 d-flex justify-content-center align-items-center text-nowrap w-100">
+            <a href="{{ route('registrar-cliente') }}" class="btn btn-primary mb-2 d-flex justify-content-center align-items-center text-nowrap w-100">
               <i class="bi bi-plus"></i>
               Registrar Cliente
-            </button>
+            </a>
             <div class="dropdown w-100 mx-sm-2 mb-2 d-flex justify-content-center align-items-center">
               <button class="btn btn-primary w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-funnel"></i>
                 Filtrar
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Nombre</a></li>
-                <li><a class="dropdown-item" href="#">Correo</a></li>
-                <li><a class="dropdown-item" href="#">Teléfono</a></li>
+                <li><button class="dropdown-item" id="filtrar-nombre">Nombre</button></li>
+                <li><button class="dropdown-item" id="filtrar-correo">Correo</button></li>
                 <li><a class="dropdown-item" href="#">
                   <div class="form-check">
                     <input
                       class="form-check-input"
                       type="checkbox"
                       value=""
-                      id="checkProceso">
+                      id="checkPendientes">
                     <label class="form-check-label" for="flexCheckChecked">
-                      Estado: En Proceso
+                      Estado: Pendientes
                     </label>
                   </div>
                 </a></li>
@@ -47,9 +46,9 @@
                       class="form-check-input"
                       type="checkbox"
                       value=""
-                      id="checkTerminado">
+                      id="checkProceso">
                     <label class="form-check-label" for="flexCheckChecked">
-                      Estado: Terminado
+                      Estado: En Proceso
                     </label>
                   </div>
                 </a></li>
@@ -75,9 +74,9 @@
         </div>
         <div class="d-flex justify-content-between align-items-center mt-3">
           <div>
-            <p>Mostrando <strong>1-10</strong> de 26 clientes</p>
+            <p>Mostrando <strong><span id="min-records">{{ count($clientes) }}</span></strong> de <strong>{{ $maxClientes }}</strong> clientes</p>
           </div>
-          <nav aria-label="Page navigation example">
+          <!--<nav aria-label="Page navigation example">
             <ul class="pagination">
               <li class="page-item"><a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a></li>
               <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -85,79 +84,131 @@
               <li class="page-item"><a class="page-link" href="#">3</a></li>
               <li class="page-item"><a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a></li>
             </ul>
-          </nav>
+          </nav>-->
         </div>
       </div>
     </div>
-  <!--
-    <div class="container-md d-flex justify-content-center align-items-center mb-3 flex-column">
-      <div class="wrapper">
-        <div class="d-flex justify-content-between align-items-end mb-5">
-          <h3 class="mb-2 my-5">Clientes</h3>
-          <a class="btn btn-primary" href="{{ route('registrar-cliente') }}">Registrar Cliente</a>
-        </div>
-        <div class="d-flex justify-content-start align-items-start flex-column mb-5">
-          <div class="alert alert-info mb-4" role="alert">
-            Haz click en el nombre de cada cliente para ver su histórico. Para registrar una solicitud de mantenimiento, haz click en "Acciones" y luego selecciona "Registrar Solicitud"
-          </div>
-          <div>
-            <div class="form-check form-switch form-check-reverse">
-              <label class="form-check-label" for="hideClients">Ocultar clientes que no tengan el estado 'pendiente' ni 'en proceso'</label>
-              <input class="form-check-input" type="checkbox" id="hideClients" />
-            </div>
-          </div>
-        </div>
-        <div class="w-100">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Pendientes</th>
-                <th scope="col">En Proceso</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody id="cuerpo-table-clientes">
-              
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  -->
 
     <script>
       (async() => {
-        const state = {
-          clientes: {},
+        const FILTRAR_POR = {
+          CORREO: 'correo',
+          NOMBRE: 'nombre',
+          TELEFONO: 'telefono',
+          ESTADO_PENDIENTES: 'pendientes',
+          ESTADO_EN_PROCESO: 'enProceso',
         }
+
+        const state = {
+          clientes: [],
+          clientesFiltrados: [],
+          filtro: FILTRAR_POR.NOMBRE,
+        }
+
+        $nombreRef = document.querySelector('#filtrar-nombre');
+        $correoRef = document.querySelector('#filtrar-correo');
+        $telefonoRef = document.querySelector('#filtrar-telefono');
+
+        $pendientesRef = document.querySelector('#checkPendientes');
+        $enProcesoRef = document.querySelector('#checkProceso');
 
         window.addEventListener('DOMContentLoaded', () => {
           boot();
         });
 
-        async function boot() {
+        function boot() {
           const rawClientes = {{ Js::from($clientes) }};
-          const newState = getState();
+          const { clientes, clientesFiltrados, filtro } = getState();
 
           let pos = 1;
-
           for(const correo in rawClientes) {
             const [cliente, solicitudes] = rawClientes[correo];
             const countHandler = key => solicitudes.reduce((t, x) => {
               return t + (x.estado === key ? 1 : 0);
             }, 0);
 
-            newState.clientes[correo] = {
+            clientes.push({
               ...cliente,
               index: pos++,
               pendientes: countHandler('pendiente'),
               enProceso: countHandler('en proceso'),
-            }
+            });
           }
 
-          setState(newState);
+          $nombreRef.onclick = () => setFiltro(FILTRAR_POR.NOMBRE);
+          $correoRef.onclick = () => setFiltro(FILTRAR_POR.CORREO);
+
+          $pendientesRef.onclick = () => {
+            if (!$pendientesRef.checked) {
+              setState({ clientesFiltrados: clientes });
+              return;
+            }
+
+            $enProcesoRef.checked = false;
+            const newFiltro = FILTRAR_POR.ESTADO_PENDIENTES
+            setFiltro(newFiltro);
+            filtrar(newFiltro);
+          }
+
+          $enProcesoRef.onclick = () => {
+            if (!$enProcesoRef.checked) {
+              setState({ clientesFiltrados: clientes });
+              return;
+            }
+
+            $pendientesRef.checked = false;
+            const newFiltro = FILTRAR_POR.ESTADO_EN_PROCESO
+            setFiltro(newFiltro);
+            filtrar(newFiltro);
+          }
+
+          const $inputFiltro = document.querySelector('#input-filtro');
+
+          $inputFiltro.onkeyup = (e) => {
+            if ((e.key.length !== 1 || !e.key.match(/[A-z|a-z|@]/i)) && e.key !== 'Backspace') {
+              return;
+            }
+
+            filtrar(e.target.value);
+          }
+
+          setState({ clientes, clientesFiltrados: clientes });
+        }
+
+        function filtrar(value) {
+          const { clientes, filtro } = getState();
+
+          if (filtro === FILTRAR_POR.ESTADO_PENDIENTES || filtro === FILTRAR_POR.ESTADO_EN_PROCESO) {
+            filtrarPorEstado(value);
+            return;
+          }
+
+          if (!value) {
+            setState({ clientesFiltrados: clientes });
+            return;
+          }
+
+          const regex = new RegExp(value, 'i');
+          const filtered = clientes.filter(cliente => cliente[filtro].match(regex));
+
+          const $minRecords = document.querySelector('#min-records');
+          $minRecords.textContent = filtered.length.toString();
+
+          setState({ clientesFiltrados: filtered });
+        }
+
+        function filtrarPorEstado (estado) {
+          const { clientes } = getState();
+          const filtered = clientes.filter(cliente => cliente[estado] > 0);
+
+          setState({ clientesFiltrados: filtered });
+        }
+
+        function setFiltro(filtro) {
+          const $inputFiltro = document.querySelector('#input-filtro');
+          $inputFiltro.placeholder = `Buscar por ${filtro}`;
+
+          setState({ filtro });
         }
 
         function FilaCliente(cliente) {
@@ -178,10 +229,10 @@
             elt('td', { className: 'px-2 py-3' }, cliente.correo),
             elt('td', { className: 'px-2 py-3' }, cliente.telefono),
             elt('td', { className: 'px-2 py-3' },
-              elt('span', { className: 'badge badge-bg-warning' }, cliente.pendientes.toString())
+              elt('span', { className: 'badge text-bg-warning' }, cliente.pendientes.toString())
             ),
             elt('td', { className: 'px-2 py-3' },
-              elt('span', { className: 'badge badge-bg-info' }, cliente.enProceso.toString())
+              elt('span', { className: 'badge text-bg-info' }, cliente.enProceso.toString())
             ),
             elt('td', { className: 'px-2 py-3' },
               elt('div', {},
@@ -203,15 +254,15 @@
         }
 
         function render() {
-          const { clientes } = getState();
+          const { clientesFiltrados } = getState();
           const $cuerpoTabla = document.querySelector('#cuerpo-table-clientes');
 
-          for(const correo in clientes) {
-            const cliente = clientes[correo];
+          while($cuerpoTabla.firstChild) {
+            $cuerpoTabla.removeChild($cuerpoTabla.firstChild);
+          }
 
-            $cuerpoTabla.appendChild(
-              FilaCliente(cliente)
-            );
+          for(const cliente of clientesFiltrados) {
+            $cuerpoTabla.appendChild(FilaCliente(cliente));
           }
         }
 
@@ -228,89 +279,6 @@
 
           render();
         }
-      })();
-    </script>
-
-    <script>
-      (async() => {
-        const rawClientes = {{ Js::from($clientes) }};
-        let hideClients = false;
-
-        function removeNodes($element) {
-          while($element.firstChild) {
-            $element.firstChild.remove();
-          }
-        }
-        
-        function fill() {
-          const sanitized = rawClientes.map(cliente => ({
-            nombre: `${cliente.nombre} ${cliente.apellido}`,
-            correo: cliente.correo_electronico,
-            estadoSolicitud: cliente.estado_solicitud,
-          }));
-
-          const indexed = sanitized.reduce((acc, cliente) => ({
-            ...acc,
-            [cliente.correo]: {
-              nombre: cliente.nombre,
-              correo: cliente.correo,
-              pendientes: (acc[cliente.correo]?.pendientes || 0) + (cliente.estadoSolicitud === 'pendiente' ? 1 : 0),
-              enProceso: (acc[cliente.correo]?.enProceso || 0) + (cliente.estadoSolicitud === 'en proceso' ? 1 : 0),
-            }
-          }), {});
-
-          const $tabla = document.querySelector('#cuerpo-table-clientes');
-          removeNodes($tabla);
-          let index = 1;
-
-          for (const correo in indexed) {
-            const cliente = indexed[correo];
-
-            if (hideClients && cliente.pendientes === 0 && cliente.enProceso === 0) {
-              continue;
-            }
-
-            const $boton = elt('button', {
-              className: 'btn btn-primary dropdown-toggle',
-              type: 'button'
-            }, 'Acciones');
-
-            $boton.setAttribute('data-bs-toggle', 'dropdown');
-            $boton.setAttribute('aria-expanded', 'false');
-
-            $tabla.appendChild(
-              elt('tr', { scope: 'row' },
-                elt('th', {}, `${index++}`),
-                elt('td', {}, 
-                  elt('a', { class: 'link-opacity-100', href: `/solicitudes/cliente/${cliente.correo}` }, cliente.nombre)
-                ),
-                elt('td', { },
-                  elt('span', { className: 'badge badge-center text-bg-warning' }, cliente.pendientes.toString())
-                ),
-                elt('td', { },
-                  elt('span', { className: 'badge badge-center text-bg-info' }, cliente.enProceso.toString())
-                ),
-                elt('td', { className: 'd-flex justify-content-end align-items-end' },
-                  elt('div', { className: 'dropdown dropdown-menu-end' },
-                    $boton,
-                    elt('ul', { className: 'dropdown-menu' },
-                      elt('li', {},
-                        elt('a', { href: `/registrar/solicitud/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Registrar Solicitud')
-                      ),
-                      elt('li', {},
-                        elt('a', { href: `/solicitudes/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Ver Histórico')
-                      ),
-                      elt('li', {},
-                        elt('a', { href: `/editar/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Editar Cliente')
-                      )
-                    )
-                  )
-                )
-              )
-            );
-          }
-        }
-
       })();
     </script>
   </section>
