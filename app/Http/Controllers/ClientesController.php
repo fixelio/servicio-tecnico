@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Clientes;
+use App\Models\SolicitudesMantenimiento;
 
 class ClientesController extends Controller
 {
@@ -15,11 +16,50 @@ class ClientesController extends Controller
 
   public function index()
   {
-    $clientes = DB::table('clientes')
-      ->leftJoin('solicitudes_mantenimiento', 'clientes.id_cliente', '=', 'solicitudes_mantenimiento.id_cliente')
+    $clientes = Clientes::skip(0)->limit(20)->get();
+    $idsClientes = [];
+
+    foreach($clientes as $cliente) {
+      array_push($idsClientes, "".$cliente['id_cliente']);
+    }
+
+    $solicitudes = SolicitudesMantenimiento
+      ::whereIn('id_cliente', $idsClientes)
       ->get();
+
+    $solicitudesIndexadas = [];
+
+    foreach($solicitudes as $solicitud) {
+      $idCliente = "".$solicitud['id_cliente'];
+      if (array_key_exists($idCliente, $solicitudesIndexadas) === false) {
+        $solicitudesIndexadas[$idCliente] = array();
+      }
+
+      array_push($solicitudesIndexadas[$idCliente], [
+        'estado' => $solicitud['estado_solicitud'],
+      ]);
+    }
+
+    $resultado = [];
+
+    foreach($clientes as $cliente) {
+      $correo = $cliente->correo_electronico;
+      $idCliente = "".$cliente['id_cliente'];
+
+      $solicitud = $solicitudesIndexadas[$idCliente];
+
+      if (array_key_exists($correo, $resultado) === false) {
+        $resultado[$correo] = array([
+          'nombre' => $cliente['nombre']." ".$cliente['apellido'],
+          'correo' => $cliente['correo_electronico'],
+          'telefono' => $cliente['telefono'],
+        ]);
+      }
       
-    return view('clientes.index', ['clientes' => $clientes]);
+      array_push($resultado[$correo], $solicitud);
+    }
+
+    return view('clientes.index', ['clientes' => $resultado]);
   }
 
   public function registrarView()

@@ -3,13 +3,14 @@
 @section('content')
   <section class="mx-2 mx-md-4 my-5">
     <div class="container-md d-flex justify-content-center align-items-center mb-3 flex-column">
-      <div class="w-75">
+      <div class="wrapper">
         <div class="d-flex justify-content-between align-items-end mb-5">
           <h3 class="mb-2 my-5">Técnicos</h3>
           <a class="btn btn-primary" href="{{ route('registrar-tecnico') }}">Registrar Técnico</a>
         </div>
-        <div class="w-100">
-          <table class="table">
+      </div>
+      <div class="wrapper table-responsive-md">
+        <table class="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -26,8 +27,8 @@
                   <td>{{ $tecnicos[$i]->nombre }} {{ $tecnicos[$i]->apellido }}</td>
                   <td>{{ $tecnicos[$i]->correo_electronico }}</td>
                   <td>{{ $tecnicos[$i]->telefono }}</td>
-                  <td>
-                    <div class="dropdown">
+                  <td class="d-flex justify-content-end align-items-end">
+                    <div class="dropdown z-3">
                       <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Acciones
                       </button>
