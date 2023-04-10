@@ -4,22 +4,6 @@
   <section class="my-5">
     <div class="container d-flex jus
     tify-content-center align-items-center flex-column mb-3">
-      <form action="#" class="row mt-5" id="form-buscar-solicitud">
-        <h3 class="mb-3">Buscar Solicitud</h3>
-        <p>Recuerda que no puedes editar una solicitud que ya ha sido marcada como "Terminada"</p>
-        <div class="input-group col-12 mb-3">
-          <input
-            type="text"
-            id="buscar-codigo"
-            class="form-control"
-            placeholder="Ingresa el código de la solicitud"
-            aria-label="Código de la solicitud"
-            aria-describedby="redireccion-codigo-solicitud"
-            value="{{ $solicitud !== null ? $solicitud?->codigo_solicitud : '' }}"
-          >
-          <a class="btn btn-outline-primary" id="redireccion-codigo-solicitud" href="#"><i class="bi bi-search"></i> Buscar</a>
-        </div>
-      </form>
       <form action="{{ route('solicitud.put') }}" method="POST" class="row g-3 mt-5">
         <h3 class="mb-4">Editar solicitud de mantenimiento</h3>
         @csrf

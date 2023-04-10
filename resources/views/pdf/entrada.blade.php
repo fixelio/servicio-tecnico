@@ -170,7 +170,7 @@ table {
    </div> 
   </div>
 
-  <div class="divTable w-100 mb-5">
+  <!--<div class="divTable w-100 mb-5">
    <div class="divTableBody">
      <div class="divTableRow">
        <div class="divTableCell w-16">
@@ -192,6 +192,28 @@ table {
              <td>{{ $notas }}</td>
            </tr>
        	</table>
+       </div>
+     </div>
+   </div> 
+  </div>-->
+  <div class="divTable w-100 mb-5">
+   <div class="divTableBody">
+     <div class="divTableRow">
+       <div class="divTableCell w-100">
+         <table class="bordered w-100" style="page-break-inside: avoid !important;">
+            <tr>
+              <td class="td-inline"><b>Diagnóstico</b></td>
+              <td class="w-100">{{ $diagnostico }}</td>
+            </tr>
+            <tr>
+              <td class="td-inline"><b>Notas</b></td>
+              <td class="w-100">
+                @foreach(preg_split('/\r\n|\r|\n/', $notas) as $nota)
+                  {{ $nota }}<br>
+                @endforeach
+              </td>
+            </tr>
+         </table>
        </div>
      </div>
    </div> 

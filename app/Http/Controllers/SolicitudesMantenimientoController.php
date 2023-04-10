@@ -61,7 +61,7 @@ class SolicitudesMantenimientoController extends Controller
     $correo = $request->route('correo');
 
     $cliente = Clientes::where('correo_electronico', $correo)->firstOrFail();
-    $solicitudes = SolicitudesMantenimiento::join('equipos', function($join) {
+    /*$solicitudes = SolicitudesMantenimiento::join('equipos', function($join) {
       $join->on('solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo');
       })
       ->join('clientes', function($join) use(&$cliente) {
@@ -69,6 +69,23 @@ class SolicitudesMantenimientoController extends Controller
           ->on('solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
           ->where('clientes.id_cliente', '=', $cliente['id_cliente']);
       })
+      ->get();*/
+
+    $solicitudes = DB::Table('clientes')
+      ->join('solicitudes_mantenimiento', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
+      ->join('equipos', 'equipos.id_equipo', '=', 'solicitudes_mantenimiento.id_equipo')
+      ->leftJoin('historial_mantenimiento', 'historial_mantenimiento.id_solicitud', '=', 'solicitudes_mantenimiento.id_solicitud')
+      ->leftJoin('facturas', 'facturas.id_historial', '=', 'historial_mantenimiento.id_historial')
+      ->leftJoin('tecnicos', 'tecnicos.id_tecnico', '=', 'historial_mantenimiento.id_tecnico')
+      ->select(
+        'solicitudes_mantenimiento.*',
+        'equipos.*',
+        'historial_mantenimiento.*',
+        'tecnicos.nombre AS nombre_tecnico',
+        'tecnicos.apellido AS apellido_tecnico',
+        'facturas.*',
+      )
+      ->where('clientes.id_cliente', '=', $cliente['id_cliente'])
       ->get();
 
     return view('solicitudes.cliente', [
@@ -250,12 +267,13 @@ class SolicitudesMantenimientoController extends Controller
   private function generarReporteEntrada($solicitud, $equipo, $tecnico)
   {
     $cliente = Clientes::where('id_cliente', $solicitud['id_cliente'])->firstOrFail();
+
     $pdf = $this->reportesService->entrada([
       'cliente' => $cliente['nombre']." ".$cliente['apellido'],
       'telefono' => $cliente['telefono'],
       'articulo' => $equipo['articulo'],
-      'marca' => $equipo['marca'],
-      'modelo' => $equipo['modelo'],
+      'marca' => $equipo['modelo'],
+      'modelo' => $equipo['marca'],
       'serie' => $equipo['num_serie'],
       'diagnostico' => $solicitud['descripcion_problema'],
       'notas' => $solicitud['observaciones'],

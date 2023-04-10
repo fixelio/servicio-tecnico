@@ -157,7 +157,7 @@
             const data = sanitized[i];
             data['indice'] = indice;
 
-            const $acciones = elt('td', { className: 'd-flex justify-content-center align-items-center' });
+            const $acciones = elt('td', { className: 'ml-3' });
             if (data.solicitud.estado !== 'terminado') {
               const $boton = elt('button', {
                 className: 'focus-ring px-2 rounded fs-5',

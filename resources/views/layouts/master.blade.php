@@ -39,7 +39,6 @@
               <ul class="dropdown-menu">
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('clientes') }}">Listado</a></li>
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('registrar-cliente') }}">Registrar</a></li>
-                <li><a class="nav-link dropdown-item py-2" href="{{ route('editar-cliente') }}">Editar</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
@@ -47,15 +46,12 @@
               <ul class="dropdown-menu">
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('listado-tecnicos') }}">Listado</a></li>
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('registrar-tecnico') }}">Registrar</a></li>
-                <li><a class="nav-link dropdown-item py-2" href="{{ route('editar-tecnico') }}">Editar</a></li>
-                <li><a class="nav-link dropdown-item py-2" href="{{ route('solicitudes-tecnico', ['trabajos' => []]) }}">Trabajos</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link  dropdown-toggle" href="#" data-bs-toggle="dropdown">Órdenes</a>
               <ul class="dropdown-menu">
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('listado-solicitudes') }}">Listado</a></li>
-                <li><a class="nav-link dropdown-item py-2" href="{{ route('editar-solicitud') }}">Editar</a></li>
               </ul>
             </li>
             <li class="nav-item px-0 px-lg-4">
