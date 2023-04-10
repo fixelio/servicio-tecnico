@@ -29,15 +29,18 @@ class ClientesController extends Controller
 
     $solicitudesIndexadas = [];
 
-    foreach($solicitudes as $solicitud) {
-      $idCliente = "".$solicitud['id_cliente'];
-      if (array_key_exists($idCliente, $solicitudesIndexadas) === false) {
-        $solicitudesIndexadas[$idCliente] = array();
-      }
+    if (count($solicitudes) > 0) {
 
-      array_push($solicitudesIndexadas[$idCliente], [
-        'estado' => $solicitud['estado_solicitud'],
-      ]);
+      foreach($solicitudes as $solicitud) {
+        $idCliente = "".$solicitud['id_cliente'];
+        if (array_key_exists($idCliente, $solicitudesIndexadas) === false) {
+          $solicitudesIndexadas[$idCliente] = array();
+        }
+
+        array_push($solicitudesIndexadas[$idCliente], [
+          'estado' => $solicitud['estado_solicitud'],
+        ]);
+      }
     }
 
     $resultado = [];
@@ -46,8 +49,6 @@ class ClientesController extends Controller
       $correo = $cliente->correo_electronico;
       $idCliente = "".$cliente['id_cliente'];
 
-      $solicitud = $solicitudesIndexadas[$idCliente];
-
       if (array_key_exists($correo, $resultado) === false) {
         $resultado[$correo] = array([
           'nombre' => $cliente['nombre']." ".$cliente['apellido'],
@@ -55,6 +56,12 @@ class ClientesController extends Controller
           'telefono' => $cliente['telefono'],
         ]);
       }
+
+      if (array_key_exists($idCliente, $solicitudesIndexadas) === false) {
+        continue;
+      }
+
+      $solicitud = $solicitudesIndexadas[$idCliente];
       
       array_push($resultado[$correo], $solicitud);
     }

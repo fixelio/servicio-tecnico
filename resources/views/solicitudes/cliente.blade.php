@@ -24,11 +24,11 @@
             <tbody>
               @for($i = 0; $i < count($solicitudes); $i++)
                 <tr scope="row">
-                  <th>{{$i + 1}}</th>
-                  <td>{{ $solicitudes[$i]->codigo_solicitud }}</td>
-                  <td>{{ $solicitudes[$i]->modelo }}</td>
-                  <td>{{ $solicitudes[$i]->fecha_solicitud }}</td>
-                  <td>
+                  <th class="px-2 py-3">{{$i + 1}}</th>
+                  <td class="px-2 py-3">{{ $solicitudes[$i]->codigo_solicitud }}</td>
+                  <td class="px-2 py-3">{{ $solicitudes[$i]->modelo }}</td>
+                  <td class="px-2 py-3">{{ $solicitudes[$i]->fecha_solicitud }}</td>
+                  <td class="px-2 py-3">
                     @if($solicitudes[$i]->estado_solicitud === 'pendiente')
                       <span class="badge text-bg-warning">Pendiente</span>
                     @elseif($solicitudes[$i]->estado_solicitud === 'en proceso')

@@ -11,7 +11,7 @@
         <a href="{{ route('clientes') }}" class="link-opacity-100">Cambiar cliente</a>
       </div>
       <form action="{{ route('solicitud.post') }}" method="POST" class="row g-3 mt-5">
-        <h3 class="mb-5">Registrar solicitud de mantenimiento</h3>
+        <h3 class="mb-5">Registrar órden de mantenimiento</h3>
         <p><strong>Ingresa los datos del equipo.</strong> Los campos obligatorios están marcados con (*)</p>
         @csrf
         <div class="col-12 mb-3">

@@ -19,14 +19,14 @@
         </div>
       </form>
       <div class="wrapper mt-5">
-        <h3 class="mb-5">Lista de solicitudes asignadas</h3>
+        <h3 class="mb-5">Lista de órdenes asignadas</h3>
 
         @if ($tecnico !== null)
         <p>Técnico: <strong>{{ $tecnico->nombre }} {{ $tecnico->apellido }}</strong></p>
         @endif
 
         @if(count($trabajos) > 0)
-          <p class="mt-3 mb-4">Solicitudes: <strong>{{ count($trabajos) }}</strong></p>
+          <p class="mt-3 mb-4">Órdenes: <strong>{{ count($trabajos) }}</strong></p>
 
           <table class="table">
             <thead>
@@ -42,12 +42,12 @@
             <tbody>
               @for($i = 0; $i < count($trabajos); $i++)
                 <tr scope="row">
-                  <th>{{$i + 1}}</th>
-                  <td>{{ $trabajos[$i]->codigo_solicitud }}</td>
-                  <td>{{ $trabajos[$i]->articulo }}</td>
-                  <td>{{ $trabajos[$i]->modelo }}</td>
-                  <td>{{ $trabajos[$i]->fecha_solicitud }}</td>
-                  <td>
+                  <th class="px-2 py-3">{{$i + 1}}</th>
+                  <td class="px-2 py-3">{{ $trabajos[$i]->codigo_solicitud }}</td>
+                  <td class="px-2 py-3">{{ $trabajos[$i]->articulo }}</td>
+                  <td class="px-2 py-3">{{ $trabajos[$i]->modelo }}</td>
+                  <td class="px-2 py-3">{{ $trabajos[$i]->fecha_solicitud }}</td>
+                  <td class="px-2 py-3">
                     @if($trabajos[$i]->estado_solicitud === 'pendiente')
                       <span class="badge text-bg-warning">Pendiente</span>
                     @elseif($trabajos[$i]->estado_solicitud === 'en proceso')
@@ -61,7 +61,7 @@
             </tbody>
           </table>
         @elseif($tecnico !== null)
-          <div class="alert alert-warning" role="alert">Este técnico no tiene ninguna solicitud de mantenimiento asignada. <a href="{{ route('listado-solicitudes') }}" class="link-opacity-100">Ir a la página de solicitudes.</a></div>
+          <div class="alert alert-warning" role="alert">Este técnico no tiene ninguna órden de mantenimiento asignada. <a href="{{ route('listado-solicitudes') }}" class="link-opacity-100">Ir a la página de órdenes.</a></div>
         @endif
       </div>
     </div>

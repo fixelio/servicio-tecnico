@@ -89,7 +89,7 @@
     <div class="container d-flex justify-content-center align-items-center flex-column">
       <div class="w-75">
         <div class="d-flex justify-content-between align-items-end mb-5">
-          <h3 class="mb-2 my-5">Listado de Solicitudes</h3>
+          <h3 class="mb-2 my-5">Listado de Órdenes</h3>
         </div>
         <div>
           @if(count($solicitudes) > 0)
@@ -101,7 +101,7 @@
                   <th scope="col">Cliente</th>
                   <th scope="col">Artículo</th>
                   <th scope="col">Estado</th>
-                  <th scope="col"></th>
+                  <th scope="col">Acciones</th>
                 </tr>
               </thead>
               <tbody id="cuerpo-tabla-solicitudes">
@@ -157,18 +157,21 @@
             const data = sanitized[i];
             data['indice'] = indice;
 
-            const $acciones = elt('td', { className: 'd-flex justify-content-end align-items-end' });
+            const $acciones = elt('td', { className: 'd-flex justify-content-center align-items-center' });
             if (data.solicitud.estado !== 'terminado') {
               const $boton = elt('button', {
-                className: 'btn btn-primary dropdown-toggle',
+                className: 'focus-ring px-2 rounded fs-5',
                 type: 'button'
-              }, 'Acciones');
+              }, elt('i', { className: 'bi bi-three-dots' }, ''));
 
               $boton.setAttribute('data-bs-toggle', 'dropdown');
               $boton.setAttribute('aria-expanded', 'false');
+              $boton.style.outline = 'none';
+              $boton.style.border = 'none';
+              $boton.style.background = 'none';
 
               $acciones.appendChild(
-                elt('div', { className: 'dropdown dropdown-menu-end' },
+                elt('div', { },
                   $boton,
                   elt('ul', { className: 'dropdown-menu' },
                     elt('li', {},
@@ -189,11 +192,11 @@
             }
 
             const element = elt('tr', { scope: 'row', id: `solicitud-${data.solicitud.codigo}` },
-              elt('th', {}, indice.toString()),
-              elt('td', {}, data.solicitud.codigo),
-              elt('td', {}, data.cliente.nombre),
-              elt('td', {}, data.solicitud.articulo),
-              elt('td', {}, 
+              elt('th', { className: "px-2 py-3" }, indice.toString()),
+              elt('td', { className: "px-2 py-3" }, data.solicitud.codigo),
+              elt('td', { className: "px-2 py-3" }, data.cliente.nombre),
+              elt('td', { className: "px-2 py-3" }, data.solicitud.articulo),
+              elt('td', { className: "px-2 py-3" }, 
                 elt('span', { className: `badge badge-center text-bg-${data.solicitud.estado === 'pendiente' ? 'warning' : (data.solicitud.estado === 'en proceso' ? 'info' : 'success')}` }, ESTADO[data.solicitud.estado])
               ),
               $acciones

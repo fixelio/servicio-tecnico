@@ -52,7 +52,7 @@
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link  dropdown-toggle" href="#" data-bs-toggle="dropdown">Solicitudes</a>
+              <a class="nav-link  dropdown-toggle" href="#" data-bs-toggle="dropdown">Órdenes</a>
               <ul class="dropdown-menu">
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('listado-solicitudes') }}">Listado</a></li>
                 <li><a class="nav-link dropdown-item py-2" href="{{ route('editar-solicitud') }}">Editar</a></li>
@@ -75,7 +75,7 @@
                   href="{{ route('logout') }}"
                   onclick="event.preventDefault();document.getElementById('logout-form').submit();"
                 >
-                  {{ __('Logout') }}
+                  {{ __('Cerrar Sesión') }}
                 </a>
 
                  <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

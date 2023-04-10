@@ -226,7 +226,7 @@ table {
              <td class="text-center" style="font-size: small;">
                Los equipos mojados no cuentan con GARANTIA.
                <br>La casa no se responsabiliza en caso de incendios, robos u otro tipo de siniestros.
-               <br>Usted dispone de un plazo máximo de 60 días luego de cotizar para retirar el artículo, una vez finalizado el plazo, la empresa no se hace responsable.
+               <br>Usted dispone de un plazo máximo de 60 días luego de cotizar para retirar el artículo, una vez finalizado el plazo la empresa no se hace responsable.
              </td>
            </tr>
          </table>

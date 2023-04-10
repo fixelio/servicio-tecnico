@@ -65,7 +65,7 @@
               <th scope="col" class="px-2 py-3">Teléfono</th>
               <th scope="col" class="px-2 py-3">Pendientes</th>
               <th scope="col" class="px-2 py-3">Procesando</th>
-              <th scope="col" class="px-2 py-3"></th>
+              <th scope="col" class="px-2 py-3">Acciones</th>
             </thead>
             <tbody id="cuerpo-table-clientes">
               
@@ -123,15 +123,15 @@
           let pos = 1;
           for(const correo in rawClientes) {
             const [cliente, solicitudes] = rawClientes[correo];
-            const countHandler = key => solicitudes.reduce((t, x) => {
+            const countHandler = key => solicitudes?.reduce((t, x) => {
               return t + (x.estado === key ? 1 : 0);
             }, 0);
 
             clientes.push({
               ...cliente,
               index: pos++,
-              pendientes: countHandler('pendiente'),
-              enProceso: countHandler('en proceso'),
+              pendientes: countHandler('pendiente') || 0,
+              enProceso: countHandler('en proceso') || 0,
             });
           }
 
@@ -239,13 +239,13 @@
                 $boton,
                 elt('ul', { className: 'dropdown-menu' },
                   elt('li', {},
-                    elt('a', { href: `/registrar/solicitud/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Registrar Solicitud')
-                  ),
-                  elt('li', {},
-                    elt('a', { href: `/solicitudes/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Ver Histórico')
+                    elt('a', { href: `/registrar/solicitud/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Registrar Orden')
                   ),
                   elt('li', {},
                     elt('a', { href: `/editar/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Editar Cliente')
+                  ),
+                  elt('li', {},
+                    elt('a', { href: `/solicitudes/cliente/${cliente.correo}`, className: 'dropdown-item' }, 'Ver Histórico')
                   )
                 )
               )
