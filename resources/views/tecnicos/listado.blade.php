@@ -15,9 +15,9 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Nombre</th>
-                <th scope="col">Teléfono</th>
                 <th scope="col">Correo</th>
-                <th scope="col"></th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -27,7 +27,7 @@
                   <td class="px-2 py-3">{{ $tecnicos[$i]->nombre }} {{ $tecnicos[$i]->apellido }}</td>
                   <td class="px-2 py-3">{{ $tecnicos[$i]->correo_electronico }}</td>
                   <td class="px-2 py-3">{{ $tecnicos[$i]->telefono }}</td>
-                  <td class="px-2 py-3 d-flex justify-content-end align-items-end">
+                  <td class="px-2 py-3">
                     <div class="">
                       <button class="focus-ring px-2 rounded fs-5" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: none;outline: none;border: none">
                         <i class="bi bi-three-dots"></i>
