@@ -88,7 +88,7 @@ class TecnicosController extends Controller
 
     $this->tecnicosService->update($tecnico['id_tecnico'], $datos);
 
-    return redirect('/editar/tecnico')->with([
+    return redirect('/tecnicos')->with([
       'type' => 'exito',
       'mensaje' => 'Se ha editado el tecnico',
     ]);

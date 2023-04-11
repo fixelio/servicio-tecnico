@@ -1,89 +1,86 @@
 @extends('layouts.master')
 
 @section('content')
-  <section class="my-5">
-    <div class="container d-flex jus
-    tify-content-center align-items-center flex-column mb-3">
-      <form action="{{ route('solicitud.put') }}" method="POST" class="row g-3 mt-5">
-        <h3 class="mb-4">Editar solicitud de mantenimiento</h3>
-        @csrf
-        <div class="col-12 mb-3">
-          <label for="articulo" class="form-label">Artículo</label>
-          <input
-            type="text"
-            id="articulo"
-            name="articulo"
-            class="form-control"
-            placeholder="Ingresa el nombre del artículo"
-            value="{{ $solicitud !== null ? $solicitud?->articulo : '' }}"
-          >
-        </div>
-        <div class="col-12 col-lg-6 mb-3">
-          <label for="num_serie" class="form-label">Número de Serie</label>
-          <input
-            type="text"
-            id="num_serie"
-            name="num_serie"
-            class="form-control"
-            placeholder="Ingresa el número de serie"
-            value="{{ $solicitud !== null ? $solicitud?->num_serie : '' }}"
-          >
-        </div>
-        <div class="col-12 col-lg-6 mb-3">
-          <label for="marca" class="form-label">Marca</label>
-          <input
-            type="text"
-            id="marca"
-            name="marca"
-            class="form-control"
-            placeholder="Ingresa la marca"
-            value="{{ $solicitud !== null ? $solicitud?->marca : '' }}"
-          >
-        </div>
-        <div class="col-12 col-lg-6 mb-3">
-          <label for="modelo" class="form-label">Modelo *</label>
-          <input
-            type="text"
-            id="modelo"
-            name="modelo"
-            class="form-control"
-            placeholder="Ingresa el modelo"
-            value="{{ $solicitud !== null ? $solicitud?->modelo : '' }}"
-          >
-        </div>
-        <div class="col-12 col-lg-6 mb-3">
-          <label for="fecha_compra" class="form-label">Fecha de compra *</label>
-          <input
-            type="date"
-            id="fecha_compra"
-            name="fecha_compra"
-            class="form-control"
-            placeholder="Ingresa la fecha de compra"
-            value="{{ $solicitud !== null ? $solicitud?->fecha_compra : '' }}"
-          >
-        </div>
+  <div class="position-relative overflow-hidden">
+    <h3 class="mb-5 px-3">Editar Orden</h3>
+    <form action="{{ route('solicitud.put') }}" method="POST" class="row g-3 px-3 w-100">
+      @csrf
+      <div class="col-12 mb-3">
+        <label for="articulo" class="form-label">Artículo</label>
+        <input
+          type="text"
+          id="articulo"
+          name="articulo"
+          class="form-control"
+          placeholder="Ingresa el nombre del artículo"
+          value="{{ $solicitud !== null ? $solicitud?->articulo : '' }}"
+        >
+      </div>
+      <div class="col-12 col-lg-6 mb-3">
+        <label for="num_serie" class="form-label">Número de Serie</label>
+        <input
+          type="text"
+          id="num_serie"
+          name="num_serie"
+          class="form-control"
+          placeholder="Ingresa el número de serie"
+          value="{{ $solicitud !== null ? $solicitud?->num_serie : '' }}"
+        >
+      </div>
+      <div class="col-12 col-lg-6 mb-3">
+        <label for="marca" class="form-label">Marca</label>
+        <input
+          type="text"
+          id="marca"
+          name="marca"
+          class="form-control"
+          placeholder="Ingresa la marca"
+          value="{{ $solicitud !== null ? $solicitud?->marca : '' }}"
+        >
+      </div>
+      <div class="col-12 col-lg-6 mb-3">
+        <label for="modelo" class="form-label">Modelo *</label>
+        <input
+          type="text"
+          id="modelo"
+          name="modelo"
+          class="form-control"
+          placeholder="Ingresa el modelo"
+          value="{{ $solicitud !== null ? $solicitud?->modelo : '' }}"
+        >
+      </div>
+      <div class="col-12 col-lg-6 mb-3">
+        <label for="fecha_compra" class="form-label">Fecha de compra *</label>
+        <input
+          type="date"
+          id="fecha_compra"
+          name="fecha_compra"
+          class="form-control"
+          placeholder="Ingresa la fecha de compra"
+          value="{{ $solicitud !== null ? $solicitud?->fecha_compra : '' }}"
+        >
+      </div>
 
-        <div class="col-12 mb-3">
-          <label for="descripcion_problema" class="form-label">
-            Descripción del problema
-          </label>
-          <textarea name="descripcion_problema" id="descripcion_problema" class="form-control" rows="4" value="{{ $solicitud !== null ? $solicitud?->descripcion_problema : '' }}">{{ $solicitud !== null ? $solicitud?->descripcion_problema : '' }}</textarea>
-        </div>
+      <div class="col-12 mb-3">
+        <label for="descripcion_problema" class="form-label">
+          Descripción del problema
+        </label>
+        <textarea name="descripcion_problema" id="descripcion_problema" class="form-control" rows="4" value="{{ $solicitud !== null ? $solicitud?->descripcion_problema : '' }}">{{ $solicitud !== null ? $solicitud?->descripcion_problema : '' }}</textarea>
+      </div>
 
-        <div class="col-12 mb-3">
-          <label for="observaciones" class="form-label">
-            Observaciones
-          </label>
-          <textarea name="observaciones" id="observaciones" class="form-control" rows="4" value="{{ $solicitud !== null ? $solicitud?->observaciones : '' }}">{{ $solicitud !== null ? $solicitud?->observaciones : '' }}</textarea>
-        </div>
+      <div class="col-12 mb-3">
+        <label for="observaciones" class="form-label">
+          Observaciones
+        </label>
+        <textarea name="observaciones" id="observaciones" class="form-control" rows="4" value="{{ $solicitud !== null ? $solicitud?->observaciones : '' }}">{{ $solicitud !== null ? $solicitud?->observaciones : '' }}</textarea>
+      </div>
 
-        <input type="hidden" name="codigo_buscar" value="{{ $solicitud?->codigo_solicitud }}">
+      <input type="hidden" name="codigo_buscar" value="{{ $solicitud?->codigo_solicitud }}">
 
-        <div>
-          <button type="submit" class="btn btn-primary" id="boton-enviar-formulario">Editar</button>
-        </div>
-      </form>
-    </div>
+      <div>
+        <button type="submit" class="btn btn-primary" id="boton-enviar-formulario">Editar</button>
+      </div>
+    </form>
     <script>
       window.addEventListener('DOMContentLoaded', () => {
         const $inputBuscarCliente = document.querySelector('#buscar-codigo');
@@ -149,6 +146,5 @@
     </script>
 
     @endif
-
-  </section>
+  </div>
 @stop

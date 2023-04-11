@@ -1,7 +1,7 @@
 @extends('layouts.master');
 
 @section('content')
-  <section class="my-5">
+  <div class="position-relative overflow-hidden">
     <div class="modal fade" tabindex="-1" id="modal-mostrar-detalles">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -26,8 +26,8 @@
                 <div class="px-1 py-4">
                   <p>Artículo: <strong id="articulo"></strong></p>
                   <p>Número de serie: <strong id="serie"></strong></p>
-                  <p>Modelo: <strong id="marca"></strong></p>
-                  <p>Marca: <strong id="modelo"></strong></p>
+                  <p>Modelo: <strong id="modelo"></strong></p>
+                  <p>Marca: <strong id="marca"></strong></p>
                   <hr>
                   <p>Diagnóstico: <span id="diagnostico"></span></p>
                   <p>Observaciones:</p>
@@ -55,65 +55,59 @@
         </div>
       </div>
     </div>
-    <div class="container d-flex justify-content-center align-items-center flex-column">
-      <div class="w-75">
-        <h3 class="mb-5">Histórico de Solicitudes</h3>
+    <h3 class="mb-5 p-3">Histórico de {{ $cliente->nombre }} {{ $cliente->apellido }}</h3>
 
-        <p>Cliente: <strong>{{ $cliente->nombre }} {{ $cliente->apellido }}</strong></p>
-
-        @if(count($solicitudes) > 0)
-          <p class="mt-3 mb-4">Solicitudes: <strong>{{ count($solicitudes) }}</strong></p>
-
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Código</th>
-                <th scope="col">Artículo</th>
-                <th scope="col">Fecha</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Acciones</th>
+    @if(count($solicitudes) > 0)
+      <div class="overflow-x-auto px-3">
+        <table class="table w-100">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Código</th>
+              <th scope="col">Artículo</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for($i = 0; $i < count($solicitudes); $i++)
+              <tr scope="row" class="text-nowrap">
+                <th class="px-2 py-3">{{$i + 1}}</th>
+                <td class="px-2 py-3">{{ $solicitudes[$i]->codigo_solicitud }}</td>
+                <td class="px-2 py-3">{{ $solicitudes[$i]->modelo }}</td>
+                <td class="px-2 py-3">{{ $solicitudes[$i]->fecha_solicitud }}</td>
+                <td class="px-2 py-3">
+                  @if($solicitudes[$i]->estado_solicitud === 'pendiente')
+                    <span class="badge text-bg-warning">Pendiente</span>
+                  @elseif($solicitudes[$i]->estado_solicitud === 'en proceso')
+                    <span class="badge text-bg-info">En Proceso</span>
+                  @else
+                    <span class="badge text-bg-success">Terminado</span>
+                  @endif
+                </td>
+                <td class="px-2 py-3">
+                  <div>
+                    <button type="button" class="focus-ring px-2 rounded fs-5" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; background: none; outline: none;">
+                      <i class="bi bi-three-dots"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="#" class="dropdown-item detalles-solicitud">
+                          Más detalles
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              @for($i = 0; $i < count($solicitudes); $i++)
-                <tr scope="row">
-                  <th class="px-2 py-3">{{$i + 1}}</th>
-                  <td class="px-2 py-3">{{ $solicitudes[$i]->codigo_solicitud }}</td>
-                  <td class="px-2 py-3">{{ $solicitudes[$i]->modelo }}</td>
-                  <td class="px-2 py-3">{{ $solicitudes[$i]->fecha_solicitud }}</td>
-                  <td class="px-2 py-3">
-                    @if($solicitudes[$i]->estado_solicitud === 'pendiente')
-                      <span class="badge text-bg-warning">Pendiente</span>
-                    @elseif($solicitudes[$i]->estado_solicitud === 'en proceso')
-                      <span class="badge text-bg-info">En Proceso</span>
-                    @else
-                      <span class="badge text-bg-success">Terminado</span>
-                    @endif
-                  </td>
-                  <td class="px-2 py-3">
-                    <div>
-                      <button type="button" class="focus-ring px-2 rounded fs-5" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; background: none; outline: none;">
-                        <i class="bi bi-three-dots"></i>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a href="#" class="dropdown-item detalles-solicitud">
-                            Más detalles
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-              @endfor
-            </tbody>
-          </table>
-        @else
-          <div class="alert alert-warning" role="alert">Este cliente no tiene ninguna orden de mantenimiento registrada. <a href="{{ route('clientes') }}" class="link-opacity-100">Volver a la lista de clientes.</a> o ir a la página de <a href="{{ route('listado-solicitudes') }}" class="link-opacity-100">órdenes.</a></div>
-        @endif
+            @endfor
+          </tbody>
+        </table>
       </div>
-    </div>
+    @else
+      <div class="alert alert-warning" role="alert">Este cliente no tiene ninguna orden de mantenimiento registrada. <a href="{{ route('clientes') }}" class="link-opacity-100">Volver a la lista de clientes.</a> o ir a la página de <a href="{{ route('listado-solicitudes') }}" class="link-opacity-100">órdenes.</a></div>
+    @endif
     <script>
       (async() => {
         const state = {
@@ -253,5 +247,5 @@
         })
       })();
     </script>
-  </section>
+  </div>
 @stop

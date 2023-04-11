@@ -1,94 +1,89 @@
 @extends('layouts.master')
 
 @section('content')
-  <section class="p-3" style="margin-top: 70px;">
-    <div class="mx-auto mx-100 wrapper py-5">
-      <div class="position-relative overflow-hidden">
-        <h3 class="mb-35 p-3">Clientes</h3>
-        <div class="d-flex flex-column flex-md-row align-items-center justify-content-between p-3">
-          <div class="w-100 py-3 mx-md-2 mb-2">
-            <form action="#" class="d-flex align-items-center w-100">
-              <label for="simpleSearch"></label>
-              <div class="input-group flex-nowrap">
-                <span class="bi bi-search input-group-text" id="addon-wrapping"></span>
-                <input type="search" class="form-control" placeholder="Buscar por nombre" aria-label="cliente" aria-describedby="addon-wrapping" id="input-filtro">
+  <div class="position-relative overflow-hidden">
+    <h3 class="mb-5 p-3">Clientes</h3>
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between px-3">
+      <div class="w-100 py-3 mx-md-2 mb-2">
+        <form action="#" class="d-flex align-items-center w-100">
+          <label for="simpleSearch"></label>
+          <div class="input-group flex-nowrap">
+            <span class="bi bi-search input-group-text" id="addon-wrapping"></span>
+            <input type="search" class="form-control" placeholder="Buscar por nombre" aria-label="cliente" aria-describedby="addon-wrapping" id="input-filtro">
+          </div>
+        </form>
+      </div>
+      <div class="w-100 d-flex flex-column flex-sm-row justify-content-end py-3">
+        <a href="{{ route('registrar-cliente') }}" class="btn btn-primary mb-2 d-flex justify-content-center align-items-center text-nowrap w-100">
+          <i class="bi bi-plus"></i>
+          Registrar Cliente
+        </a>
+        <div class="dropdown w-100 mx-sm-2 mb-2 d-flex justify-content-center align-items-center">
+          <button class="btn btn-primary w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-funnel"></i>
+            Filtrar
+          </button>
+          <ul class="dropdown-menu">
+            <li><button class="dropdown-item" id="filtrar-nombre">Nombre</button></li>
+            <li><button class="dropdown-item" id="filtrar-correo">Correo</button></li>
+            <li><a class="dropdown-item" href="#">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="checkPendientes">
+                <label class="form-check-label" for="flexCheckChecked">
+                  Estado: Pendientes
+                </label>
               </div>
-            </form>
-          </div>
-          <div class="w-100 d-flex flex-column flex-sm-row justify-content-end py-3">
-            <a href="{{ route('registrar-cliente') }}" class="btn btn-primary mb-2 d-flex justify-content-center align-items-center text-nowrap w-100">
-              <i class="bi bi-plus"></i>
-              Registrar Cliente
-            </a>
-            <div class="dropdown w-100 mx-sm-2 mb-2 d-flex justify-content-center align-items-center">
-              <button class="btn btn-primary w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-funnel"></i>
-                Filtrar
-              </button>
-              <ul class="dropdown-menu">
-                <li><button class="dropdown-item" id="filtrar-nombre">Nombre</button></li>
-                <li><button class="dropdown-item" id="filtrar-correo">Correo</button></li>
-                <li><a class="dropdown-item" href="#">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="checkPendientes">
-                    <label class="form-check-label" for="flexCheckChecked">
-                      Estado: Pendientes
-                    </label>
-                  </div>
-                </a></li>
-                <li><a class="dropdown-item" href="#">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="checkProceso">
-                    <label class="form-check-label" for="flexCheckChecked">
-                      Estado: En Proceso
-                    </label>
-                  </div>
-                </a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="table w-100">
-            <thead>
-              <th scope="col" class="px-2 py-3">#</th>
-              <th scope="col" class="px-2 py-3">Nombre</th>
-              <th scope="col" class="px-2 py-3">Correo</th>
-              <th scope="col" class="px-2 py-3">Teléfono</th>
-              <th scope="col" class="px-2 py-3">Pendientes</th>
-              <th scope="col" class="px-2 py-3">Procesando</th>
-              <th scope="col" class="px-2 py-3">Acciones</th>
-            </thead>
-            <tbody id="cuerpo-table-clientes">
-              
-            </tbody>
-          </table>
-        </div>
-        <div class="d-flex justify-content-between align-items-center mt-3">
-          <div>
-            <p>Mostrando <strong><span id="min-records">{{ count($clientes) }}</span></strong> de <strong>{{ $maxClientes }}</strong> clientes</p>
-          </div>
-          <!--<nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item"><a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a></li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a></li>
-            </ul>
-          </nav>-->
+            </a></li>
+            <li><a class="dropdown-item" href="#">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="checkProceso">
+                <label class="form-check-label" for="flexCheckChecked">
+                  Estado: En Proceso
+                </label>
+              </div>
+            </a></li>
+          </ul>
         </div>
       </div>
     </div>
-
+    <div class="overflow-x-auto px-3">
+      <table class="table w-100">
+        <thead>
+          <th scope="col" class="px-2 py-3">#</th>
+          <th scope="col" class="px-2 py-3">Nombre</th>
+          <th scope="col" class="px-2 py-3">Correo</th>
+          <th scope="col" class="px-2 py-3">Teléfono</th>
+          <th scope="col" class="px-2 py-3">Pendientes</th>
+          <th scope="col" class="px-2 py-3">Procesando</th>
+          <th scope="col" class="px-2 py-3">Acciones</th>
+        </thead>
+        <tbody id="cuerpo-table-clientes">
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mt-3 px-3">
+      <div>
+        <p>Mostrando <strong><span id="min-records">{{ count($clientes) }}</span></strong> de <strong>{{ $maxClientes }}</strong> clientes</p>
+      </div>
+      <!--<nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a></li>
+        </ul>
+      </nav>-->
+    </div>
     <script>
       (async() => {
         const FILTRAR_POR = {
@@ -281,5 +276,21 @@
         }
       })();
     </script>
-  </section>
+
+    @if(session()->get('type') !== null && session()->get('mensaje') !== null)
+
+    <script>
+      const toastElement = document.querySelector('.toast');
+      const content = document.querySelector('.toast-body');
+      const toast = new bootstrap.Toast(toastElement);
+
+      content.textContent = "{{ session()->get('type') === 'exito' ? 'Mensaje' : 'Error' }}: {{ session()->get('mensaje') }}";
+
+      toast.show();
+
+      setTimeout(() => toast.hide(), 5000);
+    </script>
+
+    @endif
+  </div>
 @stop

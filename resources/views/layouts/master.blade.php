@@ -97,7 +97,11 @@
   </div>
 
   <main class="mt-5">
-    @yield('content')
+    <section class="p-3" style="margin-top: 50px;">
+      <div class="mx-auto mx-100 wrapper py-5">
+        @yield('content')
+      </div>
+    </section>
   </main>
 
   <script>

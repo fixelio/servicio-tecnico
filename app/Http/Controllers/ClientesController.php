@@ -143,7 +143,7 @@ class ClientesController extends Controller
       'telefono' => $datos['telefono'],
     ]);
 
-    return redirect('/editar/cliente')->with([
+    return redirect('/clientes')->with([
       'type' => 'exito',
       'mensaje' => 'Se ha editado el cliente',
     ]);

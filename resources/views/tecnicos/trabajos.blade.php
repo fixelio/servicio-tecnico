@@ -1,114 +1,53 @@
 @extends('layouts.master');
 
 @section('content')
-  <section class="my-5">
-    <div class="container d-flex justify-content-center align-items-center flex-column">
-      <form action="#" class="row mt-5" id="form-buscar-tecnico">
-        <h3 class="mb-4">Buscar Técnico</h3>
-        <div class="input-group col-12 mb-3">
-          <input
-            type="email"
-            id="buscar-correo-electronico"
-            class="form-control"
-            placeholder="Ingresa el correo del técnico"
-            aria-label="Correo del técnico"
-            aria-describedby="redireccion-solicitudes-cliente"
-            value="{{ $tecnico !== null ? $tecnico?->correo_electronico : '' }}"
-          >
-          <a class="btn btn-outline-primary" id="redireccion-solicitudes-tecnico" href="#"><i class="bi bi-search"></i> Buscar</a>
-        </div>
-      </form>
-      <div class="wrapper mt-5">
-        <h3 class="mb-5">Lista de órdenes asignadas</h3>
+  <div class="position-relative overflow-hidden">
+    <h3 class="mb-5 p-3">Lista de Órdenes</h3>
 
-        @if ($tecnico !== null)
+    @if ($tecnico !== null)
+      <div class="px-3">
         <p>Técnico: <strong>{{ $tecnico->nombre }} {{ $tecnico->apellido }}</strong></p>
-        @endif
-
-        @if(count($trabajos) > 0)
-          <p class="mt-3 mb-4">Órdenes: <strong>{{ count($trabajos) }}</strong></p>
-
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Código</th>
-                <th scope="col">Artículo</th>
-                <th scope="col">Modelo</th>
-                <th scope="col">Fecha</th>
-                <th scope="col">Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for($i = 0; $i < count($trabajos); $i++)
-                <tr scope="row">
-                  <th class="px-2 py-3">{{$i + 1}}</th>
-                  <td class="px-2 py-3">{{ $trabajos[$i]->codigo_solicitud }}</td>
-                  <td class="px-2 py-3">{{ $trabajos[$i]->articulo }}</td>
-                  <td class="px-2 py-3">{{ $trabajos[$i]->modelo }}</td>
-                  <td class="px-2 py-3">{{ $trabajos[$i]->fecha_solicitud }}</td>
-                  <td class="px-2 py-3">
-                    @if($trabajos[$i]->estado_solicitud === 'pendiente')
-                      <span class="badge text-bg-warning">Pendiente</span>
-                    @elseif($trabajos[$i]->estado_solicitud === 'en proceso')
-                      <span class="badge text-bg-info">En Proceso</span>
-                    @else
-                      <span class="badge text-bg-success">Terminado</span>
-                    @endif
-                  </td>
-                </tr>
-              @endfor
-            </tbody>
-          </table>
-        @elseif($tecnico !== null)
-          <div class="alert alert-warning" role="alert">Este técnico no tiene ninguna órden de mantenimiento asignada. <a href="{{ route('listado-solicitudes') }}" class="link-opacity-100">Ir a la página de órdenes.</a></div>
-        @endif
       </div>
-    </div>
-    <script>
-      window.addEventListener('DOMContentLoaded', () => {
-        const $inputBuscarTecnico = document.querySelector('#buscar-correo-electronico');
+    @endif
 
-        $inputBuscarTecnico.addEventListener('change', e => {
-          const correo = e.target.value;
-          const $enlace = document.querySelector('#redireccion-solicitudes-tecnico');
-          if (!$enlace) {
-            return;
-          }
+    @if(count($trabajos) > 0)
+      <div class="overflow-x-auto px-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Código</th>
+              <th scope="col">Artículo</th>
+              <th scope="col">Modelo</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for($i = 0; $i < count($trabajos); $i++)
+              <tr scope="row" class="text-nowrap">
+                <th class="px-2 py-3">{{$i + 1}}</th>
+                <td class="px-2 py-3">{{ $trabajos[$i]->codigo_solicitud }}</td>
+                <td class="px-2 py-3">{{ $trabajos[$i]->articulo }}</td>
+                <td class="px-2 py-3">{{ $trabajos[$i]->modelo }}</td>
+                <td class="px-2 py-3">{{ $trabajos[$i]->fecha_solicitud }}</td>
+                <td class="px-2 py-3">
+                  @if($trabajos[$i]->estado_solicitud === 'pendiente')
+                    <span class="badge text-bg-warning">Pendiente</span>
+                  @elseif($trabajos[$i]->estado_solicitud === 'en proceso')
+                    <span class="badge text-bg-info">En Proceso</span>
+                  @else
+                    <span class="badge text-bg-success">Terminado</span>
+                  @endif
+                </td>
+              </tr>
+            @endfor
+          </tbody>
+        </table>
+      </div>
+    @elseif($tecnico !== null)
+      <div class="alert alert-warning" role="alert">Este técnico no tiene ninguna órden de mantenimiento asignada. <a href="{{ route('listado-solicitudes') }}" class="link-opacity-100">Ir a la página de órdenes.</a></div>
+    @endif
 
-          if (!correo) {
-            $enlace.setAttribute('href', '#');
-            return;
-          }
-
-          $enlace.setAttribute('href', `/solicitudes/tecnico/${correo}`);
-        });
-
-        $inputBuscarTecnico.addEventListener('keyup', e => {
-          const correo = e.target.value;
-          const $enlace = document.querySelector('#redireccion-solicitudes-tecnico');
-          if (!$enlace) {
-            return;
-          }
-
-          if (!correo) {
-            $enlace.setAttribute('href', '#');
-            return;
-          }
-
-          $enlace.setAttribute('href', `/solicitudes/tecnico/${correo}`);
-        });
-
-        document.querySelector('#form-buscar-tecnico').addEventListener('submit', e => {
-          e.preventDefault();
-          const $enlace = document.querySelector('#redireccion-solicitudes-tecnico');
-          if (!$enlace) {
-            return;
-          }
-
-          $enlace.click();
-        });
-      });
-    </script>
-  </section>
+  </div>
 @stop

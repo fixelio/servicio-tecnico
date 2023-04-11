@@ -1,14 +1,8 @@
 @extends('layouts.master')
 
 @section('content')
-  <section class="my-5">
-    <div
-      class="modal fade"
-      id="modal-estado-terminado"
-      tabindex="-1"
-      aria-labelledby=""
-      aria-hidden="true"
-    >
+  <div class="position-relative overflow-hidden">
+    <div class="modal fade" id="modal-estado-terminado" tabindex="-1" aria-labelledby="" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -43,13 +37,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="modal fade"
-      id="modal-asignar-tecnico"
-      tabindex="-1"
-      aria-labelledby=""
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="modal-asignar-tecnico" tabindex="-1" aria-labelledby="" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -85,36 +73,31 @@
           </div>
         </div>
       </div>
-    </div>    
-    <div class="container d-flex justify-content-center align-items-center flex-column">
-      <div class="w-75">
-        <div class="d-flex justify-content-between align-items-end mb-5">
-          <h3 class="mb-2 my-5">Listado de Órdenes</h3>
+    </div>
+
+    <h3 class="mb-5 p-3">Órdenes</h3>
+    <div class="overflow-x-auto px-3">
+      @if(count($solicitudes) > 0)
+        <table class="table w-100">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Código</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Artículo</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla-solicitudes">
+            
+          </tbody>
+        </table>
+      @else
+        <div class="alert alert-info" role="alert">
+          No hay órdenes de mantenimiento en proceso o pendientes. <a class="link-opacity-100" href="/clientes">Ir a la lista de clientes.</a>
         </div>
-        <div>
-          @if(count($solicitudes) > 0)
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Código</th>
-                  <th scope="col">Cliente</th>
-                  <th scope="col">Artículo</th>
-                  <th scope="col">Estado</th>
-                  <th scope="col">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="cuerpo-tabla-solicitudes">
-                
-              </tbody>
-            </table>
-          @else
-            <div class="alert alert-info" role="alert">
-              No hay órdenes de mantenimiento en proceso o pendientes. <a class="link-opacity-100" href="/clientes">Ir a la lista de clientes.</a>
-            </div>
-          @endif
-        </div>
-      </div>
+      @endif
     </div>
     <form id="cambiar-estado-form" action="{{ route('estado-solicitud.put') }}" method="POST" class="d-none">
         @csrf
@@ -125,6 +108,7 @@
         <input type="hidden" name="garantia" id="garantia" value="">
         <input type="hidden" name="monto" id="monto" value="">
     </form>
+
     <script>
       (async() => {
         const rawData = {{ Js::from($solicitudes) }};
@@ -349,5 +333,5 @@
 
     @endif
 
-  </section>
+  </div>
 @stop
