@@ -128,7 +128,7 @@ table {
              <td><b>Artículo</b></td>
            </tr>
            <tr>
-             <td><b>Marca</b></td>
+             <td><b>Modelo</b></td>
            </tr>
          </table>
        </div>
@@ -141,7 +141,7 @@ table {
              <td>{{ $articulo }}</td>
            </tr>
            <tr>
-             <td>{{ $marca }}</td>
+             <td>{{ $modelo }}</td>
            </tr>
          </table>
        </div>
@@ -151,7 +151,7 @@ table {
              <td><b>Teléfono</b></td>
            </tr>
            <tr>
-             <td><b>Modelo</b></td>
+             <td><b>Marca</b></td>
            </tr>
            <tr>
              <td><b>Serie</b></td>
@@ -164,7 +164,7 @@ table {
              <td>{{ $telefono }}</td>
            </tr>
            <tr>
-             <td>{{ $modelo }}</td>
+             <td>{{ $marca }}</td>
            </tr>
            <tr>
              <td>{{ $serie }}</td>

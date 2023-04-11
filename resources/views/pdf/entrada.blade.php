@@ -123,7 +123,7 @@ table {
              <td><b>Artículo</b></td>
            </tr>
            <tr>
-             <td><b>Marca</b></td>
+             <td><b>Modelo</b></td>
            </tr>
          </table>
        </div>
@@ -136,7 +136,7 @@ table {
              <td>{{ $articulo }}</td>
            </tr>
            <tr>
-             <td>{{ $marca }}</td>
+             <td>{{ $modelo }}</td>
            </tr>
          </table>
        </div>
@@ -146,7 +146,7 @@ table {
              <td><b>Teléfono</b></td>
            </tr>
            <tr>
-             <td><b>Modelo</b></td>
+             <td><b>Marca</b></td>
            </tr>
            <tr>
              <td><b>Serie</b></td>
@@ -159,7 +159,7 @@ table {
              <td>{{ $telefono }}</td>
            </tr>
            <tr>
-             <td>{{ $modelo }}</td>
+             <td>{{ $marca }}</td>
            </tr>
            <tr>
              <td>{{ $serie }}</td>
@@ -169,33 +169,6 @@ table {
      </div>
    </div> 
   </div>
-
-  <!--<div class="divTable w-100 mb-5">
-   <div class="divTableBody">
-     <div class="divTableRow">
-       <div class="divTableCell w-16">
-         <table class="bordered w-100">
-           <tr>
-             <td><b>Diagnóstico</b></td>
-           </tr>
-           <tr>
-             <td><b>Notas</b></td>
-           </tr>
-         </table>
-       </div>
-       <div class="divTableCell w-100">
-       	<table class="bordered w-100">
-       		<tr>
-             <td>{{ $diagnostico }}</td>
-           </tr>
-           <tr>
-             <td>{{ $notas }}</td>
-           </tr>
-       	</table>
-       </div>
-     </div>
-   </div> 
-  </div>-->
   <div class="divTable w-100 mb-5">
    <div class="divTableBody">
      <div class="divTableRow">

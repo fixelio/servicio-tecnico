@@ -110,7 +110,7 @@
             </table>
           @else
             <div class="alert alert-info" role="alert">
-              No hay solicitudes de mantenimiento en proceso o pendientes. <a class="link-opacity-100" href="/clientes">Ir a la lista de clientes.</a>
+              No hay órdenes de mantenimiento en proceso o pendientes. <a class="link-opacity-100" href="/clientes">Ir a la lista de clientes.</a>
             </div>
           @endif
         </div>

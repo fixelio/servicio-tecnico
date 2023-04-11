@@ -110,7 +110,7 @@
             </tbody>
           </table>
         @else
-          <div class="alert alert-warning" role="alert">Este cliente no tiene ninguna solicitud de mantenimiento registrada. <a href="{{ route('clientes') }}" class="link-opacity-100">Volver a la lista de clientes.</a> o ir a la página de <a href="{{ route('listado-solicitudes') }}" class="link-opacity-100">solicitudes.</a></div>
+          <div class="alert alert-warning" role="alert">Este cliente no tiene ninguna orden de mantenimiento registrada. <a href="{{ route('clientes') }}" class="link-opacity-100">Volver a la lista de clientes.</a> o ir a la página de <a href="{{ route('listado-solicitudes') }}" class="link-opacity-100">órdenes.</a></div>
         @endif
       </div>
     </div>
