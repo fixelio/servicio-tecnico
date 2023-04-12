@@ -150,3 +150,10 @@ form {
   .navbar .nav-item .dropdown-menu{ margin-top:0; }
 } 
 /* ============ desktop view .end// ============ */
+
+
+.btn-actions {
+  border: none;
+  outline: none;
+  background: none;
+}

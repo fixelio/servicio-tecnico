@@ -61,23 +61,85 @@
       <div class="overflow-x-auto px-3">
         <table class="table w-100">
           <thead>
-            <tr>
+            <tr class="text-nowrap">
               <th scope="col">#</th>
-              <th scope="col">Código</th>
-              <th scope="col">Artículo</th>
-              <th scope="col">Fecha</th>
-              <th scope="col">Estado</th>
+              <th scope="col">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Código
+                  <div>
+                    <button class="btn-actions" id="codigo-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="codigo-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Artículo
+                  <div>
+                    <button class="btn-actions" id="articulo-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="articulo-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Modelo
+                  <div>
+                    <button class="btn-actions" id="modelo-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="modelo-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Fecha
+                  <div>
+                    <button class="btn-actions" id="fecha-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="fecha-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Estado
+                  <div>
+                    <button class="btn-actions" id="estado-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="estado-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
               <th scope="col">Acciones</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="cuerpo-tabla">
             @for($i = 0; $i < count($solicitudes); $i++)
               <tr scope="row" class="text-nowrap">
-                <th class="px-2 py-3">{{$i + 1}}</th>
-                <td class="px-2 py-3">{{ $solicitudes[$i]->codigo_solicitud }}</td>
-                <td class="px-2 py-3">{{ $solicitudes[$i]->modelo }}</td>
-                <td class="px-2 py-3">{{ $solicitudes[$i]->fecha_solicitud }}</td>
-                <td class="px-2 py-3">
+                <th class="px-2 py-3 text-nowrap">{{$i + 1}}</th>
+                <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->codigo_solicitud }}</td>
+                <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->articulo }}</td>
+                <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->modelo }}</td>
+                <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->fecha_solicitud }}</td>
+                <td class="px-2 py-3 text-nowrap">
                   @if($solicitudes[$i]->estado_solicitud === 'pendiente')
                     <span class="badge text-bg-warning">Pendiente</span>
                   @elseif($solicitudes[$i]->estado_solicitud === 'en proceso')
@@ -86,7 +148,7 @@
                     <span class="badge text-bg-success">Terminado</span>
                   @endif
                 </td>
-                <td class="px-2 py-3">
+                <td class="px-2 py-3 text-nowrap">
                   <div>
                     <button type="button" class="focus-ring px-2 rounded fs-5" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; background: none; outline: none;">
                       <i class="bi bi-three-dots"></i>
@@ -113,6 +175,7 @@
         const state = {
           orden: null,
           ordenes: [],
+          ordenesOrdenadas: [],
         }
 
         function boot() {
@@ -127,6 +190,7 @@
               estado: orden.estado_solicitud,
               fechaCompra: orden.fecha_compra,
               fechaInicio: orden.fecha_inicio,
+              fecha: orden.fecha_solicitud,
               fechaFin: orden.fecha_fin,
               garantia: orden.garantia,
               marca: orden.marca,
@@ -141,6 +205,15 @@
             },
           }), {});
 
+          const btnOrdenarCollection = Array.from(document.querySelectorAll('.btn-actions'));
+          btnOrdenarCollection.forEach(btn => {
+            
+            btn.onclick = () => {
+              const [columna, modo] = btn.id.split('-');
+              ordenarPor(columna, modo);
+            }
+          });
+
           const detalles = document.querySelectorAll('.detalles-solicitud');
           for(const $detalle of detalles) {
             $detalle.onclick = e => {
@@ -149,7 +222,7 @@
             }
           }
 
-          setState({ ordenes: indexadas });
+          setState({ ordenes: indexadas, ordenesOrdenadas: indexadas });
         }
 
         function detallesOnClick($row) {
@@ -163,6 +236,80 @@
           setState({ orden });
 
           modal.show();
+        }
+
+        function ordenarPor(columna, modo) {
+          const { ordenes } = getState();
+
+          const ordenadas = Object.values(ordenes).sort((a, b) => {
+            const aCol = a[columna];
+            const bCol = b[columna];
+
+            if (modo === 'asc') {
+              return aCol.localeCompare(bCol);
+            }
+            else {
+              return bCol.localeCompare(aCol);
+            }
+          });
+
+          const $tabla = document.getElementById('cuerpo-tabla');
+          while($tabla.firstChild) {
+            $tabla.removeChild($tabla.firstChild);
+          }
+
+          const ESTADO_TO_BADGE = {
+            'pendiente': 'warning',
+            'en proceso': 'info',
+            'terminado': 'success',
+          }
+
+          ordenadas.forEach((orden, index) => {
+            const $acciones = elt('td', { className: 'px-2 py-3 text-nowrap' },);
+            const $boton = elt('button', {
+              className: 'focus-ring px-2 rounded fs-5',
+              type: 'button'
+            }, elt('i', { className: 'bi bi-three-dots' }, ''));
+
+            $boton.setAttribute('data-bs-toggle', 'dropdown');
+            $boton.setAttribute('aria-expanded', 'false');
+            $boton.style.outline = 'none';
+            $boton.style.border = 'none';
+            $boton.style.background = 'none';
+
+            $acciones.appendChild(
+              elt('div', { },
+                $boton,
+                elt('ul', { className: 'dropdown-menu' },
+                  elt('li', {},
+                    elt('a', { className: 'dropdown-item detalles-solicitud', href: '#' }, 'Más detalles'),
+                  )
+                )
+              )
+            );
+
+            $tabla.appendChild(
+              elt('tr', { scope: 'row', className: 'text-nowrap' },
+                elt('th', { className: 'px-2 py-3 text-nowrap' }, `${index + 1}`),
+                elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.codigo),
+                elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.articulo),
+                elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.modelo),
+                elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.fecha),
+                elt('td', { className: 'px-2 py-3 text-nowrap' },
+                  elt('span', { className: `badge text-bg-${ESTADO_TO_BADGE[orden.estado]}` }, orden.estado)
+                ),
+                $acciones
+              )
+            );
+          });
+
+          const detalles = document.querySelectorAll('.detalles-solicitud');
+          for(const $detalle of detalles) {
+            $detalle.onclick = e => {
+              const $row = e.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+              detallesOnClick($row);
+            }
+          }
         }
 
         function getState() {

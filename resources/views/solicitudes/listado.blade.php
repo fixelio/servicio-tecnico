@@ -76,16 +76,78 @@
     </div>
 
     <h3 class="mb-5 p-3">Órdenes</h3>
+
     <div class="overflow-x-auto px-3">
       @if(count($solicitudes) > 0)
         <table class="table w-100">
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Código</th>
-              <th scope="col">Cliente</th>
-              <th scope="col">Artículo</th>
-              <th scope="col">Estado</th>
+              <th scope="col" class="text-nowrap">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Código
+                  <div>
+                    <button class="btn-actions" id="codigo-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="codigo-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" class="text-nowrap">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Cliente
+                  <div>
+                    <button class="btn-actions" id="cliente-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="cliente-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" class="text-nowrap">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Artículo
+                  <div>
+                    <button class="btn-actions" id="articulo-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="articulo-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" class="text-nowrap">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Fecha
+                  <div>
+                    <button class="btn-actions" id="fecha-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="fecha-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" class="text-nowrap">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Estado
+                  <div>
+                    <button class="btn-actions" id="estado-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="estado-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
               <th scope="col">Acciones</th>
             </tr>
           </thead>
@@ -110,211 +172,278 @@
     </form>
 
     <script>
-      (async() => {
-        const rawData = {{ Js::from($solicitudes) }};
-        const sanitized = rawData.map(solicitud => ({
-          solicitud: {
-            codigo: solicitud.codigo_solicitud,
-            articulo: solicitud.articulo,
-            estado: solicitud.estado_solicitud,
-          },
-          cliente: {
-            nombre: `${solicitud.nombre} ${solicitud.apellido}`,
-            correo: solicitud.correo_electronico,
-          }
-        }));
 
-        const ESTADO = {
-          'en proceso': 'En Proceso',
-          'terminado': 'Terminado',
-          'pendiente': 'Pendiente',
+(async() => {
+  const ORDENAR_POR = {
+    FECHA_ASC: 'fecha ascendiente',
+    FECHA_DESC: 'fecha descendiente',
+    ESTADO_PENDIENTE: 'pendientes',
+    ESTADO_EN_PROCESO: 'en proceso',
+  }
+
+  const ESTADO = {
+    'en proceso': 'En Proceso',
+    'terminado': 'Terminado',
+    'pendiente': 'Pendiente',
+  }
+
+  const state = {
+    ordenes: [],
+    ordenesOrdenadas: [],
+    filtro: ORDENAR_POR.FECHA_DESC,
+  }
+
+  function boot() {
+    const raw = {{ Js::from($solicitudes) }};
+    const ordenes = raw.map((solicitud) => ({
+      solicitud: {
+        codigo: solicitud.codigo_solicitud,
+        articulo: solicitud.articulo,
+        estado: solicitud.estado_solicitud,
+        fecha: solicitud.fecha_solicitud,
+      },
+      cliente: {
+        nombre: `${solicitud.nombre} ${solicitud.apellido}`,
+        correo: solicitud.correo_electronico,
+      }
+    }));
+
+    const btnOrdenarCollection = Array.from(document.querySelectorAll('.btn-actions'));
+    btnOrdenarCollection.forEach(btn => {
+      
+      btn.onclick = () => {
+        const [columna, modo] = btn.id.split('-');
+        ordenarPor(columna, modo);
+      }
+    });
+
+    setState({
+      ordenes,
+      ordenesOrdenadas: ordenes,
+    });
+  }
+
+  function FilaOrden(data) {
+    const $acciones = elt('td', { className: 'ml-3' });
+
+    if (data.solicitud.estado !== 'terminado') {
+      const $boton = elt('button', {
+        className: 'focus-ring px-2 rounded fs-5',
+        type: 'button'
+      }, elt('i', { className: 'bi bi-three-dots' }, ''));
+
+      $boton.setAttribute('data-bs-toggle', 'dropdown');
+      $boton.setAttribute('aria-expanded', 'false');
+      $boton.style.outline = 'none';
+      $boton.style.border = 'none';
+      $boton.style.background = 'none';
+
+      $acciones.appendChild(
+        elt('div', { },
+          $boton,
+          elt('ul', { className: 'dropdown-menu' },
+            elt('li', {},
+              elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
+            ),
+            elt('li', {},
+              elt('button', { className: 'dropdown-item', onclick: () => marcarEnProceso(data), disabled: data.solicitud.estado === 'en proceso' || data.solicitud.estado === 'terminado' }, 'Marcar como "En proceso"')
+            ),
+            elt('li', {},
+              elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data), disabled: data.solicitud.estado === 'terminado' }, 'Marcar como "Terminado"')
+            )
+          )
+        )
+      );
+    }
+    else {
+      $acciones.appendChild(document.createTextNode('Sin acciones'));
+    }
+
+    const element = elt('tr', { scope: 'row', id: `solicitud-${data.solicitud.codigo}`, className: 'text-nowrap' },
+      elt('th', { className: "px-2 py-3" }, data.index),
+      elt('td', { className: "px-2 py-3" }, data.solicitud.codigo),
+      elt('td', { className: "px-2 py-3" }, data.cliente.nombre),
+      elt('td', { className: "px-2 py-3" }, data.solicitud.articulo),
+      elt('td', { className: 'px-2 py-3' }, data.solicitud.fecha),
+      elt('td', { className: "px-2 py-3" }, 
+        elt('span', { className: `badge badge-center text-bg-${data.solicitud.estado === 'pendiente' ? 'warning' : (data.solicitud.estado === 'en proceso' ? 'info' : 'success')}` }, ESTADO[data.solicitud.estado])
+      ),
+      $acciones
+    );
+
+    return element
+  }
+
+  function ordenarPor(columna, modo) {
+    const { ordenes } = getState();
+
+    const ordenadas = ordenes.sort((a, b) => {
+      if (columna === 'cliente') {
+        const aNombre = a.cliente.nombre;
+        const bNombre = b.cliente.nombre;
+
+        if (modo === 'asc') {
+          return aNombre[0] < bNombre[0] ? -1 : 1;
         }
-        
-        function boot() {
-          const $tabla = document.querySelector('#cuerpo-tabla-solicitudes');
-          if (!$tabla) {
-            return;
-          }
-
-          for(let i = 0; i < sanitized.length; i++) {
-            const indice = i + 1;
-            const data = sanitized[i];
-            data['indice'] = indice;
-
-            const $acciones = elt('td', { className: 'ml-3' });
-            if (data.solicitud.estado !== 'terminado') {
-              const $boton = elt('button', {
-                className: 'focus-ring px-2 rounded fs-5',
-                type: 'button'
-              }, elt('i', { className: 'bi bi-three-dots' }, ''));
-
-              $boton.setAttribute('data-bs-toggle', 'dropdown');
-              $boton.setAttribute('aria-expanded', 'false');
-              $boton.style.outline = 'none';
-              $boton.style.border = 'none';
-              $boton.style.background = 'none';
-
-              $acciones.appendChild(
-                elt('div', { },
-                  $boton,
-                  elt('ul', { className: 'dropdown-menu' },
-                    elt('li', {},
-                      elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
-                    ),
-                    elt('li', {},
-                      elt('button', { className: 'dropdown-item', onclick: () => marcarEnProceso(data), disabled: data.solicitud.estado === 'en proceso' }, 'Marcar como "En proceso"')
-                    ),
-                    elt('li', {},
-                      elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data), disabled: data.solicitud.estado === 'terminado' }, 'Marcar como "Terminado"')
-                    )
-                  )
-                )
-              );
-            }
-            else {
-              $acciones.appendChild(document.createTextNode('Sin acciones'));
-            }
-
-            const element = elt('tr', { scope: 'row', id: `solicitud-${data.solicitud.codigo}` },
-              elt('th', { className: "px-2 py-3" }, indice.toString()),
-              elt('td', { className: "px-2 py-3" }, data.solicitud.codigo),
-              elt('td', { className: "px-2 py-3" }, data.cliente.nombre),
-              elt('td', { className: "px-2 py-3" }, data.solicitud.articulo),
-              elt('td', { className: "px-2 py-3" }, 
-                elt('span', { className: `badge badge-center text-bg-${data.solicitud.estado === 'pendiente' ? 'warning' : (data.solicitud.estado === 'en proceso' ? 'info' : 'success')}` }, ESTADO[data.solicitud.estado])
-              ),
-              $acciones
-            );
-
-            $tabla.appendChild(element);
-          }
+        else {
+          return aNombre[0] > bNombre[0] ? -1 : 1;
         }
+      }
 
-        async function marcarTerminado(data) {
-          const $form = document.getElementById('cambiar-estado-form');
+      const aCol = a.solicitud[columna];
+      const bCol = b.solicitud[columna];
 
-          let $codigo = document.getElementById('codigo_solicitud');
-          let $estado = document.getElementById('estado_solicitud');
-          let $descripcion = document.getElementById('descripcion_solucion');
-          let $garantia = document.getElementById('garantia');
-          let $monto = document.getElementById('monto');
+      if (modo === 'asc') {
+        return aCol.localeCompare(bCol);
+      }
+      else {
+        return bCol.localeCompare(aCol);
+      }
+    });
 
-          const $inputDescripcion = document.getElementById('descripcion_solucion_content');
-          const $inputGarantia = document.getElementById('garantia_content');
-          const $inputMonto = document.getElementById('monto_content');
+    setState({ ordenesOrdenadas: ordenadas });
+  }
 
-          const $modal = document.querySelector('#modal-estado-terminado');
-          const modal = new bootstrap.Modal($modal, {});
+  function render() {
+    const { ordenesOrdenadas } = getState();
+    const $tabla = document.querySelector('#cuerpo-tabla-solicitudes');
+    if (!$tabla) {
+      return;
+    }
 
-          $inputDescripcion.addEventListener('change', e => {
-            $descripcion.value = e.target.value;
-          });
+    while($tabla.firstChild) {
+      $tabla.removeChild($tabla.firstChild);
+    }
 
-          $inputDescripcion.addEventListener('keyup', e => {
-            $descripcion.value = e.target.value;
-          });
+    ordenesOrdenadas.forEach((orden, index) => {
+      const data = { ...orden, index: `${index + 1}` };
+      $tabla.appendChild(FilaOrden(data));
+    });
+  }
 
+  function getState() {
+    return structuredClone(state);
+  }
 
-          $inputGarantia.addEventListener('change', e => {
-            $garantia.value = e.target.value;
-          });
+  function setState(newState) {
+    for(const key in newState) {
+      if (key in state === false) return;
 
-          $inputGarantia.addEventListener('keyup', e => {
-            $garantia.value = e.target.value;
-          });
+      state[key] = newState[key];
+    }
 
+    render();
+  }
 
-          $inputMonto.addEventListener('change', e => {
-            $monto.value = e.target.value;
-          });
+  window.addEventListener('DOMContentLoaded', () => {
+    boot();
+  });
 
-          $inputMonto.addEventListener('keyup', e => {
-            $monto.value = e.target.value;
-          });
+  async function marcarTerminado(data) {
+    const $form = document.getElementById('cambiar-estado-form');
 
-          const $botonModalEstablecer = document.querySelector('#boton-modal-establecer');
-          $botonModalEstablecer.onclick = () => {
-            $inputDescripcion.value = '';
-            $inputGarantia.value = '';
-            $inputMonto.value = '';
+    let $codigo = document.getElementById('codigo_solicitud');
+    let $estado = document.getElementById('estado_solicitud');
+    let $descripcion = document.getElementById('descripcion_solucion');
+    let $garantia = document.getElementById('garantia');
+    let $monto = document.getElementById('monto');
 
-            $codigo.value = data.solicitud.codigo;
-            $estado.value = 'terminado';
+    const $inputDescripcion = document.getElementById('descripcion_solucion_content');
+    const $inputGarantia = document.getElementById('garantia_content');
+    const $inputMonto = document.getElementById('monto_content');
 
-            const $row = document.getElementById(`solicitud-${data.solicitud.codigo}`);
-            const $estadoSolicitud = $row.children[4].children[0];
-            $estadoSolicitud.textContent = ESTADO['terminado'];
-            $estadoSolicitud.className = 'badge badge-center text-bg-success';
+    const $modal = document.querySelector('#modal-estado-terminado');
+    const modal = new bootstrap.Modal($modal, {});
 
-            const $actions = $row
-              .children[5]
-              .children[0]
-              .children[1];
+    $inputDescripcion.addEventListener('change', e => {
+      $descripcion.value = e.target.value;
+    });
 
-            $row.children[5].innerHTML = 'Sin acciones';
-            $form.submit();
-
-            $codigo.value = '';
-            $estado.value = '';
-            $descripcion.value = '';
-            $garantia.value = '';
-            $monto.value = '';
-
-            modal.hide();
-          }
-
-          modal.show();
-        }
-
-        async function marcarEnProceso(data) {
-          const $form = document.getElementById('cambiar-estado-form');
-
-          let $codigo = document.getElementById('codigo_solicitud');
-          let $estado = document.getElementById('estado_solicitud');
-          let $tecnico = document.getElementById('correo_tecnico');
-
-          const $selectTecnico = document.getElementById('tecnico_responsable_content');
-          const $modal = document.querySelector('#modal-asignar-tecnico');
-          const modal = new bootstrap.Modal($modal, {});
-
-          $selectTecnico.addEventListener('change', e => {
-            $tecnico.value = e.target.value;
-          });
-
-          const $botonModalEstablecer = document.querySelector('#boton-modal-establecer-tecnico');
-          $botonModalEstablecer.onclick = () => {
-            $codigo.value = data.solicitud.codigo;
-            $estado.value = 'en proceso';
-
-            if (!$tecnico.value) return;
-            $form.submit();
+    $inputDescripcion.addEventListener('keyup', e => {
+      $descripcion.value = e.target.value;
+    });
 
 
-            const $row = document.getElementById(`solicitud-${data.solicitud.codigo}`);
-            const $estadoSolicitud = $row.children[4].children[0];
-            $estadoSolicitud.textContent = ESTADO['en proceso'];
-            $estadoSolicitud.className = 'badge badge-center text-bg-info';
+    $inputGarantia.addEventListener('change', e => {
+      $garantia.value = e.target.value;
+    });
 
-            const $actions = $row
-              .children[5]
-              .children[0]
-              .children[1];
+    $inputGarantia.addEventListener('keyup', e => {
+      $garantia.value = e.target.value;
+    });
 
-            const $btnEnProceso = $actions
-              .children[1]
-              .children[0];
 
-            $btnEnProceso.disabled = true;
-            modal.hide();
-          }
+    $inputMonto.addEventListener('change', e => {
+      $monto.value = e.target.value;
+    });
 
-          modal.show();
-        }
+    $inputMonto.addEventListener('keyup', e => {
+      $monto.value = e.target.value;
+    });
 
-        window.addEventListener('DOMContentLoaded', () => {
-          boot();
-        });
-      })();
+    const $botonModalEstablecer = document.querySelector('#boton-modal-establecer');
+    $botonModalEstablecer.onclick = () => {
+      $inputDescripcion.value = '';
+      $inputGarantia.value = '';
+      $inputMonto.value = '';
+
+      $codigo.value = data.solicitud.codigo;
+      $estado.value = 'terminado';
+
+      $form.submit();
+
+      const { ordenes, ordenesOrdenadas } = getState();
+      const indexOrden = ordenes.findIndex(orden => orden.solicitud.codigo === data.solicitud.codigo);
+      ordenes[indexOrden].solicitud.estado = 'terminado';
+
+      const indexOrdenada = ordenesOrdenadas.findIndex(orden => orden.solicitud.codigo === data.solicitud.codigo);
+      ordenesOrdenadas[indexOrdenada].solicitud.estado = 'terminado';
+      modal.hide();
+
+      setState({ ordenes, ordenesOrdenadas });
+    }
+
+    modal.show();
+  }
+
+  async function marcarEnProceso(data) {
+    const $form = document.getElementById('cambiar-estado-form');
+
+    let $codigo = document.getElementById('codigo_solicitud');
+    let $estado = document.getElementById('estado_solicitud');
+    let $tecnico = document.getElementById('correo_tecnico');
+
+    const $selectTecnico = document.getElementById('tecnico_responsable_content');
+    const $modal = document.querySelector('#modal-asignar-tecnico');
+    const modal = new bootstrap.Modal($modal, {});
+
+    $selectTecnico.addEventListener('change', e => {
+      $tecnico.value = e.target.value;
+    });
+
+    const $botonModalEstablecer = document.querySelector('#boton-modal-establecer-tecnico');
+    $botonModalEstablecer.onclick = () => {
+      $codigo.value = data.solicitud.codigo;
+      $estado.value = 'en proceso';
+
+      if (!$tecnico.value) return;
+      $form.submit();
+
+      const { ordenes, ordenesOrdenadas } = getState();
+      const indexOrden = ordenes.findIndex(orden => orden.solicitud.codigo === data.solicitud.codigo);
+      ordenes[indexOrden].solicitud.estado = 'en proceso';
+
+      const indexOrdenada = ordenesOrdenadas.findIndex(orden => orden.solicitud.codigo === data.solicitud.codigo);
+      ordenesOrdenadas[indexOrdenada].solicitud.estado = 'en proceso';
+      modal.hide();
+
+      setState({ ordenes, ordenesOrdenadas });
+    }
+
+    modal.show();
+  }
+})();
+
     </script>
 
     @if(session()->get('type') !== null && session()->get('mensaje') !== null)

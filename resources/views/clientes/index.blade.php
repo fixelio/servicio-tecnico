@@ -33,7 +33,7 @@
                   type="checkbox"
                   value=""
                   id="checkPendientes">
-                <label class="form-check-label" for="flexCheckChecked">
+                <label class="form-check-label" for="checkPendientes">
                   Estado: Pendientes
                 </label>
               </div>
@@ -45,7 +45,7 @@
                   type="checkbox"
                   value=""
                   id="checkProceso">
-                <label class="form-check-label" for="flexCheckChecked">
+                <label class="form-check-label" for="checkProceso">
                   Estado: En Proceso
                 </label>
               </div>
@@ -58,12 +58,72 @@
       <table class="table w-100">
         <thead>
           <th scope="col" class="px-2 py-3">#</th>
-          <th scope="col" class="px-2 py-3">Nombre</th>
-          <th scope="col" class="px-2 py-3">Correo</th>
-          <th scope="col" class="px-2 py-3">Teléfono</th>
-          <th scope="col" class="px-2 py-3">Pendientes</th>
-          <th scope="col" class="px-2 py-3">Procesando</th>
-          <th scope="col" class="px-2 py-3">Acciones</th>
+          <th scope="col" class="px-2 py-3 text-nowrap">
+            <div class="w-100 d-flex justify-content-between align-items-center">
+              Nombre
+              <div>
+                <button class="btn-actions" id="nombre-asc">
+                  <i class="bi bi-caret-up-fill"></i>
+                </button>
+                <button class="btn-actions" id="nombre-desc">
+                  <i class="bi bi-caret-down-fill"></i>
+                </button>
+              </div>
+            </div>
+          </th>
+          <th scope="col" class="px-2 py-3 text-nowrap">
+            <div class="w-100 d-flex justify-content-between align-items-center">
+              Correo
+              <div>
+                <button class="btn-actions" id="correo-asc">
+                  <i class="bi bi-caret-up-fill"></i>
+                </button>
+                <button class="btn-actions" id="correo-desc">
+                  <i class="bi bi-caret-down-fill"></i>
+                </button>
+              </div>
+            </div>
+          </th>
+          <th scope="col" class="px-2 py-3 text-nowrap">
+            <div class="w-100 d-flex justify-content-between align-items-center">
+              Telefono
+              <div>
+                <button class="btn-actions" id="telefono-asc">
+                  <i class="bi bi-caret-up-fill"></i>
+                </button>
+                <button class="btn-actions" id="telefono-desc">
+                  <i class="bi bi-caret-down-fill"></i>
+                </button>
+              </div>
+            </div>
+          </th>
+          <th scope="col" class="px-2 py-3 text-nowrap">
+            <div class="w-100 d-flex justify-content-between align-items-center">
+              Pendientes
+              <div>
+                <button class="btn-actions" id="pendientes-asc">
+                  <i class="bi bi-caret-up-fill"></i>
+                </button>
+                <button class="btn-actions" id="pendientes-desc">
+                  <i class="bi bi-caret-down-fill"></i>
+                </button>
+              </div>
+            </div>
+          </th>
+          <th scope="col" class="px-2 py-3 text-nowrap">
+            <div class="w-100 d-flex justify-content-between align-items-center">
+              Procesando
+              <div>
+                <button class="btn-actions" id="enProceso-asc">
+                  <i class="bi bi-caret-up-fill"></i>
+                </button>
+                <button class="btn-actions" id="enProceso-desc">
+                  <i class="bi bi-caret-down-fill"></i>
+                </button>
+              </div>
+            </div>
+          </th>
+          <th scope="col" class="px-2 py-3 text-nowrap">Acciones</th>
         </thead>
         <tbody id="cuerpo-table-clientes">
           
@@ -130,6 +190,15 @@
             });
           }
 
+          const btnOrdenarCollection = Array.from(document.querySelectorAll('.btn-actions'));
+          btnOrdenarCollection.forEach(btn => {
+            
+            btn.onclick = () => {
+              const [columna, modo] = btn.id.split('-');
+              ordenarPor(columna, modo);
+            }
+          });
+
           $nombreRef.onclick = () => setFiltro(FILTRAR_POR.NOMBRE);
           $correoRef.onclick = () => setFiltro(FILTRAR_POR.CORREO);
 
@@ -168,6 +237,36 @@
           }
 
           setState({ clientes, clientesFiltrados: clientes });
+        }
+
+        function ordenarPor(columna, modo) {
+          const { clientesFiltrados } = getState();
+
+          const clientes = clientesFiltrados.sort((a, b) => {
+            if (columna === 'pendientes' || columna === 'enProceso') {
+              const aCol = a[columna];
+              const bCol = b[columna];
+
+              if (modo === 'asc') {
+                return aCol < bCol ? -1 : 1;
+              }
+              else {
+                return aCol > bCol ? -1 : 1;
+              }
+            }
+
+            const aCol = a[columna];
+            const bCol = b[columna];
+
+            if (modo === 'asc') {
+              return aCol.localeCompare(bCol);
+            }
+            else {
+              return bCol.localeCompare(aCol);
+            }
+          });
+
+          setState({ clientesFiltrados: clientes });
         }
 
         function filtrar(value) {
