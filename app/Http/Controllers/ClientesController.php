@@ -15,8 +15,8 @@ class ClientesController extends Controller
   }
 
   public function index()
-  {
-    $clientes = Clientes::skip(0)->limit(20)->get();
+  {    
+    $clientes = Clientes::orderBy('created_at', 'desc')->simplePaginate(25);
     $idsClientes = [];
 
     foreach($clientes as $cliente) {
@@ -68,6 +68,7 @@ class ClientesController extends Controller
 
     return view('clientes.index', [
       'clientes' => $resultado,
+      'links' => $clientes,
       'maxClientes' => Clientes::count(),
     ]);
   }

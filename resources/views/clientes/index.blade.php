@@ -134,13 +134,16 @@
       <div>
         <p>Mostrando <strong><span id="min-records">{{ count($clientes) }}</span></strong> de <strong>{{ $maxClientes }}</strong> clientes</p>
       </div>
-      <!--<nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a></li>
+      @if ($links->links()->paginator->hasPages())
+
+      <div>
+        {{ $links->links() }}
+      </div>
+
+      @endif
+      <!--<nav aria-label="Navegación de clientes">
+        <ul class="pagination" id="client-pagination">
+          
         </ul>
       </nav>-->
     </div>
@@ -198,6 +201,17 @@
               ordenarPor(columna, modo);
             }
           });
+
+          const pagination = document.querySelector('body > main > section > div > div > div.d-flex.justify-content-between.align-items-center.mt-3.px-3 > div:nth-child(2) > nav');
+
+          if (pagination !== null) {
+
+            const $prev = pagination.children[0];
+            const $next = pagination.children[1];
+
+            $prev.textContent = '« Anterior';
+            $next.textContent = 'Siguiente »';
+          }
 
           $nombreRef.onclick = () => setFiltro(FILTRAR_POR.NOMBRE);
           $correoRef.onclick = () => setFiltro(FILTRAR_POR.CORREO);
@@ -346,6 +360,8 @@
             )
           );
         }
+
+
 
         function render() {
           const { clientesFiltrados } = getState();
