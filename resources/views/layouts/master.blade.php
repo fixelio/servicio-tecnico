@@ -10,10 +10,10 @@
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
 
-  <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
-  <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('js/lib.js') }}"></script>
 </head>
 <body class="antialiased">

@@ -17,7 +17,7 @@ use App\Http\Controllers\TecnicosController;
 |
 */
 
-Route::get('/', [ClientesController::class, 'index']);
+Route::get('/', [SolicitudesMantenimientoController::class, 'listadoView']);
 
 Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes');
 Route::get('/registrar/cliente', [ClientesController::class, 'registrarView'])->name('registrar-cliente');
