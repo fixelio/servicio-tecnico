@@ -311,6 +311,47 @@
       const codigo = data.solicitud.codigo;
       const estado = data.solicitud.estado;
 
+      let $cambiarEstado = null;
+
+      if (estado === 'ingresado') {
+        $cambiarEstado = elt('button', {
+          className: 'dropdown-item',
+          onclick: () => cambiarEstado(codigo, 'presupuestado'),
+        }, 'Marcar como "Presupuestado"');
+      }
+
+      else if (estado === 'presupuestado') {
+        $cambiarEstado = elt('button', {
+          className: 'dropdown-item',
+          onclick: () => cambiarEstado(codigo, 'en reparación'),
+        }, 'Marcar como "En Reparación"');
+      }
+
+      else if (estado === 'en reparacion') {
+        $cambiarEstado = elt('button', {
+          className: 'dropdown-item',
+          onclick: () => cambiarEstado(codigo, 'derivado'),
+        }, 'Marcar como "Derivado"');
+      }
+
+      else if (estado === 'derivado') {
+        $cambiarEstado = elt('button', {
+          className: 'dropdown-item',
+          onclick: () => marcarTerminado(data),
+        }, 'Marcar como "Entregado"');
+      }
+
+      else if (estado === 'entregado') {
+        $cambiarEstado = elt('button', {
+          className: 'dropdown-item',
+          onclick: () => cambiarEstado(codigo, 'listo'),
+        }, 'Marcar como "Listo"');
+      }
+
+      else {
+        console.warn('Error fatal');
+      }
+
       $acciones.appendChild(
         elt('div', { },
           $boton,
@@ -318,21 +359,7 @@
             elt('li', {},
               elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
             ),
-            elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'presupuestado'), disabled: estado === 'listo' }, 'Marcar como "Presupuestado"')
-            ),
-            elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'en reparacion'), disabled: estado === 'listo' }, 'Marcar como "En Reparación"'),
-            ),
-            elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'derivado'), disabled: estado === 'listo' }, 'Marcar como "Derivado"'),
-            ),
-            elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data), disabled: estado === 'listo' }, 'Marcar como "Entregado"'),
-            ),
-            elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'listo'), disabled: estado === 'listo' }, 'Marcar como "Listo"'),
-            )
+            $cambiarEstado
           )
         )
       );
