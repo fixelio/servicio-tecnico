@@ -143,7 +143,8 @@
       'presupuestado': 'warning',
       'en reparacion': 'info',
       'derivado': 'primary',
-      'entregado': 'success'
+      'entregado': 'success',
+      'listo': 'success',
     }
 
     return elt('tr', { scope: 'row', className: 'text-nowrap' },

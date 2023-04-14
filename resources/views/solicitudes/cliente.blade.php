@@ -279,7 +279,8 @@
             'presupuestado': 'warning',
             'en reparacion': 'info',
             'derivado': 'primary',
-            'entregado': 'success'
+            'entregado': 'success',
+            'listo': 'success',
           }
 
           ordenadas.forEach((orden, index) => {

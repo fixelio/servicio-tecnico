@@ -256,6 +256,7 @@
     'en reparacion': 'En Reparación',
     'derivado': 'Derivado',
     'entregado': 'Entregado',
+    'listo': 'Listo',
   }
 
   const state = {
@@ -330,6 +331,9 @@
             ),
             elt('li', {},
               elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data), disabled: estado === 'entregado' }, 'Marcar como "Entregado"'),
+            ),
+            elt('li', {},
+              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'listo'), disabled: estado === 'entregado' }, 'Marcar como "Listo"'),
             )
           )
         )
@@ -344,7 +348,8 @@
       'presupuestado': 'warning',
       'en reparacion': 'info',
       'derivado': 'primary',
-      'entregado': 'success'
+      'entregado': 'success',
+      'listo': 'success',
     }
 
     const element = elt('tr', { scope: 'row', id: `solicitud-${data.solicitud.codigo}`, className: 'text-nowrap' },
