@@ -19,6 +19,61 @@
       </div>
     </div>
 
+    <div class="modal fade" tabindex="-1" id="modal-mostrar-detalles" role="dialog" aria-labelledby="modal-mostrar-detalles" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title h5">Detalles de la orden #<span id="codigo"></span></h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-underline d-flex justify-content-between" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="equipo-tab" data-bs-toggle="tab" data-bs-target="#equipo-tab-pane" type="button" role="tab" aria-controls="equipo-tab-pane" aria-selected="false"><i class="bi bi-pc-display" style="outline: none"></i> Equipo</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tecnico-tab" data-bs-toggle="tab" data-bs-target="#tecnico-tab-pane" type="button" role="tab" aria-controls="tecnico-tab-pane" aria-selected="false"><i class="bi bi-tools"></i> Técnico</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reparacion-tab" data-bs-toggle="tab" data-bs-target="#reparacion-tab-pane" type="button" role="tab" aria-controls="reparacion-tab-pane" aria-selected="false"><i class="bi bi-motherboard"></i> Reparación</button>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="equipo-tab-pane" role="tabpanel" aria-labelledby="equipo-tab" tabindex="0">
+                <div class="px-1 py-4">
+                  <p>Artículo: <strong id="articulo"></strong></p>
+                  <p>Número de serie: <strong id="serie"></strong></p>
+                  <p>Modelo: <strong id="modelo"></strong></p>
+                  <p>Marca: <strong id="marca"></strong></p>
+                  <hr>
+                  <p>Diagnóstico: <span id="diagnostico"></span></p>
+                  <p>Observaciones:</p>
+                  <ol class="list-group list-group-numbered" id="observaciones">
+                  </ol>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="tecnico-tab-pane" role="tabpanel" aria-labelledby="tecnico-tab" tabindex="0">
+                <div class="px-1 py-4">
+                  <p>Técnico responsable: <strong id="tecnico"></strong></p>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="reparacion-tab-pane" role="tabpanel" aria-labelledby="reparacion-tab" tabindex="0">
+                <div class="px-1 py-4">
+                  <p>Solución: <span id="solucion"></span></p>
+                  <p>Garantía: <span id="garantia"></span></p>
+                  <p>Monto a pagar: <span id="monto"></span><i class="bi bi-currency-dollar"></i></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     @if(count($solicitudes) > 0)
       <div class="overflow-x-auto px-3">
         <table class="table w-100">
@@ -102,12 +157,16 @@
                 <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->modelo }}</td>
                 <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->fecha_solicitud }}</td>
                 <td class="px-2 py-3 text-nowrap">
-                  @if($solicitudes[$i]->estado_solicitud === 'pendiente')
-                    <span class="badge text-bg-warning">Pendiente</span>
-                  @elseif($solicitudes[$i]->estado_solicitud === 'en proceso')
-                    <span class="badge text-bg-info">En Proceso</span>
+                  @if($solicitudes[$i]->estado_solicitud === 'ingresado')
+                    <span class="badge bg-danger">Ingresado</span>
+                  @elseif($solicitudes[$i]->estado_solicitud === 'presupuestado')
+                    <span class="badge bg-warning">Presupuestado</span>
+                  @elseif($solicitudes[$i]->estado_solicitud === 'en reparacion')
+                    <span class="badge bg-info">En Reparación</span>
+                  @elseif($solicitudes[$i]->estado_solicitud === 'derivado')
+                    <span class="badge bg-primary">Derivado</span>
                   @else
-                    <span class="badge text-bg-success">Terminado</span>
+                    <span class="badge text-bg-success">Entregado</span>
                   @endif
                 </td>
                 <td class="px-2 py-3 text-nowrap">
@@ -117,9 +176,9 @@
                     </button>
                     <ul class="dropdown-menu">
                       <li>
-                        <a href="#" class="dropdown-item detalles-solicitud">
+                        <button type="button" class="dropdown-item detalles-solicitud" data-bs-toggle="modal" data-bs-target="#modal-mostrar-detalles">
                           Más detalles
-                        </a>
+                        </button>
                       </li>
                     </ul>
                   </div>
@@ -188,16 +247,11 @@
         }
 
         function detallesOnClick($row) {
-          const $modal = document.querySelector('#modal-mostrar-detalles');
-          const modal = new bootstrap.Modal($modal, {});
-
           const codigo = $row.children[1].textContent;
           const { ordenes } = getState();
           
           const orden = ordenes[codigo];
           setState({ orden });
-
-          modal.show();
         }
 
         function ordenarPor(columna, modo) {
@@ -220,10 +274,12 @@
             $tabla.removeChild($tabla.firstChild);
           }
 
-          const ESTADO_TO_BADGE = {
-            'pendiente': 'warning',
-            'en proceso': 'info',
-            'terminado': 'success',
+          const ESTADO_TO_BG = {
+            'ingresado': 'danger',
+            'presupuestado': 'warning',
+            'en reparacion': 'info',
+            'derivado': 'primary',
+            'entregado': 'success'
           }
 
           ordenadas.forEach((orden, index) => {
@@ -258,7 +314,7 @@
                 elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.modelo),
                 elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.fecha),
                 elt('td', { className: 'px-2 py-3 text-nowrap' },
-                  elt('span', { className: `badge text-bg-${ESTADO_TO_BADGE[orden.estado]}` }, orden.estado)
+                  elt('span', { className: `badge text-bg-${ESTADO_TO_BG[orden.estado]}` }, orden.estado)
                 ),
                 $acciones
               )
@@ -312,7 +368,7 @@
 
           $codigo.textContent = orden.codigo;
 
-          if (orden.estado !== 'terminado') {
+          if (orden.estado !== 'entregado') {
             $reparacionTab.classList.add('disabled');
             $reparacionTab.disabled = true;
           } else {

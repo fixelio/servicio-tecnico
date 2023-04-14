@@ -58,7 +58,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="checkProceso">
                     <label class="form-check-label" for="checkProceso">
-                        Estado: En Proceso
+                        Estado: En Reparación
                     </label>
                   </div>
                 </button>
@@ -127,12 +127,12 @@
                     </th>
                     <th class="border-gray-200">
                       <div class="w-100 d-flex justify-content-between align-items-center">
-                        Procesando
+                        Reparación
                         <div>
-                          <button class="btn-actions" id="enProceso-asc">
+                          <button class="btn-actions" id="reparacion-asc">
                             <i class="bi bi-caret-up-fill"></i>
                           </button>
-                          <button class="btn-actions" id="enProceso-desc">
+                          <button class="btn-actions" id="reparacion-desc">
                             <i class="bi bi-caret-down-fill"></i>
                           </button>
                         </div>
@@ -160,7 +160,7 @@
           NOMBRE: 'nombre',
           TELEFONO: 'telefono',
           ESTADO_INGRESADO: 'ingresado',
-          ESTADO_EN_PROCESO: 'enProceso',
+          ESTADO_EN_PROCESO: 'reparacion',
         }
 
         const state = {
@@ -174,7 +174,7 @@
         $telefonoRef = document.querySelector('#filtrar-telefono');
 
         $ingresadoRef = document.querySelector('#checkIngresados');
-        $enProcesoRef = document.querySelector('#checkProceso');
+        $reparacionRef = document.querySelector('#checkProceso');
 
         window.addEventListener('DOMContentLoaded', () => {
           boot();
@@ -195,7 +195,7 @@
               ...cliente,
               index: pos++,
               ingresado: countHandler('ingresado') || 0,
-              enProceso: countHandler('en proceso') || 0,
+              reparacion: countHandler('en reparacion') || 0,
             });
           }
 
@@ -234,19 +234,19 @@
               return;
             }
 
-            $enProcesoRef.checked = false;
+            $reparacionRef.checked = false;
             const newFiltro = FILTRAR_POR.ESTADO_INGRESADO
             setFiltro(newFiltro);
             filtrar(newFiltro);
           }
 
-          $enProcesoRef.onclick = () => {
-            if (!$enProcesoRef.checked) {
+          $reparacionRef.onclick = () => {
+            if (!$reparacionRef.checked) {
               setState({ clientesFiltrados: clientes });
               return;
             }
 
-            $pendientesRef.checked = false;
+            $ingresadoRef.checked = false;
             const newFiltro = FILTRAR_POR.ESTADO_EN_PROCESO
             setFiltro(newFiltro);
             filtrar(newFiltro);
@@ -269,7 +269,7 @@
           const { clientesFiltrados } = getState();
 
           const clientes = clientesFiltrados.sort((a, b) => {
-            if (columna === 'ingresado' || columna === 'enProceso') {
+            if (columna === 'ingresado' || columna === 'reparacion') {
               const aCol = a[columna];
               const bCol = b[columna];
 
@@ -332,7 +332,7 @@
           }
           const $inputFiltro = document.querySelector('#input-filtro');
 
-          if (filtro === 'ingresado' || filtro === 'enProceso') {
+          if (filtro === 'ingresado' || filtro === 'reparacion') {
             $inputFiltro.disabled = true;
             $inputFiltro.placeholder = '';
           }
@@ -341,7 +341,7 @@
             $inputFiltro.placeholder = `Buscar por ${VALUES[filtro]}`;
 
             $pendientesRef.checked = false;
-            $enProcesoRef.checked = false;
+            $reparacionRef.checked = false;
 
             const { clientes } = getState();
 
@@ -372,7 +372,7 @@
               elt('span', { className: 'badge bg-warning px-1' }, cliente.ingresado.toString())
             ),
             elt('td', { className: 'px-2 py-3' },
-              elt('span', { className: 'badge bg-info px-1' }, cliente.enProceso.toString())
+              elt('span', { className: 'badge bg-info px-1' }, cliente.reparacion.toString())
             ),
             elt('td', { className: 'px-2 py-3' },
               elt('div', {},

@@ -49,14 +49,14 @@ class SolicitudesMantenimientoController extends Controller
       ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
       ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
       ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
-      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'terminado')
+      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'entregado')
       ->simplePaginate(25);
 
     $solicitudes = DB::table('solicitudes_mantenimiento')
       ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
       ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
       ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
-      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'terminado')
+      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'entregado')
       ->get();
 
     $tecnicos = $this->tecnicosService->findAll();
@@ -221,7 +221,7 @@ class SolicitudesMantenimientoController extends Controller
       'estado_solicitud' => $data['estado_solicitud']
     ]);
 
-    if ($data['estado_solicitud'] === 'terminado') {
+    if ($data['estado_solicitud'] === 'entregado') {
       $solicitudesMantenimiento = $this->solicitudesTecnicosService->findByIdSolicitud($solicitud['id_solicitud']);
       $idTecnico = $solicitudesMantenimiento['id_tecnico'];
       $tecnico = $this->tecnicosService->findById($idTecnico);
@@ -237,12 +237,12 @@ class SolicitudesMantenimientoController extends Controller
       return $this->generarReporteSalida($solicitud, $historial, $factura, $tecnico);
     }
 
-    if ($data['estado_solicitud'] === 'en proceso') {
+    /*if ($data['estado_solicitud'] === 'en proceso') {
       $tecnicoResponsable = $this->tecnicosService->findOne($data['correo_tecnico']);
       $this->asignarTecnicoResponsable($solicitud['id_solicitud'], $tecnicoResponsable['id_tecnico']);
       $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
       return $this->generarReporteEntrada($solicitud, $equipo, $tecnicoResponsable);
-    }
+    }*/
 
     return redirect()->route('listado-solicitudes')->with([
       'type' => 'exito',

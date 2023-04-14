@@ -309,6 +309,9 @@
       $boton.style.border = 'none';
       $boton.style.background = 'none';
 
+      const codigo = data.solicitud.codigo;
+      const estado = data.solicitud.estado;
+
       $acciones.appendChild(
         elt('div', { },
           $boton,
@@ -317,10 +320,16 @@
               elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
             ),
             elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => marcarEnProceso(data), disabled: data.solicitud.estado === 'en proceso' || data.solicitud.estado === 'terminado' }, 'Marcar como "En proceso"')
+              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'presupuestado'), disabled: estado === 'entregado' }, 'Marcar como "Presupuestado"')
             ),
             elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data), disabled: data.solicitud.estado === 'terminado' }, 'Marcar como "Terminado"')
+              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'en reparacion'), disabled: estado === 'entregado' }, 'Marcar como "En Reparación"'),
+            ),
+            elt('li', {},
+              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'derivado'), disabled: estado === 'entregado' }, 'Marcar como "Derivado"'),
+            ),
+            elt('li', {},
+              elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data), disabled: estado === 'entregado' }, 'Marcar como "Entregado"'),
             )
           )
         )
@@ -467,22 +476,34 @@
       $inputMonto.value = '';
 
       $codigo.value = data.solicitud.codigo;
-      $estado.value = 'terminado';
+      $estado.value = 'entregado';
 
       $form.submit();
 
       const { ordenes, ordenesOrdenadas } = getState();
       const indexOrden = ordenes.findIndex(orden => orden.solicitud.codigo === data.solicitud.codigo);
-      ordenes[indexOrden].solicitud.estado = 'terminado';
+      ordenes[indexOrden].solicitud.estado = 'entregado';
 
       const indexOrdenada = ordenesOrdenadas.findIndex(orden => orden.solicitud.codigo === data.solicitud.codigo);
-      ordenesOrdenadas[indexOrdenada].solicitud.estado = 'terminado';
+      ordenesOrdenadas[indexOrdenada].solicitud.estado = 'entregado';
       modal.hide();
 
       setState({ ordenes, ordenesOrdenadas });
     }
 
     modal.show();
+  }
+
+  async function cambiarEstado(codigo, estado) {
+    const $form = document.getElementById('cambiar-estado-form');
+
+    let $codigo = document.getElementById('codigo_solicitud');
+    let $estado = document.getElementById('estado_solicitud');
+
+    $codigo.value = codigo;
+    $estado.value = estado;
+
+    $form.submit();
   }
 
   async function marcarEnProceso(data) {
