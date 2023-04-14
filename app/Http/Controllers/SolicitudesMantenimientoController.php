@@ -41,6 +41,13 @@ class SolicitudesMantenimientoController extends Controller
 
   public function listadoView()
   {
+    $links = DB::table('solicitudes_mantenimiento')
+      ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
+      ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
+      ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
+      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'terminado')
+      ->simplePaginate(25);
+
     $solicitudes = DB::table('solicitudes_mantenimiento')
       ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
       ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
@@ -52,7 +59,9 @@ class SolicitudesMantenimientoController extends Controller
 
     return view('solicitudes.listado', [
       'solicitudes' => $solicitudes,
+      'links' => $links,
       'tecnicos' => $tecnicos,
+      'maxSolicitudes' => count($solicitudes),
     ]);
   }
 
@@ -145,7 +154,7 @@ class SolicitudesMantenimientoController extends Controller
       'codigo_solicitud' => $codigo_solicitud,
       'fecha_solicitud' => $fecha_solicitud,
       'descripcion_problema' => $datos['descripcion_problema'],
-      'estado_solicitud' => 'pendiente',
+      'estado_solicitud' => 'ingresado',
       'observaciones' => $datos['observaciones'],
     ]);
 

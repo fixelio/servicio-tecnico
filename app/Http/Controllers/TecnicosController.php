@@ -46,7 +46,11 @@ class TecnicosController extends Controller
   public function listadoView()
   {
     $tecnicos = $this->tecnicosService->findAll();
-    return view('tecnicos.listado', ['tecnicos' => $tecnicos]);
+    return view('tecnicos.listado', [
+      'tecnicos' => $tecnicos,
+      'links' => $this->tecnicosService->getPaginate(),
+      'maxTecnicos' => $this->tecnicosService->tableCount(),
+    ]);
   }
 
   public function editarView(Request $request, $correo = null)

@@ -1,62 +1,83 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('content')
-  <div class="position-relative overflow-hidden">
-    <h3 class="mb-5 p-3">Técnicos</h3>
-
-    <div class="overflow-x-auto px-3">
-      <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">
-                <div class="w-100 d-flex justify-content-between align-items-center">
-                  Nombre
-                  <div>
-                    <button class="btn-actions" id="nombre-asc">
-                      <i class="bi bi-caret-up-fill"></i>
-                    </button>
-                    <button class="btn-actions" id="nombre-desc">
-                      <i class="bi bi-caret-down-fill"></i>
-                    </button>
-                  </div>
-                </div>
-              </th>
-              <th scope="col">
-                <div class="w-100 d-flex justify-content-between align-items-center">
-                  Correo
-                  <div>
-                    <button class="btn-actions" id="correo-asc">
-                      <i class="bi bi-caret-up-fill"></i>
-                    </button>
-                    <button class="btn-actions" id="correo-desc">
-                      <i class="bi bi-caret-down-fill"></i>
-                    </button>
-                  </div>
-                </div>
-              </th>
-              <th scope="col">
-                <div class="w-100 d-flex justify-content-between align-items-center">
-                  Teléfono
-                  <div>
-                    <button class="btn-actions" id="telefono-asc">
-                      <i class="bi bi-caret-up-fill"></i>
-                    </button>
-                    <button class="btn-actions" id="telefono-desc">
-                      <i class="bi bi-caret-down-fill"></i>
-                    </button>
-                  </div>
-                </div>
-              </th>
-              <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="cuerpo-tabla-tecnicos">
-
-          </tbody>
-      </table>
+  <section>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div class="d-block">
+        <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+          <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+            <li class="breadcrumb-item">
+              <a href="/">
+                <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Técnicos</li>
+          </ol>
+        </nav>
+        <h2 class="h4">Lista de Técnicos</h2>
+      </div>
     </div>
 
+    <div class="card card-body border-0 shadow table-wrapper table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th class="border-gray-200">#</th>
+            <th class="border-gray-200">
+              <div class="w-100 d-flex justify-content-between align-items-center">
+                Nombre
+                <div>
+                  <button class="btn-actions" id="nombre-asc">
+                    <i class="bi bi-caret-up-fill"></i>
+                  </button>
+                  <button class="btn-actions" id="nombre-desc">
+                    <i class="bi bi-caret-down-fill"></i>
+                  </button>
+                </div>
+              </div>
+            </th>           
+            <th class="border-gray-200">
+              <div class="w-100 d-flex justify-content-between align-items-center">
+                Correo
+                <div>
+                  <button class="btn-actions" id="correo-asc">
+                    <i class="bi bi-caret-up-fill"></i>
+                  </button>
+                  <button class="btn-actions" id="correo-desc">
+                    <i class="bi bi-caret-down-fill"></i>
+                  </button>
+                </div>
+              </div>
+            </th>
+            <th class="border-gray-200">
+              <div class="w-100 d-flex justify-content-between align-items-center">
+                Teléfono
+                <div>
+                  <button class="btn-actions" id="telefono-asc">
+                    <i class="bi bi-caret-up-fill"></i>
+                  </button>
+                  <button class="btn-actions" id="telefono-desc">
+                    <i class="bi bi-caret-down-fill"></i>
+                  </button>
+                </div>
+              </div>
+            </th>
+            <th class="border-gray-200">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpo-tabla-tecnicos"></tbody>
+      </table>
+      <div class="card-footer px-3 border-0 d-flex flex-column flex-md-row align-items-center justify-content-between">
+        @if ($links->links()->paginator->hasPages())
+
+        {{ $links->links() }}
+
+        @endif
+
+        <div class="fw-normal mb-5 mb-md-0 small">Mostrando <b id="min-records">{{ count($tecnicos)}}</b> de <b>{{ $maxTecnicos }}</b> técnicos
+      </div>
+    </div>
+  </section>
     <script>
 
 (async() => {
@@ -66,8 +87,8 @@
   }
 
   function boot() {
-    const raw = {{ Js::from($tecnicos) }};
-    const tecnicos = raw.map((tecnico, index) => ({
+    const raw = {{ Js::from($links) }};
+    const tecnicos = raw.data.map((tecnico, index) => ({
       nombre: `${tecnico.nombre} ${tecnico.apellido}`,
       correo: tecnico.correo_electronico,
       telefono: tecnico.telefono,
@@ -193,5 +214,4 @@
     </script>
 
     @endif
-  </div>
 @stop

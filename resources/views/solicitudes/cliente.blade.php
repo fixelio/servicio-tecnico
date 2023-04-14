@@ -1,61 +1,23 @@
-@extends('layouts.master');
+@extends('layouts.app');
 
 @section('content')
-  <div class="position-relative overflow-hidden">
-    <div class="modal fade" tabindex="-1" id="modal-mostrar-detalles">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3 class="modal-title">Detalles de la orden #<span id="codigo"></span></h3>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <ul class="nav nav-underline d-flex justify-content-between" id="myTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="equipo-tab" data-bs-toggle="tab" data-bs-target="#equipo-tab-pane" type="button" role="tab" aria-controls="equipo-tab-pane" aria-selected="false"><i class="bi bi-pc-display"></i> Equipo</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="tecnico-tab" data-bs-toggle="tab" data-bs-target="#tecnico-tab-pane" type="button" role="tab" aria-controls="tecnico-tab-pane" aria-selected="false"><i class="bi bi-tools"></i> Técnico</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="reparacion-tab" data-bs-toggle="tab" data-bs-target="#reparacion-tab-pane" type="button" role="tab" aria-controls="reparacion-tab-pane" aria-selected="false"><i class="bi bi-motherboard"></i> Reparación</button>
-              </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="equipo-tab-pane" role="tabpanel" aria-labelledby="equipo-tab" tabindex="0">
-                <div class="px-1 py-4">
-                  <p>Artículo: <strong id="articulo"></strong></p>
-                  <p>Número de serie: <strong id="serie"></strong></p>
-                  <p>Modelo: <strong id="modelo"></strong></p>
-                  <p>Marca: <strong id="marca"></strong></p>
-                  <hr>
-                  <p>Diagnóstico: <span id="diagnostico"></span></p>
-                  <p>Observaciones:</p>
-                  <ol class="list-group list-group-numbered" id="observaciones">
-                  </ol>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="tecnico-tab-pane" role="tabpanel" aria-labelledby="tecnico-tab" tabindex="0">
-                <div class="px-1 py-4">
-                  <p>Técnico responsable: <strong id="tecnico"></strong></p>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="reparacion-tab-pane" role="tabpanel" aria-labelledby="reparacion-tab" tabindex="0">
-                <div class="px-1 py-4">
-                  <p>Solución: <span id="solucion"></span></p>
-                  <p>Garantía: <span id="garantia"></span></p>
-                  <p>Monto a pagar: <span id="monto"></span><i class="bi bi-currency-dollar"></i></p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          </div>
-        </div>
+  <section>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div class="d-block">
+        <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+          <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+            <li class="breadcrumb-item">
+              <a href="/">
+                <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('clientes') }}">Clientes</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Histórico</li>
+          </ol>
+        </nav>
+        <h2 class="h4">Histórico de {{ $cliente->nombre }} {{ $cliente->apellido }}</h2>
       </div>
     </div>
-    <h3 class="mb-5 p-3">Histórico de {{ $cliente->nombre }} {{ $cliente->apellido }}</h3>
 
     @if(count($solicitudes) > 0)
       <div class="overflow-x-auto px-3">
@@ -394,5 +356,5 @@
         })
       })();
     </script>
-  </div>
+  </section>
 @stop

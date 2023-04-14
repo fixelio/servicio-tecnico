@@ -27,6 +27,14 @@ class TecnicosService {
     return $tecnicos;
   }
 
+  public function getPaginate() {
+    return Tecnicos::orderBy('created_at', 'desc')->simplePaginate(25);
+  }
+
+  public function tableCount() {
+    return Tecnicos::count();
+  }
+
 	public function create($datos)
 	{
 		$resultado = Tecnicos::create($datos);

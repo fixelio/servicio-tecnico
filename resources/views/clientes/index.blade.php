@@ -4,63 +4,71 @@
   <section>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
       <div class="d-block">
-          <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
-              <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
-                  <li class="breadcrumb-item">
-                      <a href="/">
-                          <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                      </a>
-                  </li>
-                  <li class="breadcrumb-item active" aria-current="page">Clientes</li>
-              </ol>
-          </nav>
-          <h2 class="h4">Clientes</h2>
+        <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+          <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+            <li class="breadcrumb-item">
+              <a href="/">
+                <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Clientes</li>
+          </ol>
+        </nav>
+        <h2 class="h4">Clientes</h2>
       </div>
     </div>
     <div class="table-settings mb-4">
       <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
-      <div class="w-100 py-3 mx-md-2 mb-2">
-        <form action="#" class="d-flex align-items-center w-100">
-          <label for="simpleSearch"></label>
-          <div class="input-group flex-nowrap">
-            <span class="bi bi-search input-group-text" id="addon-wrapping"></span>
-            <input type="text" class="form-control" placeholder="Buscar por nombre" aria-label="cliente" aria-describedby="addon-wrapping" id="input-filtro">
+        <div class="w-100 py-3 mx-md-2 mb-2">
+          <form action="#" class="d-flex align-items-center w-100">
+            <label for="simpleSearch"></label>
+            <div class="input-group flex-nowrap">
+              <span class="bi bi-search input-group-text" id="addon-wrapping"></span>
+              <input type="text" class="form-control" placeholder="Buscar por nombre" aria-label="orden" aria-describedby="addon-wrapping" id="input-filtro">
+            </div>
+          </form>
+        </div>
+        <div class="w-100 d-flex flex-column flex-sm-row justify-content-end py-3">
+          <a href="{{ route('registrar-cliente') }}" class="btn btn-secondary mb-2 d-flex justify-content-center align-items-center text-nowrap w-100">
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            Registrar Cliente
+          </a>
+          <div class="dropdown w-100 mx-sm-2 mb-2 d-flex justify-content-center align-items-center">
+            <button class="btn btn-secondary w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"></path>
+              </svg>
+              Filtrar
+            </button>
+            <ul class="dropdown-menu">
+              <li><button class="dropdown-item" id="filtrar-nombre">Nombre</button></li>
+              <li><button class="dropdown-item" id="filtrar-correo">Correo</button></li>
+              <li>
+                <button class="dropdown-item">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkPendientes">
+                    <label class="form-check-label" for="checkPendientes">
+                        Estado: Pendiente
+                    </label>
+                  </div>
+                </button>
+              </li>
+              <li>
+                <button class="dropdown-item">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkProceso">
+                    <label class="form-check-label" for="checkProceso">
+                        Estado: En Proceso
+                    </label>
+                  </div>
+                </button>
+              </li>
+            </ul>
           </div>
-        </form>
-      </div>
-      <div class="w-100 d-flex flex-column flex-sm-row justify-content-end py-3">
-        <a href="{{ route('registrar-cliente') }}" class="btn btn-secondary mb-2 d-flex justify-content-center align-items-center text-nowrap w-100">
-          <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-          Registrar Cliente
-        </a>
-        <div class="dropdown w-100 mx-sm-2 mb-2 d-flex justify-content-center align-items-center">
-          <button class="btn btn-secondary w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"></path>
-            </svg>
-            Filtrar
-          </button>
-          <ul class="dropdown-menu">
-            <li><button class="dropdown-item" id="filtrar-nombre">Nombre</button></li>
-            <li><button class="dropdown-item" id="filtrar-correo">Correo</button></li>
-            <li><button class="dropdown-item"><div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" id="checkPendientes">
-    <label class="form-check-label" for="checkPendientes">
-        Estado: Pendiente
-    </label>
-</div></button>
-            <li><button class="dropdown-item"><div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" id="checkProceso">
-    <label class="form-check-label" for="checkProceso">
-        Estado: En Proceso
-    </label>
-</div></button></li>
-          </ul>
         </div>
       </div>
     </div>
-    </div>
-    <div class="card card-body border-0 shadow table-wrapper table-responsive">
+    <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5">
         <table class="table table-hover">
             <thead>
                 <tr>

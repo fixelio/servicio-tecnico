@@ -28,10 +28,21 @@
   border: none;
   font-size: 0.9rem;
 }
+input, select, textarea {
+  color: #000000 !important;
+}
+input:focus, select, textarea:focus {
+  color: #000000 !important;
+}
+
+td {
+  font-size: 12pt !important;
+}
 </style>
 <body>
     
-
+    @guest
+    @else
     <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
       <a class="navbar-brand me-lg-5" href="#">
           <img class="navbar-brand-dark" src="{{asset('assets/img/brand/light.svg')}}" alt="Volt logo" /> <img class="navbar-brand-light" src="{{asset('assets/img/brand/dark.svg')}}" alt="Volt logo" />
@@ -42,6 +53,7 @@
           </button>
       </div>
     </nav>
+    @endguest
 
     @guest
     @else
@@ -189,12 +201,19 @@
       </nav>
     @endguest
 
-    <main class="content">
+    @guest
+      <main>
+    @else
+      <main class="content">
+    @endguest
 
+      @guest
+      @else
       <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
         <div class="container-fluid px-0">
           <div class="d-flex justify-content-end w-100" id="navbarSupportedContent">
             <!-- Navbar links -->
+            
             <ul class="navbar-nav align-items-center">
               <li class="nav-item dropdown ms-lg-3">
                 <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -225,6 +244,7 @@
           </div>
         </div>
       </nav>
+            @endguest
 
       @yield('content')
     </main>

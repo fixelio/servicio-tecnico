@@ -1,18 +1,27 @@
-@extends('layouts.master');
+@extends('layouts.app');
 
 @section('content')
-  <div class="position-relative overflow-hidden">
-    <h3 class="mb-5 p-3">Lista de Órdenes</h3>
-
-    @if ($tecnico !== null)
-      <div class="px-3">
-        <p>Técnico: <strong>{{ $tecnico->nombre }} {{ $tecnico->apellido }}</strong></p>
+  <section>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div class="d-block">
+        <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+          <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+            <li class="breadcrumb-item">
+              <a href="/">
+                <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('listado-tecnicos') }}">Trabajos</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Técnicos</li>
+          </ol>
+        </nav>
+        <h2 class="h4">Órdenes Asignadas a {{ $tecnico->nombre }} {{ $tecnico->apellido }}</h2>
       </div>
-    @endif
+    </div>
 
     @if(count($trabajos) > 0)
-      <div class="overflow-x-auto px-3">
-        <table class="table">
+      <div class="card card-body border-0 shadow table-wrapper table-responsive">
+        <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -91,7 +100,6 @@
     @elseif($tecnico !== null)
       <div class="alert alert-warning" role="alert">Este técnico no tiene ninguna órden de mantenimiento asignada. <a href="{{ route('listado-solicitudes') }}" class="link-opacity-100">Ir a la página de órdenes.</a></div>
     @endif
-
     <script>
 (async() => {
 
@@ -201,6 +209,5 @@
   })
 })();
     </script>
-
-  </div>
+  </section>
 @stop
