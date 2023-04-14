@@ -46,9 +46,9 @@
               <li>
                 <button class="dropdown-item">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="checkPendientes">
-                    <label class="form-check-label" for="checkPendientes">
-                        Estado: Pendiente
+                    <input class="form-check-input" type="checkbox" value="" id="checkIngresados">
+                    <label class="form-check-label" for="checkIngresados">
+                        Estado: Ingresado
                     </label>
                   </div>
                 </button>
@@ -114,12 +114,12 @@
                     </th>
                     <th class="border-gray-200">
                       <div class="w-100 d-flex justify-content-between align-items-center">
-                        Pendientes
+                        Ingresados
                         <div>
-                          <button class="btn-actions" id="pendientes-asc">
+                          <button class="btn-actions" id="ingresado-asc">
                             <i class="bi bi-caret-up-fill"></i>
                           </button>
-                          <button class="btn-actions" id="pendientes-desc">
+                          <button class="btn-actions" id="ingresado-desc">
                             <i class="bi bi-caret-down-fill"></i>
                           </button>
                         </div>
@@ -159,7 +159,7 @@
           CORREO: 'correo',
           NOMBRE: 'nombre',
           TELEFONO: 'telefono',
-          ESTADO_PENDIENTES: 'pendientes',
+          ESTADO_INGRESADO: 'ingresado',
           ESTADO_EN_PROCESO: 'enProceso',
         }
 
@@ -173,7 +173,7 @@
         $correoRef = document.querySelector('#filtrar-correo');
         $telefonoRef = document.querySelector('#filtrar-telefono');
 
-        $pendientesRef = document.querySelector('#checkPendientes');
+        $ingresadoRef = document.querySelector('#checkIngresados');
         $enProcesoRef = document.querySelector('#checkProceso');
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -194,7 +194,7 @@
             clientes.push({
               ...cliente,
               index: pos++,
-              pendientes: countHandler('pendiente') || 0,
+              ingresado: countHandler('ingresado') || 0,
               enProceso: countHandler('en proceso') || 0,
             });
           }
@@ -228,14 +228,14 @@
           $nombreRef.onclick = () => setFiltro(FILTRAR_POR.NOMBRE);
           $correoRef.onclick = () => setFiltro(FILTRAR_POR.CORREO);
 
-          $pendientesRef.onclick = () => {
-            if (!$pendientesRef.checked) {
+          $ingresadoRef.onclick = () => {
+            if (!$ingresadoRef.checked) {
               setState({ clientesFiltrados: clientes });
               return;
             }
 
             $enProcesoRef.checked = false;
-            const newFiltro = FILTRAR_POR.ESTADO_PENDIENTES
+            const newFiltro = FILTRAR_POR.ESTADO_INGRESADO
             setFiltro(newFiltro);
             filtrar(newFiltro);
           }
@@ -269,7 +269,7 @@
           const { clientesFiltrados } = getState();
 
           const clientes = clientesFiltrados.sort((a, b) => {
-            if (columna === 'pendientes' || columna === 'enProceso') {
+            if (columna === 'ingresado' || columna === 'enProceso') {
               const aCol = a[columna];
               const bCol = b[columna];
 
@@ -298,7 +298,7 @@
         function filtrar(value) {
           const { clientes, filtro } = getState();
 
-          if (filtro === FILTRAR_POR.ESTADO_PENDIENTES || filtro === FILTRAR_POR.ESTADO_EN_PROCESO) {
+          if (filtro === FILTRAR_POR.ESTADO_INGRESADO || filtro === FILTRAR_POR.ESTADO_EN_PROCESO) {
             filtrarPorEstado(value);
             return;
           }
@@ -332,7 +332,7 @@
           }
           const $inputFiltro = document.querySelector('#input-filtro');
 
-          if (filtro === 'pendientes' || filtro === 'enProceso') {
+          if (filtro === 'ingresado' || filtro === 'enProceso') {
             $inputFiltro.disabled = true;
             $inputFiltro.placeholder = '';
           }
@@ -369,7 +369,7 @@
             elt('td', { className: 'px-2 py-3' }, cliente.correo),
             elt('td', { className: 'px-2 py-3' }, cliente.telefono),
             elt('td', { className: 'px-2 py-3' },
-              elt('span', { className: 'badge bg-warning px-1' }, cliente.pendientes.toString())
+              elt('span', { className: 'badge bg-warning px-1' }, cliente.ingresado.toString())
             ),
             elt('td', { className: 'px-2 py-3' },
               elt('span', { className: 'badge bg-info px-1' }, cliente.enProceso.toString())

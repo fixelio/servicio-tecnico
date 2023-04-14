@@ -38,6 +38,10 @@ input:focus, select, textarea:focus {
 td {
   font-size: 12pt !important;
 }
+.badge {
+  font-size: 12pt !important;
+  padding: 5px !important;
+}
 </style>
 <body>
     
@@ -108,11 +112,6 @@ td {
                   <li class="nav-item">
                     <a class="nav-link" href="{{ route('listado-solicitudes') }}">
                       <span class="sidebar-text">Listado</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="../../pages/examples/sign-up.html">
-                      <span class="sidebar-text">Registrar</span>
                     </a>
                   </li>
                 </ul>

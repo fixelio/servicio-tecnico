@@ -52,9 +52,24 @@
     <div class="row">
       <div class="col-12">
         <div class="card card-body border-0 shadow mb-4">
-          <form action="{{ route('solicitud.post') }}" method="POST" class="row g-3 w-100">
-            <p><strong>Ingresa los datos del equipo.</strong> Los campos obligatorios están marcados con (*)</p>
+          <form action="{{ route('solicitud.post') }}" method="POST" id="form-registrar" class="row g-3 w-100">
             @csrf
+            <div class="col-12 mb-3">
+              <label for="tecnico_responsable_content" class="form-label">Técnico Responsable</label>
+                <select
+                  class="form-select"
+                    aria-label="Técnico responsable de la solicitud"
+                    id="tecnico_responsable_content"
+                    name="correo_tecnico"
+                    required
+                  >
+                  @foreach($tecnicos as $tecnico)
+                    <option value="{{ $tecnico->correo_electronico }}">{{ $tecnico->nombre }} {{ $tecnico->apellido }}</option>
+                  @endforeach
+                </select>
+            </div>
+            <p><strong>Ingresa los datos del equipo.</strong> Los campos obligatorios están marcados con (*)</p>
+            
             <div class="col-12 mb-3">
               <label for="articulo" class="form-label">Artículo</label>
               <input
@@ -126,12 +141,19 @@
             <input type="hidden" name="correo" value="{{ $cliente['correo_electronico'] }}">
 
             <div>
-              <button class="btn btn-primary">Registrar</button>
+              <button id="btn-registrar" type="submit" class="btn btn-primary">Registrar</button>
             </div>
           </form>
         </div>
       </div>
     </div>
+
+    <script>
+      document.getElementById('btn-registrar').onclick = e => {
+        const $form = document.getElementById('form-registrar');
+        setTimeout(() => $form.reset(), 4000);
+      }
+    </script>
 
   </section>
 @stop

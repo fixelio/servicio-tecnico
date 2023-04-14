@@ -91,7 +91,7 @@
       </div>
     </div>
 
-    @if(count($solicitudes) > 0)
+    <!--@if(count($solicitudes) > 0)
 
     <div class="table-settings mb-4">
       <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
@@ -145,11 +145,12 @@
       </div>
     </div>
 
-    @endif
+    @endif-->
 
     @if(count($solicitudes) > 0)
 
-      <div class="card card-body border-0 shadow table-wrapper table-responsive">
+      <div class="card card-body border-0 position-relative shadow">
+        <div class="overflow-x-auto">
         <table class="table table-hover">
           <thead>
             <tr>
@@ -211,6 +212,7 @@
           </thead>
           <tbody id="cuerpo-tabla-solicitudes"></tbody>
         </table>
+      </div>
         <div class="card-footer px-3 border-0 d-flex flex-column flex-md-row align-items-center justify-content-between">
           @if ($links->links()->paginator->hasPages())
 

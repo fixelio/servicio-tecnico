@@ -35,8 +35,12 @@ class SolicitudesMantenimientoController extends Controller
   public function registrarView(Request $request) {
     $correo = $request->route('correo');
     $checkCliente = Clientes::where('correo_electronico', $correo)->firstOrFail();
+    $tecnicos = $this->tecnicosService->findAll();
 
-    return view('solicitudes.registrar', ['cliente' => $checkCliente]);
+    return view('solicitudes.registrar', [
+      'cliente' => $checkCliente,
+      'tecnicos' => $tecnicos,
+    ]);
   }
 
   public function listadoView()
@@ -128,11 +132,13 @@ class SolicitudesMantenimientoController extends Controller
       'articulo' => 'required',
       'modelo' => 'required',
       'correo' => 'required',
+      'correo_tecnico' => 'required',
     ]);
 
     $datos = $request->all();
 
     $cliente = Clientes::where('correo_electronico', $datos['correo'])->firstOrFail();
+    $tecnico = $this->tecnicosService->findOne($datos['correo_tecnico']);
 
     $equipo = Equipos::create([
       'articulo' => $datos['articulo'],
@@ -158,10 +164,8 @@ class SolicitudesMantenimientoController extends Controller
       'observaciones' => $datos['observaciones'],
     ]);
 
-    return redirect('/registrar/solicitud/cliente/'.$cliente['correo_electronico'])->with([
-      'type' => 'exito',
-      'mensaje' => 'Se ha registrado la solicitud',
-    ]);
+    $this->asignarTecnicoResponsable($solicitud['id_solicitud'], $tecnico['id_tecnico']);
+    return $this->generarReporteEntrada($solicitud, $equipo, $tecnico);
   }
 
   public function editar(Request $request)
