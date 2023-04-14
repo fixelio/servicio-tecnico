@@ -149,8 +149,7 @@
 
     @if(count($solicitudes) > 0)
 
-      <div class="card card-body border-0 position-relative shadow">
-        <div class="overflow-x-auto">
+      <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 pb-5" style="padding-bottom: 6.5rem">
         <table class="table table-hover">
           <thead>
             <tr>
@@ -212,8 +211,7 @@
           </thead>
           <tbody id="cuerpo-tabla-solicitudes"></tbody>
         </table>
-      </div>
-        <div class="card-footer px-3 border-0 d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <div class="card-footer px-3 border-0 d-flex flex-column flex-md-row align-items-center justify-content-between pb-5">
           @if ($links->links()->paginator->hasPages())
 
           {{ $links->links() }}
@@ -226,7 +224,7 @@
 
       @else
         <div class="alert alert-info" role="alert">
-          No hay órdenes de mantenimiento registradas. <a class="link-opacity-100" href="/clientes">Ir a la lista de clientes.</a>
+          En este momento no hay órdenes de mantenimiento procesándose. <a class="link-opacity-100" href="/clientes">Ir a la lista de clientes.</a>
         </div>
       @endif
 
@@ -298,7 +296,7 @@
   function FilaOrden(data) {
     const $acciones = elt('td', { className: 'ml-3' });
 
-    if (data.solicitud.estado !== 'entregado') {
+    if (data.solicitud.estado !== 'listo') {
       const $boton = elt('button', {
         className: 'focus-ring px-2 rounded fs-5',
         type: 'button'
@@ -321,19 +319,19 @@
               elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
             ),
             elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'presupuestado'), disabled: estado === 'entregado' }, 'Marcar como "Presupuestado"')
+              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'presupuestado'), disabled: estado === 'listo' }, 'Marcar como "Presupuestado"')
             ),
             elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'en reparacion'), disabled: estado === 'entregado' }, 'Marcar como "En Reparación"'),
+              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'en reparacion'), disabled: estado === 'listo' }, 'Marcar como "En Reparación"'),
             ),
             elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'derivado'), disabled: estado === 'entregado' }, 'Marcar como "Derivado"'),
+              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'derivado'), disabled: estado === 'listo' }, 'Marcar como "Derivado"'),
             ),
             elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data), disabled: estado === 'entregado' }, 'Marcar como "Entregado"'),
+              elt('button', { className: 'dropdown-item', onclick: () => marcarTerminado(data), disabled: estado === 'listo' }, 'Marcar como "Entregado"'),
             ),
             elt('li', {},
-              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'listo'), disabled: estado === 'entregado' }, 'Marcar como "Listo"'),
+              elt('button', { className: 'dropdown-item', onclick: () => cambiarEstado(codigo, 'listo'), disabled: estado === 'listo' }, 'Marcar como "Listo"'),
             )
           )
         )

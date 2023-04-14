@@ -49,14 +49,14 @@ class SolicitudesMantenimientoController extends Controller
       ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
       ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
       ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
-      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'entregado')
+      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'listo')
       ->simplePaginate(25);
 
     $solicitudes = DB::table('solicitudes_mantenimiento')
       ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
       ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
       ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
-      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'entregado')
+      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'listo')
       ->get();
 
     $tecnicos = $this->tecnicosService->findAll();

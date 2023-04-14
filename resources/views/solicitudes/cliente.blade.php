@@ -1,4 +1,4 @@
-@extends('layouts.app');
+@extends('layouts.app')
 
 @section('content')
   <section>
@@ -75,7 +75,7 @@
 
 
     @if(count($solicitudes) > 0)
-      <div class="overflow-x-auto px-3">
+      <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5">
         <table class="table w-100">
           <thead>
             <tr class="text-nowrap">
