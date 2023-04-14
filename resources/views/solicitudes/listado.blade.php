@@ -149,7 +149,7 @@
 
     @if(count($solicitudes) > 0)
 
-      <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 pb-5" style="padding-bottom: 6.5rem">
+      <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 pb-5" style="padding-bottom: 8rem">
         <table class="table table-hover">
           <thead>
             <tr>
