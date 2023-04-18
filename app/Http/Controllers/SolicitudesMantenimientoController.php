@@ -14,6 +14,8 @@ use App\Services\TecnicosService;
 use App\Services\ReportesService;
 use App\Services\SolicitudesTecnicosService;
 
+use Carbon\Carbon;
+
 class SolicitudesMantenimientoController extends Controller
 {
   private $tecnicosService;
@@ -43,29 +45,51 @@ class SolicitudesMantenimientoController extends Controller
     ]);
   }
 
-  public function listadoView()
+  public function listadoView(Request $request)
   {
-    $links = DB::table('solicitudes_mantenimiento')
+    $queryBuilder = DB::Table('solicitudes_mantenimiento')
       ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
       ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
-      ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
-      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'listo')
-      ->simplePaginate(25);
+      ->leftJoin('historial_mantenimiento', 'historial_mantenimiento.id_solicitud', '=', 'solicitudes_mantenimiento.id_solicitud')
+      ->leftJoin('facturas', 'facturas.id_historial', '=', 'historial_mantenimiento.id_historial')
+      ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*', 'facturas.*');
 
-    $solicitudes = DB::table('solicitudes_mantenimiento')
-      ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
-      ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
-      ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
-      ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'listo')
-      ->get();
+    $filtros = false;
+
+    if (is_null($request->query('estado')) === false) {
+      $estado = $request->query('estado');
+      $queryBuilder->where('solicitudes_mantenimiento.estado_solicitud', '=', $estado);
+      $filtros = true;
+    }
+
+    if (
+      $request->query('fecha_desde') !== null
+      && $request->query('fecha_hasta') !== null
+    ) {
+      $fecha_desde = $request->query('fecha_desde');
+      $fecha_hasta = $request->query('fecha_hasta');
+      $queryBuilder->whereBetween('solicitudes_mantenimiento.created_at', [
+        $fecha_desde,
+        $fecha_hasta,
+      ]);
+      $filtros = true;
+    }
+
+    $links = $queryBuilder->simplePaginate(25);
 
     $tecnicos = $this->tecnicosService->findAll();
 
+    $estadoFiltro = null === $request->query('estado') ? null : $request->query('estado');
+    $fechaFiltro = is_null($request->query('fecha_desde')) ?
+      null : $request->query('fecha_desde')." - ".$request->query('fecha_hasta');
+
     return view('solicitudes.listado', [
-      'solicitudes' => $solicitudes,
       'links' => $links,
       'tecnicos' => $tecnicos,
-      'maxSolicitudes' => count($solicitudes),
+      'maxSolicitudes' => SolicitudesMantenimiento::count(),
+      'filtros' => $filtros,
+      'estado_filtro' => $estadoFiltro,
+      'fecha_filtro' => $fechaFiltro,
     ]);
   }
 
@@ -231,7 +255,13 @@ class SolicitudesMantenimientoController extends Controller
       $historialOptions = ['id_tecnico' => $tecnico['id_tecnico'], 'descripcion_solucion' => $descripcionSolucion, 'garantia' => $garantia];
       $historial = $this->crearHistorial($solicitud, $historialOptions);
 
-      $facturaOptions = ['id_historial' => $historial['id_historial'], 'monto' => $data['monto']];
+      $facturaOptions = [
+        'id_historial' => $historial['id_historial'],
+        'monto' => $data['monto'],
+        'precio_material' => $data['precio_material'],
+        'precio_obra' => $data['precio_obra'],
+      ];
+
       $factura = $this->crearFactura($facturaOptions);
 
       return $this->generarReporteSalida($solicitud, $historial, $factura, $tecnico);

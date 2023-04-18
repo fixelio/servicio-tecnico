@@ -12,5 +12,5 @@ class Facturas extends Model
     protected $table = 'facturas';
 
     protected $primaryKey = 'id_factura';
-    protected $fillable = ['id_historial', 'monto'];
+    protected $fillable = ['id_historial', 'precio_material', 'precio_obra', 'monto'];
 }

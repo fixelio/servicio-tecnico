@@ -61,6 +61,8 @@
                 <div class="px-1 py-4">
                   <p>Solución: <span id="solucion"></span></p>
                   <p>Garantía: <span id="garantia"></span></p>
+                  <p>Precio de materiales: <span id="precio_material"></span><i class="bi bi-currency-dollar"></i></p>
+                  <p>Precio de mano de obra: <span id="precio_obra"></span><i class="bi bi-currency-dollar"></i></p>
                   <p>Monto a pagar: <span id="monto"></span><i class="bi bi-currency-dollar"></i></p>
                 </div>
               </div>
@@ -217,6 +219,8 @@
               marca: orden.marca,
               modelo: orden.modelo,
               monto: orden.monto,
+              precio_materiales: orden.precio_material,
+              precio_manoObra: orden.precio_obra,
               numeroSerie: orden.num_serie,
               observaciones: orden.observaciones,
               tecnico: {
@@ -360,6 +364,8 @@
           const $solucion = document.getElementById('solucion');
           const $garantia = document.getElementById('garantia');
           const $monto = document.getElementById('monto');
+          const $precioMateriales = document.getElementById('precio_material');
+          const $precioObra = document.getElementById('precio_obra');
 
           const $tecnicoTab = document.getElementById('tecnico-tab');
           const $reparacionTab = document.getElementById('reparacion-tab');
@@ -406,6 +412,8 @@
           $solucion.textContent = orden.solucion;
           $garantia.textContent = orden.garantia;
           $monto.textContent = orden.monto;
+          $precioMateriales.textContent = orden.precio_materiales;
+          $precioObra.textContent = orden.precio_manoObra;
         }
 
         window.addEventListener('DOMContentLoaded', () => {

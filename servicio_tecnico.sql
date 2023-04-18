@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-04-2023 a las 17:30:01
+-- Tiempo de generación: 18-04-2023 a las 15:58:38
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -88,6 +88,8 @@ CREATE TABLE `equipos_componentes` (
 CREATE TABLE `facturas` (
   `id_factura` int(11) NOT NULL,
   `id_historial` int(11) NOT NULL,
+  `precio_material` decimal(10,2) NOT NULL,
+  `precio_obra` decimal(10,2) NOT NULL,
   `monto` decimal(10,2) NOT NULL,
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
@@ -137,7 +139,7 @@ CREATE TABLE `solicitudes_mantenimiento` (
   `fecha_solicitud` date DEFAULT NULL,
   `descripcion_problema` varchar(255) DEFAULT NULL,
   `observaciones` varchar(255) DEFAULT NULL,
-  `estado_solicitud` enum('pendiente','en proceso','terminado') DEFAULT NULL,
+  `estado_solicitud` enum('ingresado','presupuestado','en reparacion','derivado','entregado') DEFAULT NULL,
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
