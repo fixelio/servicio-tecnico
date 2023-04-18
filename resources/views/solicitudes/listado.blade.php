@@ -10,8 +10,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p>Precio de materiales: <span id="precio_materiales"></span>$</p>
-          ´ <p>Precio de mano de obra: <span id="precio_obra"></span>$</p>
+            <p>Precio de materiales: <span id="precio_materiales_text"></span>$</p>
+            <p>Precio de mano de obra: <span id="precio_obra_text"></span>$</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -285,8 +285,6 @@
         correo: solicitud.correo_electronico,
       }
     }));
-
-    console.log(ordenes);
 
     const btnOrdenarCollection = Array.from(document.querySelectorAll('.btn-actions'));
     btnOrdenarCollection.forEach(btn => {
@@ -588,8 +586,8 @@
     const $modal = document.getElementById('modal-detalles-orden');
     const modal = new bootstrap.Modal($modal, {});
 
-    const $precioMateriales = document.getElementById('precio_materiales');
-    const $precioObra = document.getElementById('precio_obra');
+    const $precioMateriales = document.getElementById('precio_materiales_text');
+    const $precioObra = document.getElementById('precio_obra_text');
 
     $precioMateriales.textContent = orden.precioMateriales;
     $precioObra.textContent = orden.precioObra;
