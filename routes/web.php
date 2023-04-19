@@ -32,10 +32,15 @@ Route::get('/editar/solicitud/{codigo?}', [SolicitudesMantenimientoController::c
 Route::get('/solicitud/detalles/{correo?}', [
 	SolicitudesMantenimientoController::class, 'detalles'
 ])->name('detalles-solicitud');
+Route::get('/solicitud/estado', [SolicitudesMantenimientoController::class, 'generarReporteSalidaView'])->name('pagina-generar-reporte-salida');
 
 Route::post('/solicitud', [SolicitudesMantenimientoController::class, 'crear'])->name('solicitud.post');
+Route::post('/solicitud/estado', [SolicitudesMantenimientoController::class, 'cambiarEstado'])->name('estado-solicitud.put');
 Route::post('/editar/solicitud', [SolicitudesMantenimientoController::class, 'editar'])->name('solicitud.put');
-Route::post('/editar/solicitud/estado', [SolicitudesMantenimientoController::class, 'cambiarEstado'])->name('estado-solicitud.put');
+
+Route::post('/solicitudes/reporte/salida', [
+	SolicitudesMantenimientoController::class, 'generarReporteSalida'
+])->name('generar-reporte-salida');
 
 Route::get('/tecnicos', [TecnicosController::class, 'listadoView'])->name('listado-tecnicos');
 Route::get('/registrar/tecnico', [TecnicosController::class, 'registrarView'])->name('registrar-tecnico');

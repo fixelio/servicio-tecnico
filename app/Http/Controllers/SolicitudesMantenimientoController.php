@@ -52,6 +52,7 @@ class SolicitudesMantenimientoController extends Controller
       ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
       ->leftJoin('historial_mantenimiento', 'historial_mantenimiento.id_solicitud', '=', 'solicitudes_mantenimiento.id_solicitud')
       ->leftJoin('facturas', 'facturas.id_historial', '=', 'historial_mantenimiento.id_historial')
+      ->orderBy('solicitudes_mantenimiento.created_at', 'desc')
       ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*', 'facturas.*');
 
     $filtros = false;
@@ -246,6 +247,9 @@ class SolicitudesMantenimientoController extends Controller
     ]);
 
     if ($data['estado_solicitud'] === 'entregado') {
+      $cliente = Clientes::where('id_cliente', $solicitud['id_cliente'])->firstOrFail();
+      $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
+
       $solicitudesMantenimiento = $this->solicitudesTecnicosService->findByIdSolicitud($solicitud['id_solicitud']);
       $idTecnico = $solicitudesMantenimiento['id_tecnico'];
       $tecnico = $this->tecnicosService->findById($idTecnico);
@@ -264,20 +268,34 @@ class SolicitudesMantenimientoController extends Controller
 
       $factura = $this->crearFactura($facturaOptions);
 
-      return $this->generarReporteSalida($solicitud, $historial, $factura, $tecnico);
+      //return $this->generarReporteSalida($solicitud, $historial, $factura, $tecnico);
+      return redirect()->route('pagina-generar-reporte-salida', [
+        'cliente' => $cliente['nombre']." ".$cliente['apellido'],
+        'correo' => $cliente['correo_electronico'],
+        'telefono' => $cliente['telefono'],
+        'articulo' => $equipo['articulo'],
+        'marca' => $equipo['marca'],
+        'modelo' => $equipo['modelo'],
+        'serie' => $equipo['num_serie'],
+        'diagnostico' => $solicitud['descripcion_problema'],
+        'reparacion' => $historial['descripcion_solucion'],
+        'garantia' => $historial['garantia'],
+        'precioMateriales' => $factura['precio_material'],
+        'precioObra' => $factura['precio_obra'],
+        'monto' => $factura['monto'],
+        'tecnico' => $tecnico['nombre']." ".$tecnico['apellido'],
+        'ordenServicio' => $solicitud['id_solicitud'],
+      ]);
     }
 
-    /*if ($data['estado_solicitud'] === 'en proceso') {
+    if ($data['estado_solicitud'] === 'en proceso') {
       $tecnicoResponsable = $this->tecnicosService->findOne($data['correo_tecnico']);
       $this->asignarTecnicoResponsable($solicitud['id_solicitud'], $tecnicoResponsable['id_tecnico']);
       $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
       return $this->generarReporteEntrada($solicitud, $equipo, $tecnicoResponsable);
-    }*/
+    }
 
-    return redirect()->route('listado-solicitudes')->with([
-      'type' => 'exito',
-      'mensaje' => 'Se ha modificado el estado de la solicitud',
-    ]);
+    return redirect()->route('listado-solicitudes');
   }
 
   private function crearHistorial($solicitud, $options)
@@ -307,7 +325,7 @@ class SolicitudesMantenimientoController extends Controller
     ]);
   }
 
-  private function generarReporteEntrada($solicitud, $equipo, $tecnico)
+  public function generarReporteEntrada($solicitud, $equipo, $tecnico)
   {
     $cliente = Clientes::where('id_cliente', $solicitud['id_cliente'])->firstOrFail();
 
@@ -321,29 +339,56 @@ class SolicitudesMantenimientoController extends Controller
       'diagnostico' => $solicitud['descripcion_problema'],
       'notas' => $solicitud['observaciones'],
       'tecnico' => $tecnico['nombre']." ".$tecnico['apellido'],
+      'ordenServicio' => $solicitud['id_solicitud'],
     ]);
 
     return $pdf;
   }
 
-  private function generarReporteSalida($solicitud, $historial, $factura, $tecnico)
+  public function generarReporteSalidaView(Request $request)
   {
-    $cliente = Clientes::where('id_cliente', $solicitud['id_cliente'])->firstOrFail();
-    $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
-
-    $pdf = $this->reportesService->salida([
-      'cliente' => $cliente['nombre']." ".$cliente['apellido'],
-      'telefono' => $cliente['telefono'],
-      'articulo' => $equipo['articulo'],
-      'marca' => $equipo['marca'],
-      'modelo' => $equipo['modelo'],
-      'serie' => $equipo['num_serie'],
-      'diagnostico' => $solicitud['descripcion_problema'],
-      'reparacion' => $historial['descripcion_solucion'],
-      'garantia' => $historial['garantia'],
-      'monto' => $factura['monto'],
-      'tecnico' => $tecnico['nombre']." ".$tecnico['apellido'],
+    $data = $request->all();
+    return view('solicitudes.reporte_salida')->with([
+      'cliente' => $data['cliente'],
+      'correo' => $data['correo'],
+      'telefono' => $data['telefono'],
+      'articulo' => $data['articulo'],
+      'marca' => $data['marca'],
+      'modelo' => $data['modelo'],
+      'serie' => $data['serie'],
+      'diagnostico' => $data['diagnostico'],
+      'reparacion' => $data['reparacion'],
+      'garantia' => $data['garantia'],
+      'precioMateriales' => $data['precioMateriales'],
+      'precioObra' => $data['precioObra'],
+      'monto' => $data['monto'],
+      'tecnico' => $data['tecnico'],
+      'ordenServicio' => $data['ordenServicio'],
     ]);
+  }
+
+  public function generarReporteSalida(Request $request)
+  {
+    $request->validate([
+      'cliente' => 'required',
+      'telefono' => 'required',
+      'articulo' => 'required',
+      'marca' => 'required',
+      'modelo' => 'required',
+      'serie' => 'required',
+      'diagnostico' => 'required',
+      'reparacion' => 'required',
+      'garantia' => 'required',
+      'precioMateriales' => 'required',
+      'precioObra' => 'required',
+      'monto' => 'required',
+      'tecnico' => 'required',
+      'ordenServicio' => 'required',
+    ]);
+
+    $data = $request->all();
+
+    $pdf = $this->reportesService->salida($data);
 
     return $pdf;
   }

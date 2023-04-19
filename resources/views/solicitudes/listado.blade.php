@@ -644,18 +644,26 @@
 
     $inputPrecioMaterial.addEventListener('change', e => {
       $precioMaterial.value = e.target.value;
+      $monto.value = `${Number($precioMaterial.value) + Number($precioObra.value)}`;
+      $inputMonto.value = `${Number($precioMaterial.value) + Number($precioObra.value)}`;
     });
 
     $inputPrecioMaterial.addEventListener('keyup', e => {
       $precioMaterial.value = e.target.value;
+      $monto.value = `${Number($precioMaterial.value) + Number($precioObra.value)}`;
+      $inputMonto.value = `${Number($precioMaterial.value) + Number($precioObra.value)}`;
     });
 
     $inputPrecioObra.addEventListener('change', e => {
       $precioObra.value = e.target.value;
+      $monto.value = `${Number($precioMaterial.value) + Number($precioObra.value)}`;
+      $inputMonto.value = `${Number($precioMaterial.value) + Number($precioObra.value)}`;
     });
 
     $inputPrecioObra.addEventListener('keyup', e => {
       $precioObra.value = e.target.value;
+      $monto.value = `${Number($precioMaterial.value) + Number($precioObra.value)}`;
+      $inputMonto.value = `${Number($precioMaterial.value) + Number($precioObra.value)}`;
     });
 
     const $botonModalEstablecer = document.querySelector('#boton-modal-establecer');

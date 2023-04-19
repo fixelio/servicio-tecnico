@@ -9,11 +9,10 @@ use App\Models\SolicitudesMantenimiento;
 class ReportesService {
 	public function entrada($info)
 	{
-    $ordenServicio = SolicitudesMantenimiento::count();
     $fechaSolicitud = date('Y-m-d H:i:s');
 
     $data = [
-      'ordenServicio' => $ordenServicio,
+      'ordenServicio' => $info['ordenServicio'],
       'fechaSolicitud' => $fechaSolicitud,
       'cliente' => $info['cliente'],
       'articulo' => $info['articulo'],
@@ -32,11 +31,10 @@ class ReportesService {
 
   public function salida($info)
   {
-    $ordenServicio = SolicitudesMantenimiento::count();
     $fechaSolicitud = date('Y-m-d H:i:s');
 
     $data = [
-      'ordenServicio' => $ordenServicio,
+      'ordenServicio' => $info['ordenServicio'],
       'fechaSolicitud' => $fechaSolicitud,
       'cliente' => $info['cliente'],
       'telefono' => $info['telefono'],
