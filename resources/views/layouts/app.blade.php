@@ -62,6 +62,9 @@ display: block;
 }
 </style>
 <body>
+
+  <!-- Notyf -->
+    <script src="{{ asset('vendor/notyf/notyf.min.js') }}"></script>
     
     @guest
     @else
@@ -294,9 +297,6 @@ display: block;
 
     <!-- Vanilla JS Datepicker -->
     <script src="{{ asset('vendor/vanillajs-datepicker/dist/js/datepicker.min.js') }}"></script>
-
-    <!-- Notyf -->
-    <script src="{{ asset('vendor/notyf/notyf.min.js') }}"></script>
 
     <!-- Simplebar -->
     <script src="{{ asset('vendor/simplebar/dist/simplebar.min.js') }}"></script>

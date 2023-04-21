@@ -327,7 +327,28 @@
       const hasta = $hasta.valueAsDate;
 
       if (desde.getTime() > hasta.getTime()) {
-        alert('El rango de fechas es inválido');
+         const notyf = new Notyf({
+        position: {
+            x: 'right',
+            y: 'top',
+        },
+        types: [
+            {
+                type: 'danger',
+                background: 'red',
+                icon: {
+                    className: 'fas fa-info-circle',
+                    tagName: 'span',
+                    color: '#fff'
+                },
+                dismissible: false
+            }
+        ]
+    });
+    notyf.open({
+        type: 'danger',
+        message: 'El rango de fechas es inválido'
+    });
         $desde.value = '';
         $hasta.value = '';
         return;
