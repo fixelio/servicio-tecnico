@@ -50,10 +50,12 @@ class SolicitudesMantenimientoController extends Controller
     $queryBuilder = DB::Table('solicitudes_mantenimiento')
       ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
       ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
+      ->join('solicitudes_tecnicos', 'solicitudes_mantenimiento.id_solicitud', '=', 'solicitudes_tecnicos.id_solicitud')
+      ->join('tecnicos', 'solicitudes_tecnicos.id_tecnico', '=', 'tecnicos.id_tecnico')
       ->leftJoin('historial_mantenimiento', 'historial_mantenimiento.id_solicitud', '=', 'solicitudes_mantenimiento.id_solicitud')
       ->leftJoin('facturas', 'facturas.id_historial', '=', 'historial_mantenimiento.id_historial')
       ->orderBy('solicitudes_mantenimiento.created_at', 'desc')
-      ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*', 'facturas.*');
+      ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*', 'facturas.*', 'historial_mantenimiento.*', 'tecnicos.nombre as nombre_tecnico', 'tecnicos.apellido as apellido_tecnico', 'solicitudes_mantenimiento.id_solicitud');
 
     $filtros = false;
 
@@ -390,6 +392,26 @@ class SolicitudesMantenimientoController extends Controller
       'ordenServicio' => $data['ordenServicio'],
       'fecha' => $data['fecha'],
     ]);
+  }
+
+  public function reGenerarReporteEntrada(Request $request)
+  {
+    $request->validate([
+      'cliente' => 'required',
+      'telefono' => 'required',
+      'articulo' => 'required',
+      'marca' => 'required',
+      'modelo' => 'required',
+      'serie' => 'required',
+      'diagnostico' => 'required',
+      'notas' => 'required',
+      'tecnico' => 'required',
+      'ordenServicio' => 'required',
+    ]);
+
+    $data = $request->all();
+    $pdf = $this->reportesService->entrada($data);
+    return $pdf;
   }
 
   public function generarReporteSalida(Request $request)

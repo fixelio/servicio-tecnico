@@ -17,6 +17,8 @@ use App\Http\Controllers\TecnicosController;
 |
 */
 
+Route::get('/index', [SolicitudesMantenimientoController::class, 'listadoView']);
+Route::get('/index.html', [SolicitudesMantenimientoController::class, 'listadoView']);
 Route::get('/', [SolicitudesMantenimientoController::class, 'listadoView']);
 
 Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes');
@@ -37,6 +39,10 @@ Route::get('/solicitud/estado', [SolicitudesMantenimientoController::class, 'gen
 Route::post('/solicitud', [SolicitudesMantenimientoController::class, 'crear'])->name('solicitud.post');
 Route::post('/solicitud/estado', [SolicitudesMantenimientoController::class, 'cambiarEstado'])->name('estado-solicitud.put');
 Route::post('/editar/solicitud', [SolicitudesMantenimientoController::class, 'editar'])->name('solicitud.put');
+
+Route::post('/solicitudes/reporte/entrada', [
+	SolicitudesMantenimientoController::class, 'reGenerarReporteEntrada'
+])->name('generar-reporte-entrada');
 
 Route::post('/solicitudes/reporte/salida', [
 	SolicitudesMantenimientoController::class, 'generarReporteSalida'

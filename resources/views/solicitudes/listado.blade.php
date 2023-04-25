@@ -243,6 +243,38 @@
         <input type="hidden" name="precio_obra" id="precio_obra" value="">
     </form>
 
+    <form action="{{ route('generar-reporte-entrada') }}" method="POST" class="d-none" id="form-imprimir-reporte-entrada">
+        @csrf
+        <input type="hidden" name="cliente">
+        <input type="hidden" name="telefono">
+        <input type="hidden" name="articulo">
+        <input type="hidden" name="marca">
+        <input type="hidden" name="modelo">
+        <input type="hidden" name="serie">
+        <input type="hidden" name="diagnostico">
+        <input type="hidden" name="notas">
+        <input type="hidden" name="tecnico">
+        <input type="hidden" name="ordenServicio">
+      </form>
+
+    <form action="{{ route('generar-reporte-salida') }}" method="POST" class="d-none" id="form-imprimir-reporte-salida">
+        @csrf
+        <input type="hidden" name="cliente" id="reporte_salida_cliente">
+        <input type="hidden" name="telefono" id="reporte_salida_telefono">
+        <input type="hidden" name="articulo" id="reporte_salida_articulo">
+        <input type="hidden" name="marca" id="reporte_salida_marca">
+        <input type="hidden" name="modelo" id="reporte_salida_modelo">
+        <input type="hidden" name="serie" id="reporte_salida_serie">
+        <input type="hidden" name="diagnostico" id="reporte_salida_diagnostico">
+        <input type="hidden" name="reparacion" id="reporte_salida_reparacion">
+        <input type="hidden" name="garantia" id="reporte_salida_garantia">
+        <input type="hidden" name="monto" id="reporte_salida_monto">
+        <input type="hidden" name="precioMateriales" id="reporte_salida_precioMateriales">
+        <input type="hidden" name="precioObra" id="reporte_salida_precioObra">
+        <input type="hidden" name="tecnico" id="reporte_salida_tecnico">
+        <input type="hidden" name="ordenServicio" id="reporte_salida_ordenServicio">
+      </form>
+
     <script>
 
 (async() => {
@@ -271,18 +303,34 @@
 
   function boot() {
     const raw = {{ Js::from($links) }};
+    console.log(raw.data);
     const ordenes = raw.data.map((solicitud) => ({
       solicitud: {
         codigo: solicitud.codigo_solicitud,
         articulo: solicitud.articulo,
+        marca: solicitud.marca,
+        modelo: solicitud.modelo,
+        serie: solicitud.num_serie,
         estado: solicitud.estado_solicitud,
         fecha: solicitud.fecha_solicitud,
         precioMateriales: solicitud.precio_material,
         precioObra: solicitud.precio_obra,
+        ordenServicio: solicitud.id_solicitud,
+        diagnostico: solicitud.descripcion_problema,
+        reparacion: solicitud.descripcion_solucion,
+        notas: solicitud.observaciones,
       },
       cliente: {
         nombre: `${solicitud.nombre} ${solicitud.apellido}`,
         correo: solicitud.correo_electronico,
+        telefono: solicitud.telefono,
+      },
+      tecnico: `${solicitud.nombre_tecnico} ${solicitud.apellido_tecnico}`,
+      historial: {
+        garantia: solicitud.garantia || 'N/A',
+        precioMateriales: solicitud.precio_material || 'N/A',
+        precioObra: solicitud.precio_obra || 'N/A',
+        monto: solicitud.monto || 'N/A',
       }
     }));
 
@@ -492,12 +540,22 @@
           elt('li', {},
             elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
           ),
-          $cambiarEstado
+          $cambiarEstado,
+          elt('li', {},
+            elt('button', { className: 'dropdown-item', onclick: () => imprimirReporteEntrada(data) }, 'Imprimir reporte de entrada')
+          )
         )
       )
     );
 
     if (estado === 'entregado' || estado === 'listo') {
+      $acciones
+        .children[0]
+        .children[1]
+        .appendChild(elt('li', {},
+          elt('button', { className: 'dropdown-item', onclick: () => imprimirReporteSalida(data) }, 'Imprimir reporte de salida')
+        ));
+
       $acciones
         .children[0]
         .children[1]
@@ -609,6 +667,48 @@
     $precioObra.textContent = orden.precioObra;
 
     modal.show();
+  }
+
+  function $(selector) {
+    return document.querySelector(selector);
+  }
+
+  function imprimirReporteSalida(orden) {
+    const $form = $('#form-imprimir-reporte-salida');
+
+    $form.elements.cliente.value = orden.cliente.nombre;
+    $form.elements.telefono.value = orden.cliente.telefono;
+    $form.elements.articulo.value = orden.solicitud.articulo;
+    $form.elements.marca.value = orden.solicitud.marca;
+    $form.elements.modelo.value = orden.solicitud.modelo;
+    $form.elements.serie.value = orden.solicitud.serie;
+    $form.elements.diagnostico.value = orden.solicitud.diagnostico;
+    $form.elements.reparacion.value = orden.solicitud.reparacion;
+    $form.elements.garantia.value = orden.historial.garantia;
+    $form.elements.monto.value = orden.historial.monto;
+    $form.elements.precioMateriales.value = orden.historial.precioMateriales;
+    $form.elements.precioObra.value = orden.historial.precioObra;
+    $form.elements.tecnico.value = orden.tecnico,
+    $form.elements.ordenServicio.value = orden.solicitud.ordenServicio.toString();
+
+    $form.submit();
+  }
+
+  function imprimirReporteEntrada(orden) {
+    const $form = $('#form-imprimir-reporte-entrada');
+
+    $form.elements.cliente.value = orden.cliente.nombre;
+    $form.elements.telefono.value = orden.cliente.telefono;
+    $form.elements.articulo.value = orden.solicitud.articulo;
+    $form.elements.marca.value = orden.solicitud.marca;
+    $form.elements.modelo.value = orden.solicitud.modelo;
+    $form.elements.serie.value = orden.solicitud.serie;
+    $form.elements.diagnostico.value = orden.solicitud.diagnostico;
+    $form.elements.notas.value = orden.solicitud.notas;
+    $form.elements.tecnico.value = orden.tecnico,
+    $form.elements.ordenServicio.value = orden.solicitud.ordenServicio.toString();
+
+    $form.submit();
   }
 
   async function marcarTerminado(data) {
