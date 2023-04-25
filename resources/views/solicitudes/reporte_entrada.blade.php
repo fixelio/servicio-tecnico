@@ -41,7 +41,7 @@
         </p>  
       </div>
       <hr>
-      <div class="container">
+      <div class="container-fluid">
         <div class="row align-items-start">
           <div class="mb-2 col-12 col-xl-6">
             <h5 class="h6 mb-3">Datos del cliente</h5>
@@ -94,7 +94,7 @@
 
       <hr>
 
-      <div class="mb-2 w-100">
+      <div class="mb-2 container-fluid">
         <h5 class="h6 mb-3">Datos de Orden</h5>
         <div class="table-wrapper">
           <table class="table table-striped table-bordered">
