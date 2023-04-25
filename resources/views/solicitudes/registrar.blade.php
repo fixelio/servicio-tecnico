@@ -55,7 +55,7 @@
           <form action="{{ route('solicitud.post') }}" method="POST" id="form-registrar" class="row g-3 w-100">
             @csrf
             <div class="col-12 mb-3">
-              <label for="tecnico_responsable_content" class="form-label">Técnico Responsable</label>
+              <label for="tecnico_responsable_content" class="form-label">Técnico Responsable <span class="required">*</span></label>
                 <select
                   class="form-select"
                     aria-label="Técnico responsable de la solicitud"
@@ -71,7 +71,7 @@
             <p><strong>Ingresa los datos del equipo.</strong> Los campos obligatorios están marcados con (*)</p>
             
             <div class="col-12 mb-3">
-              <label for="articulo" class="form-label">Artículo</label>
+              <label for="articulo" class="form-label">Artículo <span class="required">*</span></label>
               <input
                 type="text"
                 id="articulo"
@@ -81,7 +81,7 @@
               >
             </div>
             <div class="col-12 col-lg-6 mb-3">
-              <label for="num_serie" class="form-label">Número de Serie</label>
+              <label for="num_serie" class="form-label">Número de Serie <span class="required">*</span></label>
               <input
                 type="text"
                 id="num_serie"
@@ -91,7 +91,7 @@
               >
             </div>
             <div class="col-12 col-lg-6 mb-3">
-              <label for="marca" class="form-label">Marca</label>
+              <label for="marca" class="form-label">Marca <span class="required">*</span></label>
               <input
                 type="text"
                 id="marca"
@@ -101,7 +101,7 @@
               >
             </div>
             <div class="col-12 col-lg-6 mb-3">
-              <label for="modelo" class="form-label">Modelo *</label>
+              <label for="modelo" class="form-label">Modelo <span class="required">*</span></label>
               <input
                 type="text"
                 id="modelo"
@@ -113,7 +113,7 @@
             </div>
             @csrf
             <div class="col-12 col-lg-6 mb-3">
-              <label for="fecha_compra" class="form-label">Fecha de compra *</label>
+              <label for="fecha_compra" class="form-label">Fecha de compra <span class="required">*</span></label>
               <input
                 type="date"
                 id="fecha_compra"
@@ -126,14 +126,14 @@
 
             <div class="col-12 mb-3">
               <label for="descripcion_problema" class="form-label">
-                Descripción del problema
+                Descripción del problema <span class="required">*</span>
               </label>
               <textarea name="descripcion_problema" id="descripcion_problema" class="form-control" rows="4"></textarea>
             </div>
 
             <div class="col-12 mb-3">
               <label for="observaciones" class="form-label">
-                Observaciones
+                Observaciones <span class="required">*</span>
               </label>
               <textarea name="observaciones" id="observaciones" class="form-control" rows="4"></textarea>
             </div>

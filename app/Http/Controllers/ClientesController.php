@@ -107,10 +107,7 @@ class ClientesController extends Controller
       'telefono' => $cliente['telefono'],
     ]);
 
-    return redirect()->route('registrar-cliente')->with([
-      'type' => 'exito',
-      'mensaje' => 'Se ha registrado el cliente',
-    ]);
+    return redirect()->route('clientes');
   }
 
   public function editar(Request $req)
@@ -144,9 +141,6 @@ class ClientesController extends Controller
       'telefono' => $datos['telefono'],
     ]);
 
-    return redirect('/clientes')->with([
-      'type' => 'exito',
-      'mensaje' => 'Se ha editado el cliente',
-    ]);
+    return redirect()->route('clientes');
   }
 }

@@ -70,7 +70,6 @@
                 class="form-control"
                 placeholder="Ingresa el teléfono"
                 value="{{ $tecnico !== false ? $tecnico?->telefono : '' }}"
-                required
               >
             </div>
             <input type="hidden" name="correo_buscar" value="{{ $tecnico !== null ? $tecnico?->correo_electronico : '' }}">

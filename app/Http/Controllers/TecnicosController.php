@@ -36,10 +36,7 @@ class TecnicosController extends Controller
 
     $datos = $request->all();
     $this->tecnicosService->create($datos);
-    return redirect()->route('registrar-tecnico')->with([
-      'type' => 'exito',
-      'mensaje' => 'Se ha registrado el técnico',
-    ]);
+    return redirect()->route('listado-tecnicos');
   }
 
   public function listadoView()
@@ -91,10 +88,7 @@ class TecnicosController extends Controller
 
     $this->tecnicosService->update($tecnico['id_tecnico'], $datos);
 
-    return redirect('/tecnicos')->with([
-      'type' => 'exito',
-      'mensaje' => 'Se ha editado el tecnico',
-    ]);
+    return redirect()->route('listado-tecnicos');
   }
 
   public function trabajoAsignado (Request $request, $correo = null)

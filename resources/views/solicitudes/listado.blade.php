@@ -33,19 +33,19 @@
                 <textarea id="descripcion_solucion_content" class="form-control" rows="4"></textarea>
               </div>
               <div class="col-12 col-md-6 mb-3">
-                <label for="garantia_content" class="form-label">Garantía</label>
+                <label for="garantia_content" class="form-label">Garantía <span class="required">*</span></label>
                 <input type="text" class="form-control" id="garantia_content" value="">
               </div>
               <div class="col-12 col-md-6 mb-3">
-                <label for="precio_materiales_content" class="form-label">Precio de materiales</label>
+                <label for="precio_materiales_content" class="form-label">Precio de materiales <span class="required">*</span></label>
                 <input type="number" class="form-control" id="precio_materiales_content" value="" pattern="[0-9]+([\.,][0-9]+)?" step="0.01">
               </div>
               <div class="col-12 col-md-6 mb-3">
-                <label for="precio_mano_obra_content" class="form-label">Precio de mano de obra</label>
+                <label for="precio_mano_obra_content" class="form-label">Precio de mano de obra <span class="required">*</span></label>
                 <input type="number" class="form-control" id="precio_mano_obra_content" value="" pattern="[0-9]+([\.,][0-9]+)?" step="0.01">
               </div>
               <div class="col-12 col-md-6 mb-3">
-                <label for="monto_content" class="form-label">Monto a pagar</label>
+                <label for="monto_content" class="form-label">Monto a pagar <span class="required">*</span></label>
                 <input type="number" class="form-control" id="monto_content" value="" pattern="[0-9]+([\.,][0-9]+)?" step="0.01">
               </div>
             </form>

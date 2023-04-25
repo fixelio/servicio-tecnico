@@ -34,6 +34,8 @@ Route::get('/editar/solicitud/{codigo?}', [SolicitudesMantenimientoController::c
 Route::get('/solicitud/detalles/{correo?}', [
 	SolicitudesMantenimientoController::class, 'detalles'
 ])->name('detalles-solicitud');
+
+Route::get('/solicitud/reporte/entrada', [SolicitudesMantenimientoController::class, 'generarReporteEntradaView'])->name('pagina-generar-reporte-entrada');
 Route::get('/solicitud/estado', [SolicitudesMantenimientoController::class, 'generarReporteSalidaView'])->name('pagina-generar-reporte-salida');
 
 Route::post('/solicitud', [SolicitudesMantenimientoController::class, 'crear'])->name('solicitud.post');

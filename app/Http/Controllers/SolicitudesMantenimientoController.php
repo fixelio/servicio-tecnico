@@ -194,7 +194,21 @@ class SolicitudesMantenimientoController extends Controller
     ]);
 
     $this->asignarTecnicoResponsable($solicitud['id_solicitud'], $tecnico['id_tecnico']);
-    return $this->generarReporteEntrada($solicitud, $equipo, $tecnico);
+    return redirect()->route('pagina-generar-reporte-entrada', [
+      'cliente' => $cliente['nombre']." ".$cliente['apellido'],
+      'correo' => $cliente['correo_electronico'],
+      'telefono' => $cliente['telefono'],
+      'articulo' => $equipo['articulo'],
+      'marca' => $equipo['marca'],
+      'modelo' => $equipo['modelo'],
+      'serie' => $equipo['num_serie'],
+      'diagnostico' => $solicitud['descripcion_problema'],
+      'notas' => $solicitud['observaciones'],
+      'tecnico' => $tecnico['nombre']." ".$tecnico['apellido'],
+      'ordenServicio' => $solicitud['id_solicitud'],
+      'fecha' => date('d/m/Y H:i:s'),
+    ]);
+    //return $this->generarReporteEntrada($solicitud, $equipo, $tecnico);
   }
 
   public function editar(Request $request)
@@ -252,10 +266,7 @@ class SolicitudesMantenimientoController extends Controller
       ]);
     }
 
-    return redirect('/editar/solicitud/'.$solicitud['codigo_solicitud'])->with([
-      'type' => 'exito',
-      'mensaje' => 'Se ha editado la solicitud',
-    ]);
+    return redirect()->route('listado-solicitudes');
   }
 
   public function cambiarEstado(Request $request) {
@@ -369,6 +380,25 @@ class SolicitudesMantenimientoController extends Controller
     ]);
 
     return $pdf;
+  }
+
+  public function generarReporteEntradaView(Request $request)
+  {
+    $data = $request->all();
+    return view('solicitudes.reporte_entrada')->with([
+      'cliente' => $datos['cliente'],
+      'correo' => $datos['correo'],
+      'telefono' => $datos['telefono'],
+      'articulo' => $datos['articulo'],
+      'marca' => $datos['marca'],
+      'modelo' => $datos['modelo'],
+      'serie' => $datos['serie'],
+      'diagnostico' => $datos['diagnostico'],
+      'notas' => $datos['notas'],
+      'tecnico' => $datos['tecnico'],
+      'ordenServicio' => $datos['ordenServicio'],
+      'fecha' => $datos['fecha'],
+    ]);
   }
 
   public function generarReporteSalidaView(Request $request)
