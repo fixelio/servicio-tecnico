@@ -26,7 +26,7 @@
           <form action="{{ route('tecnico.post') }}" method="POST" class="row g-3 w-100">
             @csrf
             <div class="col-12 col-lg-6 mb-3">
-              <label for="num_serie" class="form-label">Nombre</label>
+              <label for="num_serie" class="form-label">Nombre <span class="required">*</span></label>
               <input
                 type="text"
                 id="nombre"
@@ -37,7 +37,7 @@
               >
             </div>
             <div class="col-12 col-lg-6 mb-3">
-              <label for="num_serie" class="form-label">Apellido</label>
+              <label for="num_serie" class="form-label">Apellido <span class="required">*</span></label>
               <input
                 type="text"
                 id="apellido"
@@ -48,7 +48,7 @@
               >
             </div>
             <div class="col-12 col-lg-6 mb-3">
-              <label for="num_serie" class="form-label">Correo</label>
+              <label for="num_serie" class="form-label">Correo <span class="required">*</span></label>
               <input
                 type="email"
                 id="correo_electronico"
@@ -66,7 +66,6 @@
                 name="telefono"
                 class="form-control"
                 placeholder="Ingresa el teléfono"
-                required
               >
             </div>
             <div>

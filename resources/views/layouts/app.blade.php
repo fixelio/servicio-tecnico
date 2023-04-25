@@ -60,6 +60,10 @@ left: auto;
 .dropdown-menu > li:hover > .dropdown-submenu {
 display: block;
 }
+
+.required {
+  color: red;
+}
 </style>
 <body>
 

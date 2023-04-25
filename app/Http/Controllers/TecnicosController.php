@@ -32,7 +32,6 @@ class TecnicosController extends Controller
       'nombre' => 'required',
       'apellido' => 'required',
       'correo_electronico' => 'required',
-      'telefono' => 'required',
     ]);
 
     $datos = $request->all();
