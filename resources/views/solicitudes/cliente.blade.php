@@ -167,8 +167,10 @@
                     <span class="badge bg-info">En Reparación</span>
                   @elseif($solicitudes[$i]->estado_solicitud === 'derivado')
                     <span class="badge bg-primary">Derivado</span>
+                  @elseif($solicitudes[$i]->estado_solicitud === 'entregado')
+                    <span class="badge bg-success">Entregado</span>
                   @else
-                    <span class="badge text-bg-success">Entregado</span>
+                    <span class="badge text-bg-success">Listo</span>
                   @endif
                 </td>
                 <td class="px-2 py-3 text-nowrap">
@@ -375,7 +377,7 @@
 
           $codigo.textContent = orden.codigo;
 
-          if (orden.estado !== 'entregado') {
+          if (orden.estado !== 'entregado' && orden.estado !== 'listo') {
             $reparacionTab.classList.add('disabled');
             $reparacionTab.disabled = true;
           } else {

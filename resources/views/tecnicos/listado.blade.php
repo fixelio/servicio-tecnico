@@ -44,7 +44,7 @@
             </th>           
             <th class="border-gray-200">
               <div class="w-100 d-flex justify-content-between align-items-center">
-                Correo
+                Documento
                 <div>
                   <button class="btn-actions" id="correo-asc">
                     <i class="bi bi-caret-up-fill"></i>

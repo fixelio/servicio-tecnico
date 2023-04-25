@@ -48,18 +48,18 @@
               >
             </div>
             <div class="col-12 col-lg-6 mb-3">
-              <label for="num_serie" class="form-label">Correo <span class="required">*</span></label>
+              <label for="num_serie" class="form-label">Documento <span class="required">*</span></label>
               <input
-                type="email"
+                type="text"
                 id="correo_electronico"
                 name="correo_electronico"
                 class="form-control"
-                placeholder="Ingresa el correo"
+                placeholder="Ingresa el documento"
                 required
               >
             </div>
             <div class="col-12 col-lg-6 mb-3">
-              <label for="num_serie" class="form-label">Teléfono</label>
+              <label for="telefono" class="form-label">Teléfono</label>
               <input
                 type="text"
                 id="telefono"
