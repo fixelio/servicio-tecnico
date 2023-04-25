@@ -430,85 +430,80 @@
   function FilaOrden(data) {
     const $acciones = elt('td', { className: 'ml-3' });
 
-    if (data.solicitud.estado !== 'listo') {
-      const $boton = elt('button', {
-        className: 'focus-ring px-2 rounded fs-5',
-        type: 'button'
-      }, elt('i', { className: 'bi bi-three-dots' }, ''));
+    const $boton = elt('button', {
+      className: 'focus-ring px-2 rounded fs-5',
+      type: 'button'
+    }, elt('i', { className: 'bi bi-three-dots' }, ''));
 
-      $boton.setAttribute('data-bs-toggle', 'dropdown');
-      $boton.setAttribute('aria-expanded', 'false');
-      $boton.style.outline = 'none';
-      $boton.style.border = 'none';
-      $boton.style.background = 'none';
+    $boton.setAttribute('data-bs-toggle', 'dropdown');
+    $boton.setAttribute('aria-expanded', 'false');
+    $boton.style.outline = 'none';
+    $boton.style.border = 'none';
+    $boton.style.background = 'none';
 
-      const codigo = data.solicitud.codigo;
-      const estado = data.solicitud.estado;
+    const codigo = data.solicitud.codigo;
+    const estado = data.solicitud.estado;
 
-      let $cambiarEstado = null;
+    let $cambiarEstado = null;
 
-      if (estado === 'ingresado') {
-        $cambiarEstado = elt('button', {
-          className: 'dropdown-item',
-          onclick: () => cambiarEstado(codigo, 'presupuestado'),
-        }, 'Marcar como "Presupuestado"');
-      }
-
-      else if (estado === 'presupuestado') {
-        $cambiarEstado = elt('button', {
-          className: 'dropdown-item',
-          onclick: () => cambiarEstado(codigo, 'en reparación'),
-        }, 'Marcar como "En Reparación"');
-      }
-
-      else if (estado === 'en reparacion') {
-        $cambiarEstado = elt('button', {
-          className: 'dropdown-item',
-          onclick: () => cambiarEstado(codigo, 'derivado'),
-        }, 'Marcar como "Derivado"');
-      }
-
-      else if (estado === 'derivado') {
-        $cambiarEstado = elt('button', {
-          className: 'dropdown-item',
-          onclick: () => marcarTerminado(data),
-        }, 'Marcar como "Entregado"');
-      }
-
-      else if (estado === 'entregado') {
-        $cambiarEstado = elt('button', {
-          className: 'dropdown-item',
-          onclick: () => cambiarEstado(codigo, 'listo'),
-        }, 'Marcar como "Listo"');
-      }
-
-      else {
-        console.warn('Error fatal');
-      }
-
-      $acciones.appendChild(
-        elt('div', { },
-          $boton,
-          elt('ul', { className: 'dropdown-menu' },
-            elt('li', {},
-              elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
-            ),
-            $cambiarEstado
-          )
-        )
-      );
-
-      if (data.solicitud.estado === 'entregado' || data.solicitud.estado === 'listo') {
-        $acciones
-          .children[0]
-          .children[1]
-          .appendChild(elt('li', {},
-            elt('button', { className: 'dropdown-item', onclick: () => mostrarDetalles(data.solicitud) }, 'Detalles')
-          ));
-      }
+    if (estado === 'ingresado') {
+      $cambiarEstado = elt('button', {
+        className: 'dropdown-item',
+        onclick: () => cambiarEstado(codigo, 'presupuestado'),
+      }, 'Marcar como "Presupuestado"');
     }
-    else {
-      $acciones.appendChild(document.createTextNode('Sin acciones'));
+
+    else if (estado === 'presupuestado') {
+      $cambiarEstado = elt('button', {
+        className: 'dropdown-item',
+        onclick: () => cambiarEstado(codigo, 'en reparación'),
+      }, 'Marcar como "En Reparación"');
+    }
+
+    else if (estado === 'en reparacion') {
+      $cambiarEstado = elt('button', {
+        className: 'dropdown-item',
+        onclick: () => cambiarEstado(codigo, 'derivado'),
+      }, 'Marcar como "Derivado"');
+    }
+
+    else if (estado === 'derivado') {
+      $cambiarEstado = elt('button', {
+        className: 'dropdown-item',
+        onclick: () => marcarTerminado(data),
+      }, 'Marcar como "Entregado"');
+    }
+
+    else if (estado === 'entregado') {
+      $cambiarEstado = elt('button', {
+        className: 'dropdown-item',
+        onclick: () => cambiarEstado(codigo, 'listo'),
+      }, 'Marcar como "Listo"');
+    }
+
+    else if (estado === 'listo') {
+      $cambiarEstado = elt('li', { className: 'dropdown-divider' }, '');
+    }
+
+    $acciones.appendChild(
+      elt('div', { },
+        $boton,
+        elt('ul', { className: 'dropdown-menu' },
+          elt('li', {},
+            elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${data.solicitud.codigo}` }, 'Editar'),
+          ),
+          $cambiarEstado
+        )
+      )
+    );
+
+    if (estado === 'entregado' || estado === 'listo') {
+      $acciones
+        .children[0]
+        .children[1]
+        .appendChild(elt('li', {},
+          elt('button', { className: 'dropdown-item', onclick: () => mostrarDetalles(data.solicitud) }, 'Detalles')
+        ));
     }
 
     const ESTADO_TO_BG = {

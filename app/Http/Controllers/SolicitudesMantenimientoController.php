@@ -141,7 +141,9 @@ class SolicitudesMantenimientoController extends Controller
       $solicitud = DB::table('solicitudes_mantenimiento')
         ->join('equipos', 'solicitudes_mantenimiento.id_equipo', '=', 'equipos.id_equipo')
         ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
-        ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*')
+        ->leftJoin('historial_mantenimiento', 'solicitudes_mantenimiento.id_solicitud', '=', 'historial_mantenimiento.id_solicitud')
+        ->leftJoin('facturas', 'historial_mantenimiento.id_historial', '=', 'facturas.id_historial')
+        ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*', 'facturas.*', 'historial_mantenimiento.garantia')
         ->where('solicitudes_mantenimiento.codigo_solicitud', '=', $codigo)
         ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'terminado')
         ->first();
@@ -205,8 +207,7 @@ class SolicitudesMantenimientoController extends Controller
     ]);
 
     $datos = $request->all();
-    $solicitud = SolicitudesMantenimiento
-      ::where('codigo_solicitud', $datos['codigo_buscar'])
+    $solicitud = SolicitudesMantenimiento::where('codigo_solicitud', $datos['codigo_buscar'])
       ->where('estado_solicitud', '!=', 'terminado')
       ->firstOrFail();
 
@@ -216,6 +217,11 @@ class SolicitudesMantenimientoController extends Controller
         'mensaje' => 'No puedes editar el código de la solicitud'
       ]);
     }
+
+    SolicitudesMantenimiento::find($solicitud['id_solicitud'])->update([
+      'descripcion_problema' => $datos['descripcion_problema'],
+      'observaciones' => $datos['observaciones'],
+    ]);
 
     $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
 
@@ -227,7 +233,24 @@ class SolicitudesMantenimientoController extends Controller
       'fecha_compra' => $datos['fecha_compra'],
     ]);
 
-    return redirect('/editar/solicitud')->with([
+    if (isset($datos['garantia'])) {
+      $historico = HistorialMantenimiento::where('id_solicitud', $solicitud['id_solicitud'])
+        ->firstOrFail();
+
+      HistorialMantenimiento::find($historico['id_historial'])->update([
+        'garantia' => $datos['garantia'],
+      ]);
+
+      $factura = Facturas::where('id_historial', $historico['id_historial'])->firstOrFail();
+
+      Facturas::find($factura['id_factura'])->update([
+        'precio_material' => $datos['precio_material'],
+        'precio_obra' => $datos['precio_obra'],
+        'monto' => $datos['monto'],
+      ]);
+    }
+
+    return redirect('/editar/solicitud/'.$solicitud['codigo_solicitud'])->with([
       'type' => 'exito',
       'mensaje' => 'Se ha editado la solicitud',
     ]);
@@ -285,6 +308,7 @@ class SolicitudesMantenimientoController extends Controller
         'monto' => $factura['monto'],
         'tecnico' => $tecnico['nombre']." ".$tecnico['apellido'],
         'ordenServicio' => $solicitud['id_solicitud'],
+        'fecha' => date('d/m/Y H:i:s'),
       ]);
     }
 
@@ -364,6 +388,7 @@ class SolicitudesMantenimientoController extends Controller
       'monto' => $data['monto'],
       'tecnico' => $data['tecnico'],
       'ordenServicio' => $data['ordenServicio'],
+      'fecha' => $data['fecha'],
     ]);
   }
 

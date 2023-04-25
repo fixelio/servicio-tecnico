@@ -2,6 +2,17 @@
 
 @section('content')
   <section>
+    <style>
+      td, th {
+        padding: 0.55rem !important;
+        font-size: 11pt;
+      }
+
+      strong {
+        font-size: 11pt;
+        font-weight: bold;
+      }
+    </style>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
       <div class="d-block">
         <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
@@ -20,29 +31,96 @@
 
     <div class="card card-body border-0 shadow mb-4">
       <h3 class="h5 mb-2">Orden de Servicio #{{ $ordenServicio }}</h3>
-      <p class="mb-3">La orden de servicio ha sido establecida como "Entregada" exitosamente.</p>
+      <div class="d-flex justify-content-between align-items-center flex-column flex-md-row mb-1">
+        <p>La orden de servicio ha sido establecida como "Entregada" exitosamente.</p>
+        <p>
+          <svg class="icon icon-xs" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"></path>
+          </svg>
+          {{ $fecha }}
+        </p>  
+      </div>
       <hr>
-      <div class="d-flex justify-content-between align-items-start flex-md-row flex-column">
-        <div class="mb-3">
-          <h5 class="h6 mb-4">Datos de Cliente</h5>
-          <p>Nombre del Cliente: <strong>{{ $cliente }}</strong></p>
-          <p>Email: <strong>{{ $correo }}</strong></p>
-          <p>Celular: <strong>{{ $telefono }}</strong></p>
+      <div class="container">
+        <div class="row align-items-start">
+          <div class="mb-2 col-12 col-xl-6">
+            <h5 class="h6 mb-3">Datos del cliente</h5>
+            <div class="table-wrapper">
+              <table class="table table-striped table-bordered">
+                <tbody>
+                  <tr>
+                    <th>Nombre y apellido</th>
+                    <td><strong>{{ $cliente }}</strong></td>
+                  </tr>
+                  <tr>
+                    <th>Correo</th>
+                    <td><strong>{{ $correo }}</strong></td>
+                  </tr>
+                  <tr>
+                    <th>Celular</th>
+                    <td><strong>{{ $telefono }}</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="mb-2 col-12 col-xl-6">
+            <h5 class="h6 mb-3">Datos del equipo</h5>
+            <div class="table-wrapper">
+              <table class="table table-striped table-bordered">
+                <tbody>
+                  <tr>
+                    <th>Artículo</th>
+                    <td><strong>{{ $articulo }}</strong></td>
+                  </tr>
+                  <tr>
+                    <th>Marca</th>
+                    <td><strong>{{ $marca }}</strong></td>
+                  </tr>
+                  <tr>
+                    <th>Modelo</th>
+                    <td><strong>{{ $modelo }}</strong></td>
+                  </tr>
+                  <tr>
+                    <th>Número de serie</th>
+                    <td><strong>{{ $serie }}</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <div class="mb-3">
-          <h5 class="h6 mb-4">Datos de Equipo</h5>
-          <p>Artículo: <strong>{{ $articulo }}</strong></p>
-          <p>Marca: <strong>{{ $marca }}</strong></p>
-          <p>Modelo: <strong>{{ $modelo }}</strong></p>
-          <p>Número de Serie: <strong>{{ $serie }}</strong></p>
-        </div>
-        <div class="mb-3">
-          <h5 class="h6 mb-4">Datos de Reparación</h5>
-          <p>Técnico Responsable: <strong>{{ $tecnico }}</strong></p>
-          <p>Precio de materiales: <strong>{{ $precioMateriales }}$</strong></p>
-          <p>Precio de mano de obra: <strong>{{ $precioObra }}$</strong></p>
-          <p>Monto total: <strong>{{ $monto }}$</strong></p>
-          <p>Garantía: <strong>{{ $garantia }}</strong></p>
+      </div>
+
+      <hr>
+
+      <div class="mb-2 w-100">
+        <h5 class="h6 mb-3">Datos de reparación</h5>
+        <div class="table-wrapper">
+          <table class="table table-striped table-bordered">
+            <tbody>
+              <tr>
+                <th>Técnico responsable</th>
+                <td><strong>{{ $tecnico }}</strong></td>
+              </tr>
+              <tr>
+                <th>Costo de materiales</th>
+                <td><strong>{{ $precioMateriales }} $</strong></td>
+              </tr>
+              <tr>
+                <th>Costo de mano de obra</th>
+                <td><strong>{{ $precioObra }} $</strong></td>
+              </tr>
+              <tr>
+                <th>Total a pagar</th>
+                <td><strong>{{ $monto }} $</strong></td>
+              </tr>
+              <tr>
+                <th>Garantía</th>
+                <td><strong>{{ $garantia }}</strong></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       

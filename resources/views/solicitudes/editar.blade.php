@@ -97,6 +97,39 @@
 
           <input type="hidden" name="codigo_buscar" value="{{ $solicitud?->codigo_solicitud }}">
 
+          @if (is_null($solicitud?->precio_material) === false)
+
+          <hr>
+
+          <h5 class="h6 mb-3">Datos de reparación</h5>
+          
+          <div class="col-12 col-lg-6 mb-3">
+            <label for="precio_material" class="form-label">Precio de materiales</label>
+            <input type="number" class="form-control" placeholder="Ingresa el precio de los materiales" name="precio_material" id="precio_material" value="{{ $solicitud?->precio_material}}" required="true">
+          </div>
+          @endif
+
+          @if (is_null($solicitud?->precio_obra) === false)
+          <div class="col-12 col-lg-6 mb-3">
+            <label for="precio_obra" class="form-label">Precio de mano de obra</label>
+            <input type="number" class="form-control" placeholder="Ingresa el precio de la mano de obra" name="precio_obra" id="precio_obra" value="{{ $solicitud?->precio_obra}}" required="true">
+          </div>
+          @endif
+
+          @if (is_null($solicitud?->garantia) === false)
+          <div class="col-12 col-lg-6 mb-3">
+            <label for="garantia" class="form-label">Garantía</label>
+            <input type="text" class="form-control" placeholder="Garantía" name="garantia" id="garantia" value="{{ $solicitud?->garantia}}" required="true">
+          </div>
+          @endif
+
+          @if (is_null($solicitud?->monto) === false)
+          <div class="col-12 col-lg-6 mb-3">
+            <label for="monto" class="form-label">Monto total</label>
+            <input type="number" class="form-control" placeholder="Monto total a pagar" name="monto" id="monto" value="{{ $solicitud?->monto}}" required="true">
+          </div>
+          @endif
+
           <div>
             <button type="submit" class="btn btn-primary" id="boton-enviar-formulario">Editar</button>
           </div>
@@ -106,53 +139,30 @@
     </div>
 
     <script>
-      window.addEventListener('DOMContentLoaded', () => {
-        const $inputBuscarCliente = document.querySelector('#buscar-codigo');
-        const haySolicitud = {{ $solicitud === null ? 'false' : 'true' }};
-        const $botonEnviarFormulario = document.querySelector('#boton-enviar-formulario');
+      @if (is_null($solicitud?->monto) === false)
+      
+      const $monto = document.getElementById('monto');
+      const $precioMateriales = document.getElementById('precio_material');
+      const $precioObra = document.getElementById('precio_obra');
 
-        $botonEnviarFormulario.disabled = !haySolicitud;
-
-        $inputBuscarCliente.addEventListener('change', e => {
-          const codigo = e.target.value;
-          const $enlace = document.querySelector('#redireccion-codigo-solicitud');
-          if (!$enlace) {
-            return;
-          }
-
-          if (!codigo) {
-            $enlace.setAttribute('href', '#');
-            return;
-          }
-
-          $enlace.setAttribute('href', `/editar/solicitud/${codigo}`);
-        });
-
-        $inputBuscarCliente.addEventListener('keyup', e => {
-          const codigo = e.target.value;
-          const $enlace = document.querySelector('#redireccion-codigo-solicitud');
-          if (!$enlace) {
-            return;
-          }
-
-          if (!codigo) {
-            $enlace.setAttribute('href', '#');
-            return;
-          }
-
-          $enlace.setAttribute('href', `/editar/solicitud/${codigo}`);
-        });
-
-        document.querySelector('#form-buscar-solicitud').addEventListener('submit', e => {
-          e.preventDefault();
-          const $enlace = document.querySelector('#redireccion-codigo-solicitud');
-          if (!$enlace) {
-            return;
-          }
-
-          $enlace.click();
-        });
+      $precioMateriales.addEventListener('change', e => {
+        $monto.value = `${Number($precioMateriales.value) + Number($precioObra.value)}`;
       });
+
+      $precioMateriales.addEventListener('keyup', e => {
+        $monto.value = `${Number($precioMateriales.value) + Number($precioObra.value)}`;
+      });
+
+      $precioObra.addEventListener('change', e => {
+        $monto.value = `${Number($precioMateriales.value) + Number($precioObra.value)}`;
+      });
+
+      $precioObra.addEventListener('keyup', e => {
+        $monto.value = `${Number($precioMateriales.value) + Number($precioObra.value)}`;
+      });
+
+      @endif
+
     </script>
 
     @if(session()->get('type') !== null && session()->get('mensaje') !== null)
