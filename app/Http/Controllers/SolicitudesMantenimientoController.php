@@ -384,7 +384,7 @@ class SolicitudesMantenimientoController extends Controller
 
   public function generarReporteEntradaView(Request $request)
   {
-    $data = $request->all();
+    $datos = $request->all();
     return view('solicitudes.reporte_entrada')->with([
       'cliente' => $datos['cliente'],
       'correo' => $datos['correo'],
