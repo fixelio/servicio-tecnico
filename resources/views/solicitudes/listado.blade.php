@@ -153,6 +153,7 @@
     @if(count($links) > 0)
 
       <div class="card card-body border-0 shadow table-wrapper table-responsive mb-5 pb-5" style="padding-bottom: 8rem">
+
         <table class="table table-hover">
           <thead>
             <tr>
@@ -565,12 +566,12 @@
     }
 
     const ESTADO_TO_BG = {
-      'ingresado': 'danger',
-      'presupuestado': 'warning',
-      'en reparacion': 'info',
-      'derivado': 'primary',
-      'entregado': 'success',
-      'listo': 'success',
+      'ingresado': 'ingresado',
+      'presupuestado': 'presupuestado',
+      'en reparacion': 'enreparacion',
+      'derivado': 'derivado',
+      'entregado': 'entregado',
+      'listo': 'listo',
     }
 
     const element = elt('tr', { scope: 'row', id: `solicitud-${data.solicitud.codigo}`, className: 'text-nowrap' },
@@ -580,7 +581,7 @@
       elt('td', { className: "px-2 py-3" }, data.solicitud.articulo),
       elt('td', { className: "px-2 py-3" }, 
         elt('span', {
-          className: `badge bg-${ESTADO_TO_BG[data.solicitud.estado]}`
+          className: `badge ${ESTADO_TO_BG[data.solicitud.estado]}`
         }, ESTADO[data.solicitud.estado])),
       $acciones
     );

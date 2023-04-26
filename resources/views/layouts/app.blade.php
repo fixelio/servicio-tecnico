@@ -61,8 +61,48 @@ left: auto;
 display: block;
 }
 
+.badge {
+  padding: 5px 10px !important;
+}
+
 .required {
   color: red;
+}
+
+/* amarillo */
+.presupuestado {
+  background: #ffd600;
+  color: white;
+}
+
+/* rojo */
+.enreparacion {
+  background: #d32f2f;
+  color: #fafafa;
+}
+
+/* naranja */
+.derivado {
+  background: #ef6c00;
+  color: #fafafa;
+}
+
+/* azul */
+.entregado {
+  background: #3949ab;
+  color: #fafafa;
+}
+
+/* verde */
+.listo {
+  background: #4caf50;
+  color: #fafafa;
+}
+
+/* negro */
+.ingresado {
+  background: #212121;
+  color: #fafafa;
 }
 </style>
 <body>

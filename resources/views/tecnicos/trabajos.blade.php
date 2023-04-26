@@ -139,12 +139,12 @@
 
   function FilaTrabajo(trabajo) {
     const ESTADO_TO_BG = {
-      'ingresado': 'danger',
-      'presupuestado': 'warning',
-      'en reparacion': 'info',
-      'derivado': 'primary',
-      'entregado': 'success',
-      'listo': 'success',
+      'ingresado': 'ingresado',
+      'presupuestado': 'presupuestado',
+      'en reparacion': 'enreparacion',
+      'derivado': 'derivado',
+      'entregado': 'entregado',
+      'listo': 'listo',
     }
 
     return elt('tr', { scope: 'row', className: 'text-nowrap' },
@@ -154,7 +154,7 @@
       elt('td', { className: 'px-2 py-3 text-nowrap' }, trabajo.modelo),
       elt('td', { className: 'px-2 py-3 text-nowrap' }, trabajo.fecha),
       elt('td', { className: 'px-2 py-3 text-nowrap' },
-        elt('span', { className: `badge bg-${ESTADO_TO_BG[trabajo.estado]}` }, trabajo.estado)
+        elt('span', { className: `badge ${ESTADO_TO_BG[trabajo.estado]}` }, trabajo.estado)
       )
     );
   }

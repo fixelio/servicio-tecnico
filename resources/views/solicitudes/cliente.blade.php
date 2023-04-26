@@ -160,17 +160,17 @@
                 <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->fecha_solicitud }}</td>
                 <td class="px-2 py-3 text-nowrap">
                   @if($solicitudes[$i]->estado_solicitud === 'ingresado')
-                    <span class="badge bg-danger">Ingresado</span>
+                    <span class="badge ingresado">Ingresado</span>
                   @elseif($solicitudes[$i]->estado_solicitud === 'presupuestado')
-                    <span class="badge bg-warning">Presupuestado</span>
+                    <span class="badge presupuestado">Presupuestado</span>
                   @elseif($solicitudes[$i]->estado_solicitud === 'en reparacion')
-                    <span class="badge bg-info">En Reparación</span>
+                    <span class="badge enreparacion">En Reparación</span>
                   @elseif($solicitudes[$i]->estado_solicitud === 'derivado')
-                    <span class="badge bg-primary">Derivado</span>
+                    <span class="badge derivado">Derivado</span>
                   @elseif($solicitudes[$i]->estado_solicitud === 'entregado')
-                    <span class="badge bg-success">Entregado</span>
+                    <span class="badge entregado">Entregado</span>
                   @else
-                    <span class="badge text-bg-success">Listo</span>
+                    <span class="badge listo">Listo</span>
                   @endif
                 </td>
                 <td class="px-2 py-3 text-nowrap">
@@ -281,12 +281,12 @@
           }
 
           const ESTADO_TO_BG = {
-            'ingresado': 'danger',
-            'presupuestado': 'warning',
-            'en reparacion': 'info',
-            'derivado': 'primary',
-            'entregado': 'success',
-            'listo': 'success',
+            'ingresado': 'ingresado',
+            'presupuestado': 'presupuestado',
+            'en reparacion': 'enreparacion',
+            'derivado': 'derivado',
+            'entregado': 'entregado',
+            'listo': 'listo',
           }
 
           ordenadas.forEach((orden, index) => {
