@@ -210,6 +210,19 @@
                   </div>
                 </div>
               </th>
+              <th class="border-gray-200">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Cotizada
+                  <div>
+                    <button class="btn-actions" id="cotizada-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="cotizada-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
               <th class="border-gray-200">Acciones</th>
             </tr>
           </thead>
@@ -319,6 +332,7 @@
         diagnostico: solicitud.descripcion_problema,
         reparacion: solicitud.descripcion_solucion,
         notas: solicitud.observaciones,
+        cotizada: solicitud.monto ? 'Si' : 'No',
       },
       cliente: {
         nombre: `${solicitud.nombre} ${solicitud.apellido || ''}`,
@@ -553,6 +567,7 @@
         elt('span', {
           className: `badge ${ESTADO_TO_BG[data.solicitud.estado]}`
         }, ESTADO[data.solicitud.estado])),
+      elt('td', { className: 'px-2 py-3 text-center' }, data.solicitud.cotizada),
       $acciones
     );
 
