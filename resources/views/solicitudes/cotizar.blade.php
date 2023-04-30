@@ -37,7 +37,7 @@
           
           <div class="col-12 col-sm-6 mb-3">
             <label for="precio_material" class="form-label">Precio de materiales <span class="required">*</span></label>
-            <input type="number" class="form-control" placeholder="Ingresa el precio de los materiales" name="precio_material" id="precio_material" step="2" value="{{ $solicitud?->precio_material}}" required="true">
+            <input type="number" class="form-control" placeholder="Ingresa el precio de los materiales" name="precio_material" id="precio_material" step="0.01" value="{{ $solicitud?->precio_material}}" required="true">
           </div>
 
           <div class="col-12 col-sm-6 mb-3">

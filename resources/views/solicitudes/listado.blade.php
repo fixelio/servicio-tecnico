@@ -97,8 +97,8 @@
             <li><button class="dropdown-item filtrar-estado" id="filtro-presupuestado">Presupuestado</button></li>
             <li><button class="dropdown-item filtrar-estado" id="filtro-en reparacion">En Reparación</button></li>
             <li><button class="dropdown-item filtrar-estado" id="filtro-derivado">Derivado</button></li>
-            <li><button class="dropdown-item filtrar-estado" id="filtro-entregado">Entregado</button></li>
             <li><button class="dropdown-item filtrar-estado" id="filtro-listo">Listo</button></li>
+            <li><button class="dropdown-item filtrar-estado" id="filtro-entregado">Entregado</button></li>
           </ul>
         </div>
 
