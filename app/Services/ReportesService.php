@@ -9,7 +9,7 @@ use App\Models\SolicitudesMantenimiento;
 class ReportesService {
 	public function entrada($info)
 	{
-    $fechaSolicitud = date('Y-m-d H:i:s');
+    $fechaSolicitud = date('Y/m/d H:i:s');
 
     $data = [
       'ordenServicio' => $info['ordenServicio'],
@@ -31,7 +31,7 @@ class ReportesService {
 
   public function salida($info)
   {
-    $fechaSolicitud = date('Y-m-d H:i:s');
+    $fechaSolicitud = date('Y/m/d H:i:s');
 
     $data = [
       'ordenServicio' => $info['ordenServicio'],

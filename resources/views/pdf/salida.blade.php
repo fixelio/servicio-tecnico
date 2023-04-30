@@ -5,20 +5,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="PDF de entrada de una solicitud">
 	<meta name="keywords" content="solicitud de mantenimiento, reporte">
-	<title>Solicitud de entrada</title>
+	<title>Solicitud de Salida</title>
 </head>
 <style>
 * {
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: medium;
+  font-family: Inter, sans-serif;
+  font-size: small;
 }
 
 td {
-  padding: 8px 10px;
+  padding: 6px 7px;
+}
+
+.bg-gray {
+  background: #e0e0e0;
 }
 
 .bordered td {
-  border-color: #959594;
+  border-color: #e0e0e0;
   border-style: solid;
   border-width: 1px;
 }
@@ -87,6 +91,18 @@ table {
   width: 1%;
   white-space: nowrap;
 }
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-5 {
+  margin-bottom: 2rem;
+}
 </style>
 <body>
   <div class="divTable w-100 mb-5">
@@ -95,7 +111,7 @@ table {
        <div class="divTableCell w-33">
          <table class="bordered w-100">
            <tr>
-             <td><b>Orden de Servicio: {{ $ordenServicio }}</b></td>
+             <td class="bg-gray"><b>Orden de Servicio: {{ $ordenServicio }}</b></td>
            </tr>
            <tr>
              <td><b>Fecha:</b> {{ $fechaSolicitud }}</td>
@@ -105,7 +121,7 @@ table {
        <div class="divTableCell w-67">
          <table class="w-100">
            <tr>
-             <td class="text-center">25075822</td>
+             <td class="text-center bg-gray">25075822</td>
            </tr>
            <tr>
              <td class="text-center">megabitsoluciones@gmail.com</td>
@@ -116,58 +132,58 @@ table {
    </div> 
   </div>
 
-  <div class="divTable w-100">
+  <div class="divTable w-100 mb-5">
    <div class="divTableBody">
      <div class="divTableRow">
        <div class="divTableCell" style="width: 17.1%">
          <table class="bordered w-100">
            <tr>
-             <td><b>Cliente</b></td>
+             <td class="bg-gray">Cliente</td>
            </tr>
            <tr>
-             <td><b>Artículo</b></td>
+             <td>Artículo</td>
            </tr>
            <tr>
-             <td><b>Modelo</b></td>
+             <td class="bg-gray">Modelo</td>
            </tr>
          </table>
        </div>
        <div class="divTableCell w-50">
          <table class="bordered w-100">
            <tr>
-             <td>{{ $cliente }}</td>
+             <td class="bg-gray"><b>{{ $cliente }}</b></td>
            </tr>
            <tr>
-             <td>{{ $articulo }}</td>
+             <td><b>{{ $articulo }}</b></td>
            </tr>
            <tr>
-             <td>{{ $modelo }}</td>
+             <td class="bg-gray"><b>{{ $modelo }}</b></td>
            </tr>
          </table>
        </div>
        <div class="divTableCell">
          <table class="bordered">
            <tr>
-             <td><b>Teléfono</b></td>
+             <td class="bg-gray">Teléfono</td>
            </tr>
            <tr>
-             <td><b>Marca</b></td>
+             <td>Marca</td>
            </tr>
            <tr>
-             <td><b>Serie</b></td>
+             <td class="bg-gray">Serie</td>
            </tr>
          </table>
        </div>
        <div class="divTableCell w-50">
          <table class="bordered w-100">
            <tr>
-             <td>{{ $telefono }}</td>
+             <td class="bg-gray"><b>{{ $telefono }}</b></td>
            </tr>
            <tr>
-             <td>{{ $marca }}</td>
+             <td><b>{{ $marca }}</b></td>
            </tr>
            <tr>
-             <td>{{ $serie }}</td>
+             <td class="bg-gray"><b>{{ $serie }}</b></td>
            </tr>
          </table>
        </div>
@@ -181,16 +197,20 @@ table {
        <div class="divTableCell w-100">
          <table class="bordered w-100" style="page-break-inside: avoid !important;">
             <tr>
-              <td class="td-inline"><b>Diagnóstico</b></td>
-              <td class="w-100">{{ $diagnostico }}</td>
+              <td class="td-inline bg-gray">Diagnóstico</td>
+              <td class="w-100 bg-gray"><b>{{ $diagnostico }}</b></td>
             </tr>
             <tr>
-              <td class="td-inline"><b>Reparación</b></td>
-              <td class="w-100">{{ $reparacion }}</td>
+              <td class="td-inline">Reparación</td>
+              <td class="w-100">
+                @foreach(preg_split('/\r\n|\r|\n/', $reparacion) as $r)
+                  <b>{{ $r }}</b><br>
+                @endforeach
+              </td>
             </tr>
             <tr>
-              <td class="td-inline"><b>Garantía</b></td>
-              <td class="w-100">{{ $garantia }}</td>
+              <td class="td-inline bg-gray">Garantía</td>
+              <td class="w-100 bg-gray"><b>{{ $garantia }}</b></td>
             </tr>
          </table>
        </div>
@@ -204,14 +224,14 @@ table {
         <div class="divTableCell w-33">
           <table class="bordered w-100">
             <tr>
-              <td><b style="font-size: large; font-style: italic;">Total a Pagar: ${{ $monto }}</b></td>
+              <td class="bg-gray"><b style="font-size: large; font-style: italic;">Total a Pagar: ${{ $monto }}</b></td>
             </tr>
           </table>
         </div>
         <div class="divTableCell w-67">
           <table class="w-100">
             <tr>
-              <td class="text-center">Técnico Responsable: {{ $tecnico }}</td>
+              <td class="text-center bg-gray">Técnico Responsable: <b>{{ $tecnico }}</b></td>
             </tr>
           </table>
         </div>

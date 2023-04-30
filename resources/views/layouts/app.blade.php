@@ -69,6 +69,12 @@ display: block;
   color: red;
 }
 
+/* negro */
+.ingresado {
+  background: #212121;
+  color: #fafafa;
+}
+
 /* amarillo */
 .presupuestado {
   background: #ffd600;
@@ -99,11 +105,6 @@ display: block;
   color: #fafafa;
 }
 
-/* negro */
-.ingresado {
-  background: #212121;
-  color: #fafafa;
-}
 </style>
 <body>
 

@@ -25,6 +25,17 @@
         <div class="card card-body border-0 shadow mb-4">
           <form action="{{ route('solicitud.put') }}" method="POST" class="row g-3 w-100">
           @csrf
+          <div class="class col-12 mb-3">
+            <label for="estado_solicitud">Estado <span class="required">*</span></label>
+            <select class="form-select" name="estado_solicitud" id="estado_solicitud" value="{{ $solicitud !== null ? $solicitud->estado_solicitud : '' }}" required="">
+              <option value="ingresado" {{ $solicitud->estado_solicitud === 'ingresado' ? 'selected="selected"' : '' }}>Ingresado</option>
+              <option value="presupuestado" {{ $solicitud->estado_solicitud === 'presupuestado' ? 'selected="selected"' : '' }}>Presupuestado</option>
+              <option value="en reparacion" {{ $solicitud->estado_solicitud === 'en reparacion' ? 'selected="selected"' : '' }}>En Reparación</option>
+              <option value="derivado" {{ $solicitud->estado_solicitud === 'derivado' ? 'selected="selected"' : '' }}>Derivado</option>
+              <option value="listo" {{ $solicitud->estado_solicitud === 'listo' ? 'selected="selected"' : '' }}>Listo</option>
+              <option value="entregado" {{ $solicitud->estado_solicitud === 'entregado' ? 'selected="selected"' : '' }}>Entregado</option>
+            </select>
+          </div>
           <div class="col-12 mb-3">
             <label for="articulo" class="form-label">Artículo <span class="required">*</span></label>
             <input
@@ -36,8 +47,8 @@
               value="{{ $solicitud !== null ? $solicitud?->articulo : '' }}"
             >
           </div>
-          <div class="col-12 col-lg-6 mb-3">
-            <label for="num_serie" class="form-label">Número de Serie <span class="required">*</span></label>
+          <div class="col-12 col-sm-6 mb-3">
+            <label for="num_serie" class="form-label">Número de Serie</label>
             <input
               type="text"
               id="num_serie"
@@ -47,8 +58,8 @@
               value="{{ $solicitud !== null ? $solicitud?->num_serie : '' }}"
             >
           </div>
-          <div class="col-12 col-lg-6 mb-3">
-            <label for="marca" class="form-label">Marca <span class="required">*</span></label>
+          <div class="col-12 col-sm-6 mb-3">
+            <label for="marca" class="form-label">Marca</label>
             <input
               type="text"
               id="marca"
@@ -58,8 +69,8 @@
               value="{{ $solicitud !== null ? $solicitud?->marca : '' }}"
             >
           </div>
-          <div class="col-12 col-lg-6 mb-3">
-            <label for="modelo" class="form-label">Modelo <span class="required">*</span></label>
+          <div class="col-12 col-sm-6 mb-3">
+            <label for="modelo" class="form-label">Modelo</label>
             <input
               type="text"
               id="modelo"
@@ -69,7 +80,7 @@
               value="{{ $solicitud !== null ? $solicitud?->modelo : '' }}"
             >
           </div>
-          <div class="col-12 col-lg-6 mb-3">
+          <div class="col-12 col-sm-6 mb-3">
             <label for="fecha_compra" class="form-label">Fecha de compra <span class="required">*</span></label>
             <input
               type="date"
@@ -90,41 +101,49 @@
 
           <div class="col-12 mb-3">
             <label for="observaciones" class="form-label">
-              Observaciones <span class="required">*</span>
+              Observaciones
             </label>
             <textarea name="observaciones" id="observaciones" class="form-control" rows="4" value="{{ $solicitud !== null ? $solicitud?->observaciones : '' }}">{{ $solicitud !== null ? $solicitud?->observaciones : '' }}</textarea>
           </div>
 
           <input type="hidden" name="codigo_buscar" value="{{ $solicitud?->codigo_solicitud }}">
 
-          @if (is_null($solicitud?->precio_material) === false)
+          @if (is_null($solicitud->descripcion_solucion) === false)
 
           <hr>
 
           <h5 class="h6 mb-3">Datos de reparación</h5>
+
+          <div class="col-12 mb-3">
+            <label for="descripcion_solucion" class="form-label">Descripción de la solución <span class="required">*</span></label>
+            <textarea id="descripcion_solucion" name="descripcion_solucion" class="form-control" rows="4" required="true">{{ $solicitud?->descripcion_solucion }}</textarea>
+          </div>
+
+          @endif
           
-          <div class="col-12 col-lg-6 mb-3">
+          @if (is_null($solicitud?->precio_material) === false)
+          <div class="col-12 col-sm-6 mb-3">
             <label for="precio_material" class="form-label">Precio de materiales</label>
             <input type="number" class="form-control" placeholder="Ingresa el precio de los materiales" name="precio_material" id="precio_material" value="{{ $solicitud?->precio_material}}" required="true">
           </div>
           @endif
 
           @if (is_null($solicitud?->precio_obra) === false)
-          <div class="col-12 col-lg-6 mb-3">
+          <div class="col-12 col-sm-6 mb-3">
             <label for="precio_obra" class="form-label">Precio de mano de obra</label>
             <input type="number" class="form-control" placeholder="Ingresa el precio de la mano de obra" name="precio_obra" id="precio_obra" value="{{ $solicitud?->precio_obra}}" required="true">
           </div>
           @endif
 
           @if (is_null($solicitud?->garantia) === false)
-          <div class="col-12 col-lg-6 mb-3">
+          <div class="col-12 col-sm-6 mb-3">
             <label for="garantia" class="form-label">Garantía</label>
             <input type="text" class="form-control" placeholder="Garantía" name="garantia" id="garantia" value="{{ $solicitud?->garantia}}" required="true">
           </div>
           @endif
 
           @if (is_null($solicitud?->monto) === false)
-          <div class="col-12 col-lg-6 mb-3">
+          <div class="col-12 col-sm-6 mb-3">
             <label for="monto" class="form-label">Monto total</label>
             <input type="number" class="form-control" placeholder="Monto total a pagar" name="monto" id="monto" value="{{ $solicitud?->monto}}" required="true">
           </div>

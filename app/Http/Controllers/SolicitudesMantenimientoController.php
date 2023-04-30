@@ -145,7 +145,7 @@ class SolicitudesMantenimientoController extends Controller
         ->join('clientes', 'solicitudes_mantenimiento.id_cliente', '=', 'clientes.id_cliente')
         ->leftJoin('historial_mantenimiento', 'solicitudes_mantenimiento.id_solicitud', '=', 'historial_mantenimiento.id_solicitud')
         ->leftJoin('facturas', 'historial_mantenimiento.id_historial', '=', 'facturas.id_historial')
-        ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*', 'facturas.*', 'historial_mantenimiento.garantia')
+        ->select('solicitudes_mantenimiento.*', 'equipos.*', 'clientes.*', 'facturas.*', 'historial_mantenimiento.*')
         ->where('solicitudes_mantenimiento.codigo_solicitud', '=', $codigo)
         ->where('solicitudes_mantenimiento.estado_solicitud', '!=', 'terminado')
         ->first();
@@ -159,7 +159,8 @@ class SolicitudesMantenimientoController extends Controller
   public function crear(Request $request) {
     $request->validate([
       'articulo' => 'required',
-      'modelo' => 'required',
+      'fecha_compra' => 'required',
+      'descripcion_problema' => 'required',
       'correo' => 'required',
       'correo_tecnico' => 'required',
     ]);
@@ -182,7 +183,7 @@ class SolicitudesMantenimientoController extends Controller
 
     $codigo = str_pad("".$cantidad, 3, "0", STR_PAD_LEFT);
 
-    $codigo_solicitud = date('Y')."-".$codigo.date('m').date('d');
+    $codigo_solicitud = date('Y').date('m').date('d')."-".$codigo;
     $solicitud = SolicitudesMantenimiento::create([
       'id_equipo' => $equipo['id_equipo'],
       'id_cliente' => $cliente['id_cliente'],
@@ -199,11 +200,11 @@ class SolicitudesMantenimientoController extends Controller
       'correo' => $cliente['correo_electronico'],
       'telefono' => $cliente['telefono'],
       'articulo' => $equipo['articulo'],
-      'marca' => $equipo['marca'],
-      'modelo' => $equipo['modelo'],
-      'serie' => $equipo['num_serie'],
+      'marca' => is_null($equipo?->marca) ? '***' : $equipo->marca,
+      'modelo' =>  is_null($equipo?->modelo) ? '***' : $equipo['modelo'],
+      'serie' => is_null($equipo?->num_serie) ? '***' : $equipo['num_serie'],
       'diagnostico' => $solicitud['descripcion_problema'],
-      'notas' => $solicitud['observaciones'],
+      'notas' => is_null($solicitud?->observaciones) ? '' : $solicitud->observaciones,
       'tecnico' => $tecnico['nombre']." ".$tecnico['apellido'],
       'ordenServicio' => $solicitud['id_solicitud'],
       'fecha' => date('d/m/Y H:i:s'),
@@ -214,17 +215,15 @@ class SolicitudesMantenimientoController extends Controller
   public function editar(Request $request)
   {
     $request->validate([
-      'articulo' => 'required',
-      'num_serie' => 'required',
-      'marca' => 'required',
-      'modelo' => 'required',
-      'fecha_compra' => 'required',
       'codigo_buscar' => 'required',
+      'articulo' => 'required',
+      'fecha_compra' => 'required',
+      'descripcion_problema' => 'required',
+      'estado_solicitud' => 'required',
     ]);
 
     $datos = $request->all();
     $solicitud = SolicitudesMantenimiento::where('codigo_solicitud', $datos['codigo_buscar'])
-      ->where('estado_solicitud', '!=', 'terminado')
       ->firstOrFail();
 
     if ($solicitud->codigo_solicitud !== $datos['codigo_buscar']) {
@@ -236,16 +235,17 @@ class SolicitudesMantenimientoController extends Controller
 
     SolicitudesMantenimiento::find($solicitud['id_solicitud'])->update([
       'descripcion_problema' => $datos['descripcion_problema'],
-      'observaciones' => $datos['observaciones'],
+      'observaciones' => $request->input('observaciones') !== null ? $request->input('observaciones') : null,
+      'estado_solicitud' => $datos['estado_solicitud'],
     ]);
 
     $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
 
     Equipos::find($equipo['id_equipo'])->update([
       'articulo' => $datos['articulo'],
-      'num_serie' => $datos['num_serie'],
-      'marca' => $datos['marca'],
-      'modelo' => $datos['modelo'],
+      'num_serie' => isset($datos?->num_serie) ? $datos->num_serie : null,
+      'marca' => isset($datos?->marca) ? $datos->marca : null,
+      'modelo' => isset($datos?->modelo) ? $datos->modelo : null,
       'fecha_compra' => $datos['fecha_compra'],
     ]);
 
@@ -255,6 +255,7 @@ class SolicitudesMantenimientoController extends Controller
 
       HistorialMantenimiento::find($historico['id_historial'])->update([
         'garantia' => $datos['garantia'],
+        'descripcion_solucion' => $datos['descripcion_solucion'],
       ]);
 
       $factura = Facturas::where('id_historial', $historico['id_historial'])->firstOrFail();
@@ -277,10 +278,15 @@ class SolicitudesMantenimientoController extends Controller
 
     $data = $request->all();
 
-    $solicitud = SolicitudesMantenimiento::where('codigo_solicitud', $data['codigo_solicitud'])->firstOrFail();
+    $solicitud = SolicitudesMantenimiento
+      ::where('codigo_solicitud', $data['codigo_solicitud'])
+      ->firstOrFail();
+
     SolicitudesMantenimiento::find($solicitud['id_solicitud'])->update([
       'estado_solicitud' => $data['estado_solicitud']
     ]);
+
+    /*
 
     if ($data['estado_solicitud'] === 'entregado') {
       $cliente = Clientes::where('id_cliente', $solicitud['id_cliente'])->firstOrFail();
@@ -305,6 +311,7 @@ class SolicitudesMantenimientoController extends Controller
       $factura = $this->crearFactura($facturaOptions);
 
       //return $this->generarReporteSalida($solicitud, $historial, $factura, $tecnico);
+      
       return redirect()->route('pagina-generar-reporte-salida', [
         'cliente' => $cliente['nombre']." ".$cliente['apellido'],
         'correo' => $cliente['correo_electronico'],
@@ -330,9 +337,97 @@ class SolicitudesMantenimientoController extends Controller
       $this->asignarTecnicoResponsable($solicitud['id_solicitud'], $tecnicoResponsable['id_tecnico']);
       $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
       return $this->generarReporteEntrada($solicitud, $equipo, $tecnicoResponsable);
-    }
+    }*/
 
     return redirect()->route('listado-solicitudes');
+  }
+
+  public function cotizacionView(Request $request, $codigo = null)
+  {
+    $codigo = $request->route('codigo');
+    $solicitud = null;
+
+    if ($codigo !== null) {
+      $solicitud = DB::table('solicitudes_mantenimiento')
+        ->join('historial_mantenimiento', 'solicitudes_mantenimiento.id_solicitud', '=', 'historial_mantenimiento.id_solicitud')
+        ->join('facturas', 'historial_mantenimiento.id_historial', '=', 'facturas.id_historial')
+        ->select('facturas.*', 'historial_mantenimiento.*')
+        ->where('solicitudes_mantenimiento.codigo_solicitud', '=', $codigo)
+        ->first();
+    }
+
+    return view('solicitudes.cotizar', [
+      'solicitud' => $solicitud,
+      'codigo' => $codigo,
+    ]);
+  }
+
+  public function crearCotizacion(Request $request)
+  {
+    $request->validate([
+      'precio_material' => 'required',
+      'precio_obra' => 'required',
+      'garantia' => 'required',
+      'monto' => 'required',
+      'descripcion_solucion' => 'required',
+      'codigo_solicitud' => 'required',
+    ]);
+
+    $datos = $request->all();
+
+    $solicitud = SolicitudesMantenimiento::where('codigo_solicitud', $datos['codigo_solicitud'])
+      ->firstOrFail();
+
+    $solicitudTecnico = $this->solicitudesTecnicosService->findByIdSolicitud($solicitud['id_solicitud']);
+
+    $historial = $this->crearHistorial($solicitud, [
+      'id_tecnico' => $solicitudTecnico['id_tecnico'],
+      'descripcion_solucion' => $datos['descripcion_solucion'],
+      'garantia' => $datos['garantia'],
+    ]);
+
+    $facturaOptions = [
+      'id_historial' => $historial['id_historial'],
+      'monto' => $datos['monto'],
+      'precio_material' => $datos['precio_material'],
+      'precio_obra' => $datos['precio_obra'],
+    ];
+
+    $this->crearFactura($facturaOptions);
+
+    return redirect('/solicitudes');
+  }
+
+  public function editarCotizacion(Request $request)
+  {
+    $request->validate([
+      'precio_material' => 'required',
+      'precio_obra' => 'required',
+      'garantia' => 'required',
+      'monto' => 'required',
+      'descripcion_solucion' => 'required',
+      'codigo_solicitud' => 'required',
+    ]);
+
+    $datos = $request->all();
+    $solicitud = SolicitudesMantenimiento::where('codigo_solicitud', $datos['codigo_solicitud'])
+      ->firstOrFail();
+
+    $historial = HistorialMantenimiento::where('id_solicitud', $solicitud['id_solicitud'])->firstOrFail();
+    $factura = Facturas::where('id_historial', $historial['id_historial'])->firstOrFail();
+
+    HistorialMantenimiento::find($historial['id_historial'])->update([
+      'descripcion_solucion' => $datos['descripcion_solucion'],
+      'garantia' => $datos['garantia'],
+    ]);
+
+    Facturas::find($factura['id_factura'])->update([
+      'precio_material' => $datos['precio_material'],
+      'precio_obra' => $datos['precio_obra'],
+      'monto' => $datos['monto'],
+    ]);
+
+    return redirect('/solicitudes');
   }
 
   private function crearHistorial($solicitud, $options)
@@ -430,17 +525,24 @@ class SolicitudesMantenimientoController extends Controller
       'cliente' => 'required',
       'telefono' => 'required',
       'articulo' => 'required',
-      'marca' => 'required',
-      'modelo' => 'required',
-      'serie' => 'required',
       'diagnostico' => 'required',
-      'notas' => 'required',
       'tecnico' => 'required',
       'ordenServicio' => 'required',
     ]);
 
     $data = $request->all();
-    $pdf = $this->reportesService->entrada($data);
+    $pdf = $this->reportesService->entrada([
+      'cliente' => $data['cliente'],
+      'telefono' => $data['telefono'],
+      'articulo' => $data['articulo'],
+      'marca' => isset($data['marca']) ? $data['marca'] : '***',
+      'modelo' => isset($data['modelo']) ? $data['modelo'] : '***',
+      'serie' => isset($data['serie']) ? $data['serie'] : '***',
+      'diagnostico' => $data['diagnostico'],
+      'notas' => isset($data['notas']) ? $data['notas'] : '',
+      'tecnico' => $data['tecnico'],
+      'ordenServicio' => $data['ordenServicio'],
+    ]);
     return $pdf;
   }
 

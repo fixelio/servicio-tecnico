@@ -34,6 +34,9 @@ Route::get('/editar/solicitud/{codigo?}', [SolicitudesMantenimientoController::c
 Route::get('/solicitud/detalles/{correo?}', [
 	SolicitudesMantenimientoController::class, 'detalles'
 ])->name('detalles-solicitud');
+Route::get('/cotizacion/orden/{codigo}', [
+	SolicitudesMantenimientoController::class, 'cotizacionView'
+])->name('cotizar');
 
 Route::get('/solicitud/reporte/entrada', [SolicitudesMantenimientoController::class, 'generarReporteEntradaView'])->name('pagina-generar-reporte-entrada');
 Route::get('/solicitud/estado', [SolicitudesMantenimientoController::class, 'generarReporteSalidaView'])->name('pagina-generar-reporte-salida');
@@ -49,6 +52,14 @@ Route::post('/solicitudes/reporte/entrada', [
 Route::post('/solicitudes/reporte/salida', [
 	SolicitudesMantenimientoController::class, 'generarReporteSalida'
 ])->name('generar-reporte-salida');
+
+Route::post('/registrar/cotizacion/orden', [
+	SolicitudesMantenimientoController::class, 'crearCotizacion',
+])->name('cotizar.post');
+
+Route::post('/editar/cotizacion/orden', [
+	SolicitudesMantenimientoController::class, 'editarCotizacion',
+])->name('cotizar.put');
 
 Route::get('/tecnicos', [TecnicosController::class, 'listadoView'])->name('listado-tecnicos');
 Route::get('/registrar/tecnico', [TecnicosController::class, 'registrarView'])->name('registrar-tecnico');

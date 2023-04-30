@@ -78,10 +78,11 @@
                 name="articulo"
                 class="form-control"
                 placeholder="Ingresa el nombre del artículo"
+                required
               >
             </div>
-            <div class="col-12 col-lg-6 mb-3">
-              <label for="num_serie" class="form-label">Número de Serie <span class="required">*</span></label>
+            <div class="col-12 col-sm-6 mb-3">
+              <label for="num_serie" class="form-label">Número de Serie</label>
               <input
                 type="text"
                 id="num_serie"
@@ -90,8 +91,8 @@
                 placeholder="Ingresa el número de serie"
               >
             </div>
-            <div class="col-12 col-lg-6 mb-3">
-              <label for="marca" class="form-label">Marca <span class="required">*</span></label>
+            <div class="col-12 col-sm-6 mb-3">
+              <label for="marca" class="form-label">Marca</label>
               <input
                 type="text"
                 id="marca"
@@ -100,19 +101,18 @@
                 placeholder="Ingresa la marca"
               >
             </div>
-            <div class="col-12 col-lg-6 mb-3">
-              <label for="modelo" class="form-label">Modelo <span class="required">*</span></label>
+            <div class="col-12 col-sm-6 mb-3">
+              <label for="modelo" class="form-label">Modelo</label>
               <input
                 type="text"
                 id="modelo"
                 name="modelo"
                 class="form-control"
                 placeholder="Ingresa el modelo"
-                required
               >
             </div>
             @csrf
-            <div class="col-12 col-lg-6 mb-3">
+            <div class="col-12 col-sm-6 mb-3">
               <label for="fecha_compra" class="form-label">Fecha de compra <span class="required">*</span></label>
               <input
                 type="date"
@@ -133,7 +133,7 @@
 
             <div class="col-12 mb-3">
               <label for="observaciones" class="form-label">
-                Observaciones <span class="required">*</span>
+                Observaciones
               </label>
               <textarea name="observaciones" id="observaciones" class="form-control" rows="4"></textarea>
             </div>

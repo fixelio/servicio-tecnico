@@ -25,7 +25,7 @@
         <div class="card card-body border-0 shadow mb-4">
           <form action="{{ route('cliente.post') }}" method="POST" class="row g-3 w-100">
             @csrf
-            <div class="col-12 col-lg-6 mb-3">
+            <div class="col-12 col-sm-6 mb-3">
               <label for="num_serie" class="form-label">Nombre <span class="required">*</span></label>
               <input
                 type="text"
@@ -36,18 +36,17 @@
                 required
               >
             </div>
-            <div class="col-12 col-lg-6 mb-3">
-              <label for="num_serie" class="form-label">Apellido <span class="required">*</span></label>
+            <div class="col-12 col-sm-6 mb-3">
+              <label for="num_serie" class="form-label">Apellido</label>
               <input
                 type="text"
                 id="apellido"
                 name="apellido"
                 class="form-control"
                 placeholder="Ingresa el apellido"
-                required
               >
             </div>
-            <div class="col-12 col-lg-6 mb-3">
+            <div class="col-12 col-sm-6 mb-3">
               <label for="num_serie" class="form-label">Correo <span class="required">*</span></label>
               <input
                 type="email"
@@ -58,7 +57,7 @@
                 required
               >
             </div>
-            <div class="col-12 col-lg-6 mb-3">
+            <div class="col-12 col-sm-6 mb-3">
               <label for="num_serie" class="form-label">Teléfono <span class="required">*</span></label>
               <input
                 type="text"
@@ -76,18 +75,32 @@
         </div>
       </div>
     </div>
-    @if(session()->get('type') !== null && session()->get('mensaje') !== null)
+    
+    @if(session()->get('error') !== null && session()->get('message') !== null)
 
     <script>
-      const toastElement = document.querySelector('.toast');
-      const content = document.querySelector('.toast-body');
-      const toast = new bootstrap.Toast(toastElement);
-
-      content.textContent = "{{ session()->get('type') === 'exito' ? 'Mensaje' : 'Error' }}: {{ session()->get('mensaje') }}";
-
-      toast.show();
-
-      setTimeout(() => toast.hide(), 5000);
+      const notyf = new Notyf({
+        position: {
+            x: 'right',
+            y: 'top',
+        },
+        types: [
+            {
+                type: 'danger',
+                background: 'red',
+                icon: {
+                    className: 'fas fa-info-circle',
+                    tagName: 'span',
+                    color: '#fff'
+                },
+                dismissible: false
+            }
+        ]
+    });
+    notyf.open({
+        type: 'danger',
+        message: '{{ session()->get('message') }}'
+    });
     </script>
 
     @endif

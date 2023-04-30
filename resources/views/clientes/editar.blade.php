@@ -38,7 +38,7 @@
               >
             </div>
             <div class="col-12 col-lg-6 mb-3">
-              <label for="num_serie" class="form-label">Apellido <span class="required">*</span></label>
+              <label for="num_serie" class="form-label">Apellido</label>
               <input
                 type="text"
                 id="apellido"
@@ -46,7 +46,6 @@
                 class="form-control"
                 placeholder="Ingresa el apellido"
                 value="{{ $cliente !== false ? $cliente?->apellido : '' }}"
-                required
               >
             </div>
             <div class="col-12 col-lg-6 mb-3">
@@ -81,6 +80,35 @@
         </div>
       </div>
     </div>
+
+    @if(session()->get('error') !== null && session()->get('message') !== null)
+
+    <script>
+      const notyf = new Notyf({
+        position: {
+            x: 'right',
+            y: 'top',
+        },
+        types: [
+            {
+                type: 'danger',
+                background: 'red',
+                icon: {
+                    className: 'fas fa-info-circle',
+                    tagName: 'span',
+                    color: '#fff'
+                },
+                dismissible: false
+            }
+        ]
+    });
+    notyf.open({
+        type: 'danger',
+        message: '{{ session()->get('message') }}'
+    });
+    </script>
+
+    @endif
 
   </section>
 @stop

@@ -94,15 +94,23 @@ class ClientesController extends Controller
   {
     $req->validate([
       'nombre' => 'required',
-      'apellido' => 'required',
       'correo_electronico' => 'required',
       'telefono' => 'required'
     ]);
 
     $cliente = $req->all();
+    $yaExistente = Clientes::where('correo_electronico', $cliente['correo_electronico'])->first();
+
+    if ($yaExistente !== null) {
+      return redirect()->route('registrar-cliente')->with([
+        'error' => true,
+        'message' => 'Ya hay un cliente registrado con el correo electrónico "'.$cliente['correo_electronico'].'"',
+      ]);
+    }
+
     $check = Clientes::create([
       'nombre' => $cliente['nombre'],
-      'apellido' => $cliente['apellido'],
+      'apellido' => isset($cliente['apellido']) ? $cliente['apellido'] : '',
       'correo_electronico' => $cliente['correo_electronico'],
       'telefono' => $cliente['telefono'],
     ]);
@@ -114,7 +122,6 @@ class ClientesController extends Controller
   {
     $req->validate([
       'nombre' => 'required',
-      'apellido' => 'required',
       'correo_electronico' => 'required',
       'telefono' => 'required',
       'correo_buscar' => 'required',
@@ -129,8 +136,8 @@ class ClientesController extends Controller
 
     if ($debeChequear && is_null($check) === false) {
       return redirect('/editar/cliente/'.$datos['correo_buscar'])->with([
-        'type' => 'error',
-        'mensaje' => 'Ya hay un cliente registrado con el correo '.$datos['correo_electronico'],
+        'error' => true,
+        'message' => 'Ya hay un cliente registrado con el correo "'.$datos['correo_electronico'].'"',
       ]);
     }
 
