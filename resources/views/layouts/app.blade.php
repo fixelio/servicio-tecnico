@@ -110,6 +110,10 @@ display: block;
 
   <!-- Notyf -->
     <script src="{{ asset('vendor/notyf/notyf.min.js') }}"></script>
+
+    <!-- Charts -->
+    <script src="{{ asset('vendor/chartist/dist/chartist.min.js') }}"></script>
+    <script src="{{ asset('vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js') }}"></script>
     
     @guest
     @else
@@ -184,6 +188,16 @@ display: block;
                   </svg>
                   </span> 
                   <span class="sidebar-text">Técnicos</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ route('listado-arqueos') }}">
+                <span class="sidebar-icon">
+                  <svg class="icon icon-sm" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </span>
+                <span class="sidebar-text">Arqueos</span>
               </a>
             </li>
             <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
@@ -265,10 +279,6 @@ display: block;
 
     <!-- Smooth scroll -->
     <script src="{{ asset('vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js') }}"></script>
-
-    <!-- Charts -->
-    <script src="{{ asset('vendor/chartist/dist/chartist.min.js') }}"></script>
-    <script src="{{ asset('vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js') }}"></script>
 
     <!-- Datepicker -->
     <script src="{{ asset('vendor/vanillajs-datepicker/dist/js/datepicker.min.js') }}"></script>

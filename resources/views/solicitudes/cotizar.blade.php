@@ -16,7 +16,7 @@
             <li class="breadcrumb-item active">Cotizar</li>
           </ol>
         </nav>
-        <h2 class="h4">Cotización de Orden</h2>
+        <h2 class="h4">Cotización de Orden #{{ $solicitud->codigo_solicitud}}</h2>
       </div>
     </div>
 
@@ -25,6 +25,8 @@
         <div class="card card-body border-0 shadow mb-4">
           <form action="{{ route($solicitud === null ? 'cotizar.post' : 'cotizar.put') }}" method="POST" class="row g-3 w-100">
           @csrf
+
+          <h3 class="h6 mb-4">Técnico responsable: {{ $solicitud->nombre." ".$solicitud->apellido }}</h3>
 
           <input type="hidden" name="codigo_solicitud" value="{{ $codigo }}">
 
@@ -35,12 +37,12 @@
           
           <div class="col-12 col-sm-6 mb-3">
             <label for="precio_material" class="form-label">Precio de materiales <span class="required">*</span></label>
-            <input type="number" class="form-control" placeholder="Ingresa el precio de los materiales" name="precio_material" id="precio_material" value="{{ $solicitud?->precio_material}}" required="true">
+            <input type="number" class="form-control" placeholder="Ingresa el precio de los materiales" name="precio_material" id="precio_material" step="2" value="{{ $solicitud?->precio_material}}" required="true">
           </div>
 
           <div class="col-12 col-sm-6 mb-3">
             <label for="precio_obra" class="form-label">Precio de mano de obra <span class="required">*</span></label>
-            <input type="number" class="form-control" placeholder="Ingresa el precio de la mano de obra" name="precio_obra" id="precio_obra" value="{{ $solicitud?->precio_obra}}" required="true">
+            <input type="number" class="form-control" placeholder="Ingresa el precio de la mano de obra" name="precio_obra" id="precio_obra" step="0.01" value="{{ $solicitud?->precio_obra}}" required="true">
           </div>
 
           <div class="col-12 col-sm-6 mb-3">
@@ -50,7 +52,7 @@
 
           <div class="col-12 col-sm-6 mb-3">
             <label for="monto" class="form-label">Monto total <span class="required">*</span></label>
-            <input type="number" class="form-control" placeholder="Monto total a pagar" name="monto" id="monto" value="{{ $solicitud?->monto}}" required="true">
+            <input type="number" class="form-control" placeholder="Monto total a pagar" name="monto" id="monto" value="{{ $solicitud?->monto}}" step="0.01" required="true">
           </div>
 
           <hr>

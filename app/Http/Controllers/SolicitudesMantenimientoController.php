@@ -349,9 +349,11 @@ class SolicitudesMantenimientoController extends Controller
 
     if ($codigo !== null) {
       $solicitud = DB::table('solicitudes_mantenimiento')
+        ->join('solicitudes_tecnicos', 'solicitudes_tecnicos.id_solicitud', '=', 'solicitudes_mantenimiento.id_solicitud')
+        ->join('tecnicos', 'tecnicos.id_tecnico', '=', 'solicitudes_tecnicos.id_tecnico')
         ->join('historial_mantenimiento', 'solicitudes_mantenimiento.id_solicitud', '=', 'historial_mantenimiento.id_solicitud')
         ->join('facturas', 'historial_mantenimiento.id_historial', '=', 'facturas.id_historial')
-        ->select('facturas.*', 'historial_mantenimiento.*')
+        ->select('facturas.*', 'historial_mantenimiento.*', 'tecnicos.nombre', 'tecnicos.apellido', 'solicitudes_mantenimiento.codigo_solicitud')
         ->where('solicitudes_mantenimiento.codigo_solicitud', '=', $codigo)
         ->first();
     }

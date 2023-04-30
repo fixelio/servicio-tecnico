@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\SolicitudesMantenimientoController;
 use App\Http\Controllers\TecnicosController;
+use App\Http\Controllers\ArqueosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,5 +68,8 @@ Route::get('/editar/tecnico/{correo?}', [TecnicosController::class, 'editarView'
 Route::get('/solicitudes/tecnico/{correo?}', [TecnicosController::class, 'trabajoAsignado'])->name('solicitudes-tecnico');
 Route::post('/tecnico', [TecnicosController::class, 'crear'])->name('tecnico.post');
 Route::post('/editar/tecnico', [TecnicosController::class, 'editar'])->name('tecnico.put');
+
+
+Route::get('/arqueos', [ArqueosController::class, 'listadoView'])->name('listado-arqueos');
 
 Auth::routes();
