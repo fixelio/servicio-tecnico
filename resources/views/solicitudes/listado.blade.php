@@ -321,7 +321,7 @@
         notas: solicitud.observaciones,
       },
       cliente: {
-        nombre: `${solicitud.nombre} ${solicitud.apellido}`,
+        nombre: `${solicitud.nombre} ${solicitud.apellido || ''}`,
         correo: solicitud.correo_electronico,
         telefono: solicitud.telefono,
       },

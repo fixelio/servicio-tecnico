@@ -16,7 +16,7 @@
             <li class="breadcrumb-item active">Cotizar</li>
           </ol>
         </nav>
-        <h2 class="h4">Cotización de Orden #{{ $solicitud->codigo_solicitud}}</h2>
+        <h2 class="h4">Cotización de Orden #{{ $codigo }}</h2>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
           <form action="{{ route($solicitud === null ? 'cotizar.post' : 'cotizar.put') }}" method="POST" class="row g-3 w-100">
           @csrf
 
-          <h3 class="h6 mb-4">Técnico responsable: {{ $solicitud->nombre." ".$solicitud->apellido }}</h3>
+          <h3 class="h6 mb-4">Técnico responsable: {{ $tecnico->nombre." ".$tecnico->apellido }}</h3>
 
           <input type="hidden" name="codigo_solicitud" value="{{ $codigo }}">
 
