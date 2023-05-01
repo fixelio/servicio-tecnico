@@ -198,7 +198,11 @@ table {
          <table class="bordered w-100" style="page-break-inside: avoid !important;">
             <tr>
               <td class="td-inline bg-gray">Diagnóstico</td>
-              <td class="w-100 bg-gray"><b>{{ $diagnostico }}</b></td>
+              <td class="w-100 bg-gray">
+                @foreach(preg_split('/\r\n|\r|\n/', $diagnostico) as $d)
+                  <b>{{ $d }}</b><br>
+                @endforeach
+              </td>
             </tr>
             <tr>
               <td class="td-inline">Notas</td>
