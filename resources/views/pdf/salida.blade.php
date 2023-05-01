@@ -121,10 +121,10 @@ table {
        <div class="divTableCell w-67">
          <table class="w-100">
            <tr>
-             <td class="text-center bg-gray">25075822</td>
+             <td class="text-center bg-gray">{{ $empresa['telefono'] }}</td>
            </tr>
            <tr>
-             <td class="text-center">megabitsoluciones@gmail.com</td>
+             <td class="text-center">{{ $empresa['email'] }}</td>
            </tr>
          </table>
        </div>
@@ -270,9 +270,9 @@ table {
          <table class="bordered w-100">
            <tr>
              <td class="text-center" style="font-size: small;">
-               Los equipos mojados no cuentan con GARANTIA.
-               <br>La casa no se responsabiliza en caso de incendios, robos u otro tipo de siniestros.
-               <br>Usted dispone de un plazo máximo de 60 días luego de cotizar para retirar el artículo, una vez finalizado el plazo la empresa no se hace responsable.
+               @foreach(preg_split('/\r\n|\r|\n/', $empresa['footer']) as $f)
+                  {{ $f }}<br>
+                @endforeach
              </td>
            </tr>
          </table>

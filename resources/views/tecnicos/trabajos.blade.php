@@ -121,7 +121,7 @@
       codigo: trabajo.codigo_solicitud,
       articulo: trabajo.articulo,
       modelo: trabajo.modelo,
-      fecha: trabajo.fecha_solicitud,
+      fecha: trabajo.fecha_compra,
       estado: trabajo.estado_solicitud,
     }));
 
@@ -151,7 +151,7 @@
       elt('th', { className: 'px-2 py-3 text-nowrap' }, trabajo.index),
       elt('td', { className: 'px-2 py-3 text-nowrap' }, trabajo.codigo),
       elt('td', { className: 'px-2 py-3 text-nowrap' }, trabajo.articulo),
-      elt('td', { className: 'px-2 py-3 text-nowrap' }, trabajo.modelo),
+      elt('td', { className: 'px-2 py-3 text-nowrap' }, trabajo.modelo || ''),
       elt('td', { className: 'px-2 py-3 text-nowrap' }, trabajo.fecha),
       elt('td', { className: 'px-2 py-3 text-nowrap' },
         elt('span', { className: `badge ${ESTADO_TO_BG[trabajo.estado]}` }, trabajo.estado)

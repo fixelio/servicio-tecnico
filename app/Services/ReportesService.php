@@ -5,11 +5,13 @@ namespace App\Services;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use App\Models\SolicitudesMantenimiento;
+use App\Models\Empresa;
 
 class ReportesService {
 	public function entrada($info)
 	{
     $fechaSolicitud = date('Y/m/d H:i:s');
+    $empresa = Empresa::latest()->first();
 
     $data = [
       'ordenServicio' => $info['ordenServicio'],
@@ -23,6 +25,7 @@ class ReportesService {
       'diagnostico' => $info['diagnostico'],
       'notas' => $info['notas'],
       'tecnico' => $info['tecnico'],
+      'empresa' => $empresa,
     ];
 
 		return Pdf::loadView('pdf.entrada', $data)
@@ -32,6 +35,7 @@ class ReportesService {
   public function salida($info)
   {
     $fechaSolicitud = date('Y/m/d H:i:s');
+    $empresa = Empresa::latest()->first();
 
     $data = [
       'ordenServicio' => $info['ordenServicio'],
@@ -47,6 +51,7 @@ class ReportesService {
       'garantia' => $info['garantia'],
       'monto' => $info['monto'],
       'tecnico' => $info['tecnico'],
+      'empresa' => $empresa,
     ];
 
     return Pdf::loadView('pdf.salida', $data)

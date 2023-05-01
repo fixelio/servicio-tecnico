@@ -71,7 +71,7 @@ class SolicitudesMantenimientoController extends Controller
     ) {
       $fecha_desde = $request->query('fecha_desde');
       $fecha_hasta = $request->query('fecha_hasta');
-      $queryBuilder->whereBetween('solicitudes_mantenimiento.created_at', [
+      $queryBuilder->whereBetween('equipos.fecha_compra', [
         $fecha_desde,
         $fecha_hasta,
       ]);

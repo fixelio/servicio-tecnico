@@ -86,10 +86,11 @@
                   <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg>
                 </div>
                 <div class="d-block">
-                  <label class="mb-0">Ingresos</label>
-                  <h4 class="mb-0">{{ $total }} $</h4>
+                  <label class="mb-0">Ganancia</label>
+                  <h4 class="mb-0">{{ $precioReparacion }} $</h4>
                 </div>
               </div>
+              <!--
               <div class="col-12 col-md-6 d-flex align-items-center py-3">
                 <div class="icon-shape icon-sm icon-shape-success rounded me-3">
                   <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -113,6 +114,7 @@
                   <h4 class="mb-0">{{ $precioReparacion }} $</h4>
                 </div>
               </div>
+            -->
             </div>
           </div>
         </div>

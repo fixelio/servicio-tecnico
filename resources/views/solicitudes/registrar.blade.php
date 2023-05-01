@@ -113,13 +113,13 @@
             </div>
             @csrf
             <div class="col-12 col-sm-6 mb-3">
-              <label for="fecha_compra" class="form-label">Fecha de compra <span class="required">*</span></label>
+              <label for="fecha_compra" class="form-label">Fecha de ingreso <span class="required">*</span></label>
               <input
                 type="date"
                 id="fecha_compra"
                 name="fecha_compra"
                 class="form-control"
-                placeholder="Ingresa la fecha de compra"
+                placeholder="Ingresa la fecha de ingreso"
                 required
               >
             </div>
@@ -153,6 +153,11 @@
         const $form = document.getElementById('form-registrar');
         setTimeout(() => $form.reset(), 4000);
       }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const $fecha = document.querySelector('#fecha_compra');
+        $fecha.valueAsDate = new Date(Date.now());
+      });
     </script>
 
   </section>

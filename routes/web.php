@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\SolicitudesMantenimientoController;
 use App\Http\Controllers\TecnicosController;
 use App\Http\Controllers\ArqueosController;
+use App\Http\Controllers\EmpresaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,5 +72,13 @@ Route::post('/editar/tecnico', [TecnicosController::class, 'editar'])->name('tec
 
 
 Route::get('/arqueos', [ArqueosController::class, 'listadoView'])->name('listado-arqueos');
+
+Route::get('/empresa', [
+	EmpresaController::class, 'resumenView'
+])->name('empresa');
+
+Route::post('/empresa', [
+	EmpresaController::class, 'editar'
+])->name('empresa.put');
 
 Auth::routes();

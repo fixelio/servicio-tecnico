@@ -105,7 +105,11 @@
               </tr>
               <tr>
                 <th>Diagnóstico</th>
-                <td><strong>{{ $diagnostico }}</strong></td>
+                <td><strong>
+                  @foreach(preg_split('/\r\n|\r|\n/', $diagnostico) as $d)
+                    {{ $d }}<br>
+                  @endforeach
+                </strong></td>
               </tr>
               <tr>
                 <th>Notas</th>

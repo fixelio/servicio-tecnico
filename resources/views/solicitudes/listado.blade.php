@@ -332,7 +332,7 @@
         diagnostico: solicitud.descripcion_problema,
         reparacion: solicitud.descripcion_solucion,
         notas: solicitud.observaciones,
-        cotizada: solicitud.monto ? 'Si' : 'No',
+        cotizada: Boolean(solicitud.monto) ? 'Si' : 'No',
       },
       cliente: {
         nombre: `${solicitud.nombre} ${solicitud.apellido || ''}`,
@@ -520,7 +520,7 @@
             elt('button', { className: 'dropdown-item', onclick: () => imprimirReporteEntrada(data) }, 'Imprimir reporte de entrada')
           ),
           elt('li', {},
-            elt('button', { className: 'dropdown-item', onclick: () => imprimirReporteSalida(data), disabled: estado !== 'entregado' && estado !== 'listo' }, 'Imprimir reporte de salida')
+            elt('button', { className: 'dropdown-item', onclick: () => imprimirReporteSalida(data), disabled: !((estado === 'entregado' || estado === 'listo') && data.solicitud.cotizada === 'Si') }, 'Imprimir reporte de salida')
           ),
           elt('li', {},
             elt('button', { className: 'dropdown-item' }, elt('i', { className: 'bi bi-chevron-left' }), ' Cambiar Estado'),

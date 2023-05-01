@@ -36,13 +36,13 @@
           </div>
           
           <div class="col-12 col-sm-6 mb-3">
-            <label for="precio_material" class="form-label">Precio de materiales <span class="required">*</span></label>
-            <input type="number" class="form-control" placeholder="Ingresa el precio de los materiales" name="precio_material" id="precio_material" step="0.01" value="{{ $solicitud?->precio_material}}" required="true">
+            <label for="precio_material" class="form-label">Costo <span class="required">*</span></label>
+            <input type="number" class="form-control" placeholder="Ingresa el costo" name="precio_material" id="precio_material" step="0.01" value="{{ $solicitud?->precio_material}}" required="true">
           </div>
 
           <div class="col-12 col-sm-6 mb-3">
-            <label for="precio_obra" class="form-label">Precio de mano de obra <span class="required">*</span></label>
-            <input type="number" class="form-control" placeholder="Ingresa el precio de la mano de obra" name="precio_obra" id="precio_obra" step="0.01" value="{{ $solicitud?->precio_obra}}" required="true">
+            <label for="precio_obra" class="form-label">Ganancia <span class="required">*</span></label>
+            <input type="number" class="form-control" placeholder="Ingresa la ganancia" name="precio_obra" id="precio_obra" step="0.01" value="{{ $solicitud?->precio_obra}}" required="true">
           </div>
 
           <div class="col-12 col-sm-6 mb-3">
@@ -51,7 +51,7 @@
           </div>
 
           <div class="col-12 col-sm-6 mb-3">
-            <label for="monto" class="form-label">Monto total <span class="required">*</span></label>
+            <label for="monto" class="form-label">Precio total <span class="required">*</span></label>
             <input type="number" class="form-control" placeholder="Monto total a pagar" name="monto" id="monto" value="{{ $solicitud?->monto}}" step="0.01" required="true">
           </div>
 

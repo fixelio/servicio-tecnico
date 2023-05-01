@@ -27,14 +27,17 @@ class ArqueosController extends Controller
     }
 
     if ($request->query('desde') !== null && $request->query('hasta') !== null) {
-      $ordenes->whereBetween('solicitudes_mantenimiento.fecha_solicitud', [
-        $request->query('desde'),
-        $request->query('hasta')
-      ])
-      ->select('solicitudes_mantenimiento.*', 'historial_mantenimiento.*', 'facturas.*');
+      $ordenes->join('equipos', 'equipos.id_equipo', '=', 'solicitudes_mantenimiento.id_equipo')
+        ->whereBetween('equipos.fecha_compra', [
+          $request->query('desde'),
+          $request->query('hasta')
+        ])
+        ->select('solicitudes_mantenimiento.*', 'historial_mantenimiento.*', 'facturas.*');
     }
 
-    $resultado = $ordenes->get();
+    $resultado = $ordenes
+      ->where('solicitudes_mantenimiento.estado_solicitud', 'entregado')
+      ->get();
 
     $preciosMateriales = 0;
     $preciosReparacion = 0;

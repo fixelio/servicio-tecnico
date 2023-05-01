@@ -157,7 +157,7 @@
                 <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->codigo_solicitud }}</td>
                 <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->articulo }}</td>
                 <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->modelo }}</td>
-                <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->fecha_solicitud }}</td>
+                <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->fecha_compra }}</td>
                 <td class="px-2 py-3 text-nowrap">
                   @if($solicitudes[$i]->estado_solicitud === 'ingresado')
                     <span class="badge ingresado">Ingresado</span>
@@ -319,7 +319,7 @@
                 elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.codigo),
                 elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.articulo),
                 elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.modelo),
-                elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.fecha),
+                elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.fechaCompra),
                 elt('td', { className: 'px-2 py-3 text-nowrap' },
                   elt('span', { className: `badge text-bg-${ESTADO_TO_BG[orden.estado]}` }, orden.estado)
                 ),
