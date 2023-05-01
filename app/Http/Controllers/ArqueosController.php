@@ -27,8 +27,7 @@ class ArqueosController extends Controller
     }
 
     if ($request->query('desde') !== null && $request->query('hasta') !== null) {
-      $ordenes->join('equipos', 'equipos.id_equipo', '=', 'solicitudes_mantenimiento.id_equipo')
-        ->whereBetween('equipos.fecha_compra', [
+      $ordenes->whereBetween('solicitudes_mantenimiento.fecha_solicitud', [
           $request->query('desde'),
           $request->query('hasta')
         ])

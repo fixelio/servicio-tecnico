@@ -46,7 +46,9 @@
                   <p>Modelo: <strong id="modelo"></strong></p>
                   <p>Marca: <strong id="marca"></strong></p>
                   <hr>
-                  <p>Diagnóstico: <span id="diagnostico"></span></p>
+                  <p>Diagnóstico:</p>
+                  <ol class="list-group list-group-numbered" id="diagnostico">
+                  </ol>
                   <p>Observaciones:</p>
                   <ol class="list-group list-group-numbered" id="observaciones">
                   </ol>
@@ -59,7 +61,8 @@
               </div>
               <div class="tab-pane fade" id="reparacion-tab-pane" role="tabpanel" aria-labelledby="reparacion-tab" tabindex="0">
                 <div class="px-1 py-4">
-                  <p>Solución: <span id="solucion"></span></p>
+                  <p>Solución:</p>
+                  <ol class="list-group list-group-numbered" id="solucion"></ol>
                   <p>Garantía: <span id="garantia"></span></p>
                   <p>Precio de materiales: <span id="precio_material"></span><i class="bi bi-currency-dollar"></i></p>
                   <p>Precio de mano de obra: <span id="precio_obra"></span><i class="bi bi-currency-dollar"></i></p>
@@ -123,12 +126,25 @@
               </th>
               <th scope="col">
                 <div class="w-100 d-flex justify-content-between align-items-center">
-                  Fecha
+                  Fecha de Ingreso
                   <div>
                     <button class="btn-actions" id="fecha-asc">
                       <i class="bi bi-caret-up-fill"></i>
                     </button>
                     <button class="btn-actions" id="fecha-desc">
+                      <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                  Fecha de Entrega
+                  <div>
+                    <button class="btn-actions" id="fechaEntrega-asc">
+                      <i class="bi bi-caret-up-fill"></i>
+                    </button>
+                    <button class="btn-actions" id="fechaEntrega-desc">
                       <i class="bi bi-caret-down-fill"></i>
                     </button>
                   </div>
@@ -158,6 +174,7 @@
                 <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->articulo }}</td>
                 <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->modelo }}</td>
                 <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->fecha_compra }}</td>
+                <td class="px-2 py-3 text-nowrap">{{ $solicitudes[$i]->estado_solicitud === 'entregado' ? $solicitudes[$i]->fecha_solicitud : 'N/A' }}</td>
                 <td class="px-2 py-3 text-nowrap">
                   @if($solicitudes[$i]->estado_solicitud === 'ingresado')
                     <span class="badge ingresado">Ingresado</span>
@@ -216,6 +233,7 @@
               fechaCompra: orden.fecha_compra,
               fechaInicio: orden.fecha_inicio,
               fecha: orden.fecha_solicitud,
+              fechaEntrega: orden.fecha_solicitud,
               fechaFin: orden.fecha_fin,
               garantia: orden.garantia,
               marca: orden.marca,
@@ -318,10 +336,11 @@
                 elt('th', { className: 'px-2 py-3 text-nowrap' }, `${index + 1}`),
                 elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.codigo),
                 elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.articulo),
-                elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.modelo),
+                elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.modelo || ''),
                 elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.fechaCompra),
+                elt('td', { className: 'px-2 py-3 text-nowrap' }, orden.estado === 'entregado' ? orden.fechaEntrega : 'Sin entregar'),
                 elt('td', { className: 'px-2 py-3 text-nowrap' },
-                  elt('span', { className: `badge text-bg-${ESTADO_TO_BG[orden.estado]}` }, orden.estado)
+                  elt('span', { className: `badge ${ESTADO_TO_BG[orden.estado]}` }, orden.estado)
                 ),
                 $acciones
               )
@@ -397,21 +416,46 @@
           $marca.textContent = orden.marca;
           $modelo.textContent = orden.modelo;
           $serie.textContent = orden.numeroSerie;
-          $diagnostico.textContent = orden.diagnostico;
+
+          while($diagnostico.firstChild) {
+            $diagnostico.removeChild($diagnostico.firstChild);
+          }
+
+          if (orden.diagnostico !== null) {
+            for (const diagnostico of orden.diagnostico?.split('\n')) {
+              $diagnostico.appendChild(
+                elt('li', { className: "list-group-item" }, diagnostico)
+              );
+            }
+          }
+
 
           while($observaciones.firstChild) {
             $observaciones.removeChild($observaciones.firstChild);
           }
 
-          for (const observacion of orden.observaciones.split('\n')) {
-            $observaciones.appendChild(
-              elt('li', { className: "list-group-item" }, observacion)
-            );
+          if (orden.observaciones !== null) {
+            for (const observacion of orden.observaciones?.split('\n')) {
+              $observaciones.appendChild(
+                elt('li', { className: "list-group-item" }, observacion)
+              );
+            }
           }
 
           $tecnico.textContent = `${orden.tecnico.nombre} ${orden.tecnico.apellido}`;
 
-          $solucion.textContent = orden.solucion;
+          while($solucion.firstChild) {
+            $observaciones.removeChild($solucion.firstChild);
+          }
+
+          if (orden.solucion !== null) {
+            for (const solucion of orden.solucion?.split('\n')) {
+              $solucion.appendChild(
+                elt('li', { className: "list-group-item" }, solucion)
+              );
+            }
+          }
+
           $garantia.textContent = orden.garantia;
           $monto.textContent = orden.monto;
           $precioMateriales.textContent = orden.precio_materiales;

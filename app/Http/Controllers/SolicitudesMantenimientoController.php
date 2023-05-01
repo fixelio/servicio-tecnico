@@ -283,61 +283,9 @@ class SolicitudesMantenimientoController extends Controller
       ->firstOrFail();
 
     SolicitudesMantenimiento::find($solicitud['id_solicitud'])->update([
-      'estado_solicitud' => $data['estado_solicitud']
+      'estado_solicitud' => $data['estado_solicitud'],
+      'fecha_solicitud' => $data['estado_solicitud'] === 'entregado' ? date('Y-m-d') : $solicitud['fecha_solicitud'],
     ]);
-
-    /*
-
-    if ($data['estado_solicitud'] === 'entregado') {
-      $cliente = Clientes::where('id_cliente', $solicitud['id_cliente'])->firstOrFail();
-      $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
-
-      $solicitudesMantenimiento = $this->solicitudesTecnicosService->findByIdSolicitud($solicitud['id_solicitud']);
-      $idTecnico = $solicitudesMantenimiento['id_tecnico'];
-      $tecnico = $this->tecnicosService->findById($idTecnico);
-
-      $descripcionSolucion = is_null($data['descripcion_solucion']) ? '' : $data['descripcion_solucion'];
-      $garantia = is_null($data['garantia']) ? '' : $data['garantia'];
-      $historialOptions = ['id_tecnico' => $tecnico['id_tecnico'], 'descripcion_solucion' => $descripcionSolucion, 'garantia' => $garantia];
-      $historial = $this->crearHistorial($solicitud, $historialOptions);
-
-      $facturaOptions = [
-        'id_historial' => $historial['id_historial'],
-        'monto' => $data['monto'],
-        'precio_material' => $data['precio_material'],
-        'precio_obra' => $data['precio_obra'],
-      ];
-
-      $factura = $this->crearFactura($facturaOptions);
-
-      //return $this->generarReporteSalida($solicitud, $historial, $factura, $tecnico);
-      
-      return redirect()->route('pagina-generar-reporte-salida', [
-        'cliente' => $cliente['nombre']." ".$cliente['apellido'],
-        'correo' => $cliente['correo_electronico'],
-        'telefono' => $cliente['telefono'],
-        'articulo' => $equipo['articulo'],
-        'marca' => $equipo['marca'],
-        'modelo' => $equipo['modelo'],
-        'serie' => $equipo['num_serie'],
-        'diagnostico' => $solicitud['descripcion_problema'],
-        'reparacion' => $historial['descripcion_solucion'],
-        'garantia' => $historial['garantia'],
-        'precioMateriales' => $factura['precio_material'],
-        'precioObra' => $factura['precio_obra'],
-        'monto' => $factura['monto'],
-        'tecnico' => $tecnico['nombre']." ".$tecnico['apellido'],
-        'ordenServicio' => $solicitud['id_solicitud'],
-        'fecha' => date('d/m/Y H:i:s'),
-      ]);
-    }
-
-    if ($data['estado_solicitud'] === 'en proceso') {
-      $tecnicoResponsable = $this->tecnicosService->findOne($data['correo_tecnico']);
-      $this->asignarTecnicoResponsable($solicitud['id_solicitud'], $tecnicoResponsable['id_tecnico']);
-      $equipo = Equipos::where('id_equipo', $solicitud['id_equipo'])->firstOrFail();
-      return $this->generarReporteEntrada($solicitud, $equipo, $tecnicoResponsable);
-    }*/
 
     return redirect()->route('listado-solicitudes');
   }
