@@ -123,28 +123,28 @@
           
           @if (is_null($solicitud?->precio_material) === false)
           <div class="col-12 col-sm-6 mb-3">
-            <label for="precio_material" class="form-label">Precio de materiales</label>
-            <input type="number" class="form-control" placeholder="Ingresa el precio de los materiales" name="precio_material" id="precio_material" value="{{ $solicitud?->precio_material}}" step="0.01" required="true">
+            <label for="precio_material" class="form-label">Costo <span class="required">*</span></label>
+            <input type="number" class="form-control" placeholder="Ingresa el costo" name="precio_material" id="precio_material" value="{{ $solicitud?->precio_material}}" step="0.01" required="true">
           </div>
           @endif
 
           @if (is_null($solicitud?->precio_obra) === false)
           <div class="col-12 col-sm-6 mb-3">
-            <label for="precio_obra" class="form-label">Precio de mano de obra</label>
-            <input type="number" class="form-control" placeholder="Ingresa el precio de la mano de obra" name="precio_obra" id="precio_obra" value="{{ $solicitud?->precio_obra}}" step="0.01" required="true">
+            <label for="precio_obra" class="form-label">Ganancia <span class="required">*</span></label>
+            <input type="number" class="form-control" placeholder="Ingresa la ganancia" name="precio_obra" id="precio_obra" value="{{ $solicitud?->precio_obra}}" step="0.01" required="true">
           </div>
           @endif
 
           @if (is_null($solicitud?->garantia) === false)
           <div class="col-12 col-sm-6 mb-3">
-            <label for="garantia" class="form-label">Garantía</label>
+            <label for="garantia" class="form-label">Garantía <span class="required">*</span></label>
             <input type="text" class="form-control" placeholder="Garantía" name="garantia" id="garantia" value="{{ $solicitud?->garantia}}" required="true">
           </div>
           @endif
 
           @if (is_null($solicitud?->monto) === false)
           <div class="col-12 col-sm-6 mb-3">
-            <label for="monto" class="form-label">Monto total</label>
+            <label for="monto" class="form-label">Costo total <span class="required">*</span></label>
             <input type="number" class="form-control" placeholder="Monto total a pagar" name="monto" id="monto" value="{{ $solicitud?->monto}}" step="0.01" required="true">
           </div>
           @endif
