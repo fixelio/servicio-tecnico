@@ -67,7 +67,6 @@ class TecnicosController extends Controller
       'nombre' => 'required',
       'apellido' => 'required',
       'correo_electronico' => 'required',
-      'telefono' => 'required',
       'correo_buscar' => 'required',
     ]);
 

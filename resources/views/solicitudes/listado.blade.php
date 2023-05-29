@@ -68,7 +68,7 @@
         <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
           <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
             <li class="breadcrumb-item">
-              <a href="/">
+              <a href="/" id="toHome">
                 <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
               </a>
             </li>
@@ -241,7 +241,7 @@
 
       @else
         <div class="alert alert-info" role="alert">
-          En este momento no hay órdenes de mantenimiento procesándose. <a class="link-opacity-100" href="/clientes">Ir a la lista de clientes.</a>
+          En este momento no hay órdenes de mantenimiento procesándose. <a class="link-opacity-100" href="/clientes" id="toClientes">Ir a la lista de clientes.</a>
         </div>
       @endif
 
@@ -348,6 +348,12 @@
       }
     }));
 
+    document.querySelector('#toHome').href = `${document.location.origin}/servicio-tecnico/public/`
+    let $toClientes = document.querySelector('#toClientes')
+    if ($toClientes) {
+      $toClientes.href = `${document.location.origin}/servicio-tecnico/public/clientes`
+    }
+
     const btnOrdenarCollection = Array.from(document.querySelectorAll('.btn-actions'));
     btnOrdenarCollection.forEach(btn => {
       
@@ -372,7 +378,7 @@
 
         $estadoFiltroContainer.appendChild(BotonFiltro(id, 'estado_filtro'));
         filtrosURL.set('estado', id);
-        $aplicarFiltros.href = `/solicitudes?${filtrosURL.toString()}`;
+        $aplicarFiltros.href = `${document.location.origin}/servicio-tecnico/public/solicitudes?${filtrosURL.toString()}`;
       }
     });
 
@@ -419,7 +425,7 @@
       filtrosURL.set('fecha_desde', $desde.value);
       filtrosURL.set('fecha_hasta', $hasta.value);
 
-      $aplicarFiltros.href = `/solicitudes?${filtrosURL.toString()}`;
+      $aplicarFiltros.href = `${document.location.origin}/servicio-tecnico/public/solicitudes?${filtrosURL.toString()}`;
       while($fechaFiltroContainer.firstChild) {
         $fechaFiltroContainer.removeChild($fechaFiltroContainer.firstChild);
       }
@@ -448,7 +454,7 @@
       $next.textContent = 'Siguiente »';
     }
 
-    $aplicarFiltros.href = `/solicitudes${location.search}`;
+    $aplicarFiltros.href = `${document.location.origin}/servicio-tecnico/public/solicitudes${location.search}`;
     filtrosURL = new URLSearchParams(location.search);
 
     const $estadoFiltro = document.getElementById('estado_filtro');
@@ -471,7 +477,7 @@
     const $aplicarFiltros = document.getElementById('aplicar-filtros');
     e.target.remove();
     filtrosURL.delete('estado');
-    $aplicarFiltros.href = `/solicitudes?${filtrosURL.toString()}`;
+    $aplicarFiltros.href = `${document.location.origin}/servicio-tecnico/public/solicitudes?${filtrosURL.toString()}`;
   }
 
   function fechaFiltroOnClick(e) {
@@ -479,7 +485,7 @@
     e.target.remove();
     filtrosURL.delete('fecha_desde');
     filtrosURL.delete('fecha_hasta');
-    $aplicarFiltros.href = `/solicitudes?${filtrosURL.toString()}`;
+    $aplicarFiltros.href = `${document.location.origin}/servicio-tecnico/public/solicitudes?${filtrosURL.toString()}`;
   }
 
   function BotonFiltro(estado, id) {
@@ -511,10 +517,10 @@
         $boton,
         elt('ul', { className: 'dropdown-menu' },
           elt('li', {},
-            elt('a', { className: 'dropdown-item', href: `/editar/solicitud/${codigo}` }, 'Editar'),
+            elt('a', { className: 'dropdown-item', href: `${document.location.origin}/servicio-tecnico/public/editar/solicitud/${codigo}` }, 'Editar'),
           ),
           elt('li', {},
-            elt('a', { className: 'dropdown-item', href: `/cotizacion/orden/${codigo}` }, 'Cotizar')
+            elt('a', { className: 'dropdown-item', href: `${document.location.origin}/servicio-tecnico/public/cotizacion/orden/${codigo}` }, 'Cotizar')
           ),
           elt('li', {},
             elt('button', { className: 'dropdown-item', onclick: () => imprimirReporteEntrada(data) }, 'Imprimir reporte de entrada')

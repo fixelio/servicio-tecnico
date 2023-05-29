@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
           <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
             <li class="breadcrumb-item">
-              <a href="/">
+              <a href="/" id="toHome">
                 <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
               </a>
             </li>
@@ -101,6 +101,8 @@
       index: `${index + 1}`
     }));
 
+    document.getElementById('toHome').href = `${document.location.origin}/servicio-tecnico/public/`
+
     const btnOrdenarCollection = Array.from(document.querySelectorAll('.btn-actions'));
     btnOrdenarCollection.forEach(btn => {
       
@@ -132,10 +134,10 @@
         $boton,
         elt('ul', { className: 'dropdown-menu' },
           elt('li', {},
-            elt('a', { className: 'dropdown-item', href: `/editar/tecnico/${tecnico.correo}` }, 'Editar'),
+            elt('a', { className: 'dropdown-item', href: `${document.location.origin}/servicio-tecnico/public/editar/tecnico/${tecnico.correo}` }, 'Editar'),
           ),
           elt('li', {},
-            elt('a', { className: 'dropdown-item', href: `/solicitudes/tecnico/${tecnico.correo}` }, 'Órdenes Asignadas'),
+            elt('a', { className: 'dropdown-item', href: `${document.location.origin}/servicio-tecnico/public/solicitudes/tecnico/${tecnico.correo}` }, 'Órdenes Asignadas'),
           )
         )
       )
