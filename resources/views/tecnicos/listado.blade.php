@@ -97,7 +97,7 @@
     const tecnicos = raw.data.map((tecnico, index) => ({
       nombre: `${tecnico.nombre} ${tecnico.apellido}`,
       correo: tecnico.correo_electronico,
-      telefono: tecnico.telefono,
+      telefono: tecnico.telefono || 'N/A',
       index: `${index + 1}`
     }));
 
