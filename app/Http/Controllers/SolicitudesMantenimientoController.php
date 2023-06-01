@@ -243,9 +243,9 @@ class SolicitudesMantenimientoController extends Controller
 
     Equipos::find($equipo['id_equipo'])->update([
       'articulo' => $datos['articulo'],
-      'num_serie' => isset($datos?->num_serie) ? $datos->num_serie : null,
-      'marca' => isset($datos?->marca) ? $datos->marca : null,
-      'modelo' => isset($datos?->modelo) ? $datos->modelo : null,
+      'num_serie' => is_null($datos['num_serie']) ? null : $datos['num_serie'],
+      'marca' => is_null($datos['marca']) ? null : $datos['marca'],
+      'modelo' => is_null($datos['modelo']) ? null : $datos['modelo'],
       'fecha_compra' => $datos['fecha_compra'],
     ]);
 
