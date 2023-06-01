@@ -16,17 +16,20 @@ class ArqueosController extends Controller
 
   public function listadoView(Request $request)
   {
+    $filtrar = false;
     $ordenes = DB::Table('solicitudes_mantenimiento')
       ->join('historial_mantenimiento', 'historial_mantenimiento.id_solicitud', '=', 'solicitudes_mantenimiento.id_solicitud')
       ->join('facturas', 'facturas.id_historial', '=', 'historial_mantenimiento.id_historial');
 
     if ($request->query('tecnico') !== null && $request->query('tecnico') !== 'all') {
+      $filtrar = true;
       $tecnico = Tecnicos::where('id_tecnico', $request->query('tecnico'))->firstOrFail();
       $ordenes->join('solicitudes_tecnicos', 'solicitudes_tecnicos.id_solicitud', '=', 'solicitudes_mantenimiento.id_solicitud')
       ->where('solicitudes_tecnicos.id_tecnico', $tecnico['id_tecnico']);
     }
 
     if ($request->query('desde') !== null && $request->query('hasta') !== null) {
+      $filtrar = true;
       $ordenes->whereBetween('solicitudes_mantenimiento.fecha_solicitud', [
           $request->query('desde'),
           $request->query('hasta')
@@ -55,6 +58,7 @@ class ArqueosController extends Controller
       'hasta' => $request->query('hasta') !== null ? $request->query('hasta') : '',
       'tecnicos' => Tecnicos::all(),
       'id_tecnico' => $request->query('tecnico'),
+      'filtrar' => $filtrar,
     ]);
   }
 }

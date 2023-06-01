@@ -153,7 +153,7 @@ display: block;
           </div>
           <ul class="nav flex-column pt-3 pt-md-0">
             <li class="nav-item">
-              <a href="../../index.html" class="nav-link d-flex align-items-center">
+              <a href="../../index.html" class="nav-link d-flex align-items-center" id="toHome">
                 <span class="sidebar-icon">
                   <img src="{{asset('assets/img/brand/light.svg')}}" height="20" width="20" alt="Volt Logo">
                 </span>
@@ -255,7 +255,7 @@ display: block;
                   </div>
                 </a>
                 <div class="dropdown-menu dashboard-dropdown dropdown-menu-end mt-2 py-1">
-                  <a class="dropdown-item d-flex align-items-center" href="{{ route('listado-solicitudes') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                  <a class="dropdown-item d-flex align-items-center" href="{{ route('listado-solicitudes') }}">
                     <svg class="dropdown-icon text-danger me-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"></path>
                     </svg>
@@ -310,5 +310,10 @@ display: block;
 
     <!-- Volt JS -->
     <script src="{{ asset('assets/js/volt.js') }}"></script>
+
+
+    <script>
+      document.querySelector('#toHome').href = `${document.location.origin}/servicio-tecnico/public/`;
+    </script>
 </body>
 </html>

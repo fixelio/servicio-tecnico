@@ -78,7 +78,7 @@
                 </div>
                 <div class="d-block">
                     <label class="mb-0">Total de Órdenes</label>
-                    <h4 class="mb-0">{{ $ordenes }}</h4>
+                    <h4 class="mb-0">{{ $filtrar ? $ordenes : '0' }}</h4>
                 </div>
               </div>
               <div class="col-12 col-md-6 d-flex align-items-center py-3">
@@ -87,7 +87,7 @@
                 </div>
                 <div class="d-block">
                   <label class="mb-0">Ganancia</label>
-                  <h4 class="mb-0">{{ $precioReparacion }} $</h4>
+                  <h4 class="mb-0">{{ $filtrar ? $precioReparacion : '0' }} $</h4>
                 </div>
               </div>
             </div>
